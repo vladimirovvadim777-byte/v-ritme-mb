@@ -5,7 +5,7 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width,initial-scale=1,viewport-fit=cover" name="viewport"/>
 <meta content="#F5F3ED" name="theme-color"/>
-<title>В ритме МБ — Community Journal · v9.2</title>
+<title>В ритме МБ — Community Journal · v9.3 Backend</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <style>
 :root{
@@ -261,7 +261,7 @@ window.__V_RITME_CONFIG__={apiBase:"https://yrcogxmnqrebbzcnqbjc.supabase.co/fun
 <div class="people-wall" id="peopleWall"><article class="person"><span class="idx">01</span><h3>Аня</h3><p>Бегаю, чтобы голова работала свободнее.</p><div class="person-tags"><span>бег · утро · кофе</span></div></article><article class="person"><span class="idx">02</span><h3>Максим</h3><p>Если маршрут закончился кофе — день уже удался.</p><div class="person-tags"><span>gravel · маршруты</span></div></article><article class="person"><span class="idx">03</span><h3>Лена</h3><p>Перезагрузка начинается там, где заканчивается асфальт.</p><div class="person-tags"><span>хайкинг · смыслы</span></div></article><article class="person"><span class="idx">04</span><h3>Илья</h3><p>Тренировка — это кнопка reset.</p><div class="person-tags"><span>зал · город</span></div></article><article class="person"><span class="idx">05</span><h3>Саша</h3><p>Не обязательно ехать быстро, чтобы ехать далеко.</p><div class="person-tags"><span>шоссе · темп</span></div></article><article class="person"><span class="idx">06</span><h3>Даша</h3><p>Некоторые идеи не приходят, пока не выйдешь из офиса.</p><div class="person-tags"><span>прогулки · идеи</span></div></article></div>
 </section>
 <section class="screen" id="activities">
-<div class="activity-hero"><div class="activity-info"><div><div class="kicker">29 августа · 08:30 · Москва</div><h1 class="serif">Coffee<br/>Ride.</h1><p>24 км вдоль реки. Спокойный темп, разговоры по дороге. Кофе — уже после. Это не гонка, а повод встретиться.</p><button class="btn-solid" onclick="toast('Ты в ритме')" type="button">Присоединиться</button></div><div class="kicker">ritual · movement · human</div></div><div class="activity-photo"><div class="ritual-copy"><b>Кофе<br>после.</b><span>conversation · ritual · city</span></div></div></div>
+<div class="activity-hero"><div class="activity-info"><div><div class="kicker">29 августа · 08:30 · Москва</div><h1 class="serif">Coffee<br/>Ride.</h1><p>24 км вдоль реки. Спокойный темп, разговоры по дороге. Кофе — уже после. Это не гонка, а повод встретиться.</p><button class="btn-solid" onclick="joinActivity('coffee-ride',this)" type="button">Присоединиться</button></div><div class="kicker">ritual · movement · human</div></div><div class="activity-photo"><div class="ritual-copy"><b>Кофе<br>после.</b><span>conversation · ritual · city</span></div></div></div>
 <section class="routes"><div class="routes-head"><h2 class="serif">Маршруты<br/>сообщества</h2><button class="btn" type="button">Смотреть все ↗</button></div><div class="route-grid">
 <article class="route photo"><div class="route-top"><span>01 / ROAD</span><span>18 км</span></div><div><h3>Morning Flow</h3><p>Ранний круг по набережным Москвы. Без гонки, только поток.</p><button class="btn" type="button">Смотреть маршрут ↗</button></div></article>
 <article class="route ritual"><div class="ring"></div><div class="route-top"><span>02 / RITUAL</span><span>24 км</span></div><div><h3>Coffee Ride</h3><p>Спокойный темп вдоль реки. Разговоры по дороге, кофе — уже после.</p><button class="btn" type="button">Присоединиться ↗</button></div></article>
@@ -277,7 +277,11 @@ window.__V_RITME_CONFIG__={apiBase:"https://yrcogxmnqrebbzcnqbjc.supabase.co/fun
 <section class="screen member" id="my">
 <div class="member-cover"><div class="member-photo" id="memberPhoto">TG</div><div class="member-copy"><div><div class="kicker">Member / В ритме МБ</div><h1 class="serif" id="memberName">Твой<br/>ритм.</h1></div><div class="member-statement">«Спорт — не отдельная часть дня. Это способ настроить голову.»</div></div></div>
 <div class="member-grid"><div class="field"><label>Главный ритм</label><input value="Велосипед"/></div><div class="field"><label>Сегодня я</label><input value="Готов катнуть вечером"/></div><div class="field"><label>Что меня драйвит</label><input value="Длинные маршруты и кофе после"/></div><div class="field"><label>С кем готов объединиться</label><input value="Покататься, побегать, обсудить идею"/></div></div>
-<section class="bike"><div class="bike-visual" id="bikeVisual">Мой велосипед</div><div><div class="kicker">Личный объект / часть ритма</div><h2 class="serif" style="font-size:52px;margin:12px 0 24px">Мой велосипед.</h2><div class="field"><label>Название / модель</label><input id="bikeName" placeholder="Например: Canyon Grizl CF SL 7"/></div><div class="field" style="margin-top:18px"><label>Фото велосипеда</label><div class="file-control"><input type="file" id="bikeFile" accept="image/*"><span>Добавить фото ↗</span><i id="bikeFileName">JPG / PNG</i></div></div><div class="field" style="margin-top:18px"><label>Пара слов о нём</label><textarea placeholder="За что любишь, где чаще ездишь"></textarea></div></div></section>
+<section class="bike"><div class="bike-visual" id="bikeVisual">Мой велосипед</div><div><div class="kicker">Личный объект / часть ритма</div><h2 class="serif" style="font-size:52px;margin:12px 0 24px">Мой велосипед.</h2><div class="field"><label>Название / модель</label><input id="bikeName" placeholder="Например: Canyon Grizl CF SL 7"/></div><div class="field" style="margin-top:18px"><label>Фото велосипеда</label><div class="file-control"><input type="file" id="bikeFile" accept="image/*"><span>Добавить фото ↗</span><i id="bikeFileName">JPG / PNG</i></div></div><div class="field" style="margin-top:18px"><label>Пара слов о нём</label><textarea id="bikeNote" placeholder="За что любишь, где чаще ездишь"></textarea></div></div></section>
+ <div style="display:flex;gap:16px;align-items:center;margin-top:28px;border-top:1px solid var(--line);padding-top:20px">
+   <button type="button" class="btn-solid" id="saveProfileBtn">Сохранить</button>
+   <span class="kicker" id="syncState">Telegram sync · ожидает запуска</span>
+ </div>
 </section>
 </main>
 <div id="toast" style="position:fixed;right:16px;bottom:110px;background:#111;color:#fff;padding:10px 14px;border-radius:20px;font-size:12px;opacity:0;transition:.2s;z-index:100"></div>
@@ -291,7 +295,13 @@ const people=[
 ["Даша","Некоторые идеи не приходят, пока не выйдешь из офиса.","прогулки · идеи"]
 ];
 peopleWall.innerHTML=people.map((p,i)=>`<article class="person"><span class="idx">0${i+1}</span><span class="portrait-initial">${p[0][0]}</span><h3>${p[0]}</h3><p>${p[1]}</p><div class="person-tags"><span>${p[2]}</span></div></article>`).join("");
-const ev=[["02 сентября · 07:45","Утренний бег","5 км без гонки"],["06 сентября · 11:00","Городской хайкинг","зелёные районы Москвы"],["10 сентября · весь день","100 км вместе","общий велочеллендж"],["13 сентября · 18:30","Сильная мысль","спорт, работа и энергия"],["20 сентября · 09:00","Новый маршрут","выбираем голосованием"]];
+const ev=[
+["02 сентября · 07:45","Утренний бег","5 км без гонки","morning-run"],
+["06 сентября · 11:00","Городской хайкинг","зелёные районы Москвы","city-hiking"],
+["10 сентября · весь день","100 км вместе","общий велочеллендж","100k-together"],
+["13 сентября · 18:30","Сильная мысль","спорт, работа и энергия","strong-thought"],
+["20 сентября · 09:00","Новый маршрут","выбираем голосованием","new-route"]
+];
 events.innerHTML=ev.map(e=>`<div class="event-row"><time>${e[0]}</time><div><h3>${e[1]}</h3><div class="kicker">${e[2]}</div></div><span></span><button type="button" class="btn" onclick="toast('Присоединяем')">Присоединиться ↗</button></div>`).join("");
 function switchView(id){
  document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('active',s.id===id));
@@ -311,5 +321,103 @@ if(u){
  if(u.photo_url){topAvatar.innerHTML=`<img src="${u.photo_url}" alt="">`;memberPhoto.innerHTML=`<img src="${u.photo_url}" alt="">`;}
 }
 bikeFile.addEventListener('change',e=>{const f=e.target.files?.[0];if(!f)return;bikeFileName.textContent=f.name;const r=new FileReader();r.onload=()=>bikeVisual.innerHTML=`<img src="${r.result}" alt="">`;r.readAsDataURL(f)});
+
+const API_BASE = window.__V_RITME_CONFIG__?.apiBase || "";
+const initData = tg?.initData || "";
+
+async function api(path, method="GET", payload=null){
+  if(!initData) throw new Error("Открой Mini App внутри Telegram");
+  const res = await fetch(API_BASE + path,{
+    method,
+    headers:{
+      "content-type":"application/json",
+      "x-telegram-init-data":initData
+    },
+    body: payload ? JSON.stringify(payload) : undefined
+  });
+  const data = await res.json().catch(()=>({}));
+  if(!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
+  return data;
+}
+
+function setSync(text, ok=false){
+  const e=document.getElementById("syncState");
+  if(!e) return;
+  e.textContent=text;
+  e.style.color=ok ? "var(--ink)" : "var(--ash)";
+}
+
+async function hydrateMember(){
+  if(!initData){
+    setSync("Preview mode · данные не сохраняются");
+    return;
+  }
+  try{
+    setSync("Telegram sync · подключаем");
+    const data=await api("/api/me");
+    const p=data.profile || {};
+    if(p.first_name){
+      topName.textContent=p.first_name;
+      memberName.innerHTML=p.first_name+"<br>в ритме.";
+    }
+    if(p.telegram_photo_url){
+      topAvatar.innerHTML=`<img src="${p.telegram_photo_url}" alt="">`;
+      memberPhoto.innerHTML=`<img src="${p.telegram_photo_url}" alt="">`;
+    }
+    if(document.getElementById("rhythm")) rhythm.value=p.rhythm || rhythm.value;
+    if(document.getElementById("status")) status.value=p.status || status.value;
+    if(document.getElementById("drive")) drive.value=p.drive || drive.value;
+    if(document.getElementById("connect")) connect.value=p.connect || connect.value;
+    if(data.bike){
+      bikeName.value=data.bike.name || "";
+      bikeNote.value=data.bike.note || "";
+      if(data.bike.photo_url) bikeVisual.innerHTML=`<img src="${data.bike.photo_url}" alt="">`;
+    }
+    setSync("Telegram sync · подключено",true);
+  }catch(e){
+    setSync("Sync error · "+e.message);
+  }
+}
+
+async function saveProfile(){
+  try{
+    setSync("Сохраняем…");
+    await api("/api/profile","POST",{
+      rhythm:rhythm.value,
+      status:status.value,
+      drive:drive.value,
+      connect:connect.value,
+      is_visible:true
+    });
+    if(bikeName.value.trim()){
+      await api("/api/bike","POST",{
+        name:bikeName.value.trim(),
+        note:bikeNote.value.trim(),
+        is_visible:true
+      });
+    }
+    setSync("Сохранено в профиле",true);
+    toast("Профиль сохранён");
+  }catch(e){
+    setSync("Не сохранено · "+e.message);
+    toast("Не удалось сохранить");
+  }
+}
+
+async function joinActivity(slug,btn){
+  try{
+    if(btn){btn.disabled=true;btn.textContent="Добавляем…";}
+    await api("/api/join-activity","POST",{activity_slug:slug});
+    if(btn) btn.textContent="В ритме ✓";
+    toast("Ты в ритме");
+  }catch(e){
+    if(btn){btn.disabled=false;btn.textContent="Присоединиться ↗";}
+    toast(e.message);
+  }
+}
+
+document.getElementById("saveProfileBtn")?.addEventListener("click",saveProfile);
+hydrateMember();
+
 </script>
 </body></html>
