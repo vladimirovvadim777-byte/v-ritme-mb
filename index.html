@@ -5,7 +5,7 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width,initial-scale=1,viewport-fit=cover" name="viewport"/>
 <meta content="#F5F3ED" name="theme-color"/>
-<title>В ритме МБ — Community Journal · v9.3 Backend</title>
+<title>В ритме МБ — Community Journal · v9.4 Live Social Data</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <style>
 :root{
@@ -252,8 +252,8 @@ window.__V_RITME_CONFIG__={apiBase:"https://yrcogxmnqrebbzcnqbjc.supabase.co/fun
 <div class="cover">
 <div class="cover-meta"><span class="kicker">Community journal · выпуск 01</span><b>Москва · сейчас</b></div>
 <div class="cover-photo"><div class="cover-copy"><div class="kicker" style="color:#fff">Люди · движение · город</div><h1 class="serif">Пульс движения.</h1><p>Ритм города складывается из людей вокруг. Не рейтинг — живая температура сообщества.</p></div></div>
-<div class="pulse-grid"><div class="metric lead"><b>68<em>%</em></b><span>активны за 24 часа</span></div><div class="metric"><b>327</b><span>человек в ритме</span></div><div class="metric"><b>1 840</b><span>км вместе</span></div><div class="metric"><b>214</b><span>мыслей</span></div></div>
-<div class="live-strip"><h2 class="serif">Живой<br/>поток</h2><div class="ticker"><div class="tick"><time>сейчас</time><span>Максим присоединился к Coffee Ride</span></div><div class="tick"><time>4 мин</time><span>Лена оставила новую мысль после прогулки</span></div><div class="tick"><time>12 мин</time><span>Аня отметила утренний бег · 6,2 км</span></div><div class="tick"><time>25 мин</time><span>Трое нашли компанию на вечерний заезд</span></div></div></div>
+<div class="pulse-grid"><div class="metric lead"><b><span id="metricActive">—</span><em>%</em></b><span>активны за 24 часа</span></div><div class="metric"><b id="metricPeople">—</b><span>человек в ритме</span></div><div class="metric"><b id="metricKm">—</b><span>км вместе</span></div><div class="metric"><b id="metricThoughts">—</b><span>мыслей</span></div></div>
+<div class="live-strip"><h2 class="serif">Живой<br/>поток</h2><div class="ticker" id="liveTicker"><div class="tick"><time>сейчас</time><span>Подключаем живой поток…</span></div></div></div>
 </div>
 </section>
 <section class="screen" id="people">
@@ -357,12 +357,15 @@ async function hydrateMember(){
     const data=await api("/api/me");
     const p=data.profile || {};
     if(p.first_name){
+      window.__tgInitial=(p.first_name||"В").trim().charAt(0).toUpperCase()||"В";
       topName.textContent=p.first_name;
+      if(!topAvatar.querySelector("img")) topAvatar.textContent=window.__tgInitial;
       memberName.innerHTML=p.first_name+"<br>в ритме.";
     }
     if(p.telegram_photo_url){
-      topAvatar.innerHTML=`<img src="${p.telegram_photo_url}" alt="">`;
-      memberPhoto.innerHTML=`<img src="${p.telegram_photo_url}" alt="">`;
+      const tgPhoto = p.telegram_photo_url;
+      topAvatar.innerHTML=`<img src="${tgPhoto}" alt="" referrerpolicy="no-referrer" onerror="this.remove();this.parentElement.textContent=(window.__tgInitial||'В')">`;
+      memberPhoto.innerHTML=`<img src="${tgPhoto}" alt="" referrerpolicy="no-referrer" onerror="this.remove();this.parentElement.textContent='TG'">`;
     }
     if(document.getElementById("rhythm")) rhythm.value=p.rhythm || rhythm.value;
     if(document.getElementById("status")) status.value=p.status || status.value;
@@ -418,6 +421,65 @@ async function joinActivity(slug,btn){
 
 document.getElementById("saveProfileBtn")?.addEventListener("click",saveProfile);
 hydrateMember();
+
+
+const PULSE_URL="https://yrcogxmnqrebbzcnqbjc.supabase.co/functions/v1/v-ritme-pulse";
+
+function fmtNum(v){
+  const n=Number(v||0);
+  return new Intl.NumberFormat("ru-RU",{maximumFractionDigits:1}).format(n);
+}
+function timeAgo(iso){
+  const ms=Date.now()-new Date(iso).getTime();
+  const min=Math.max(0,Math.round(ms/60000));
+  if(min<1) return "сейчас";
+  if(min<60) return `${min} мин`;
+  const h=Math.round(min/60);
+  if(h<24) return `${h} ч`;
+  return `${Math.round(h/24)} д`;
+}
+function eventText(e){
+  const name=e.first_name || e.username || "Участник";
+  const map={
+    app_open:`${name} открыл «В ритме МБ»`,
+    profile_created:`${name} присоединился к сообществу`,
+    profile_saved:`${name} обновил свой ритм`,
+    bike_saved:`${name} добавил велосипед`,
+    meaning_published:`${name} опубликовал новую мысль`,
+    activity_joined:`${name} присоединился к активности`,
+    reaction:`${name} оставил реакцию`,
+    chat_message:`${name} написал в чате`,
+    chat_reaction:`${name} отреагировал в чате`,
+    chat_join:`${name} присоединился к чату`,
+    chat_leave:`${name} вышел из чата`,
+    bot_button:`${name} откликнулся на сообщение бота`,
+    chat_member_update:`В чате обновился состав участников`
+  };
+  return map[e.event_type] || `${name} · ${e.event_type}`;
+}
+async function hydratePulse(){
+  const src=document.getElementById("pulseSource");
+  try{
+    const r=await fetch(PULSE_URL,{cache:"no-store"});
+    const d=await r.json();
+    if(!r.ok||!d.ok) throw new Error(d.error||`HTTP ${r.status}`);
+    const m=d.metrics||{};
+    metricActive.textContent=fmtNum(m.active_24h_pct);
+    metricPeople.textContent=fmtNum(m.people_in_rhythm);
+    metricKm.textContent=fmtNum(m.km_together);
+    metricThoughts.textContent=fmtNum(m.thoughts);
+    const feed=(d.feed||[]).slice(0,8);
+    liveTicker.innerHTML=feed.length
+      ? feed.map(e=>`<div class="tick"><time>${timeAgo(e.occurred_at)}</time><span>${eventText(e)}</span></div>`).join("")
+      : `<div class="tick"><time>сейчас</time><span>Пока нет событий. Будь первым в ритме.</span></div>`;
+    if(src) src.textContent="live data · Telegram chat + Mini App";
+  }catch(e){
+    if(src) src.textContent="live data · временно недоступно";
+    liveTicker.innerHTML=`<div class="tick"><time>—</time><span>Живой поток временно недоступен</span></div>`;
+  }
+}
+hydratePulse();
+setInterval(hydratePulse,60000);
 
 </script>
 </body></html>
