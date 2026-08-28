@@ -1,33 +1,39 @@
 <!doctype html>
-<html lang="ru" data-build="v9.8.1-github-loader">
+<html lang="ru" data-build="v10.1-github-bootstrap">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#F5F3ED">
-<title>В ритме МБ — v9.8.1</title>
+<meta name="theme-color" content="#f3f0e7">
+<title>В ритме МБ</title>
 <style>
-html,body{margin:0;min-height:100%;background:#f5f3ed;color:#111;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-.boot{min-height:100vh;display:grid;place-items:center;padding:24px;box-sizing:border-box}
-.boot small{letter-spacing:.12em;text-transform:uppercase}
+html,body{margin:0;min-height:100%;background:#f3f0e7;color:#0b0b0a;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.boot{min-height:100vh;display:grid;place-items:center;text-align:center;padding:24px;box-sizing:border-box}
+.boot span{font-size:13px;letter-spacing:.18em;text-transform:uppercase}
+.boot small{display:block;margin-top:14px;color:#74716b;font-size:10px;letter-spacing:.08em}
 </style>
 </head>
 <body>
-<div class="boot"><small>В ритме МБ · загрузка</small></div>
+<div class="boot"><div><span>В ритме МБ · загрузка</span><small id="state">Собираем журнал…</small></div></div>
 <script>
 (async()=>{
-  const APP_URL='https://yrcogxmnqrebbzcnqbjc.supabase.co/functions/v1/v-ritme-app';
-  try{
-    const r=await fetch(APP_URL,{cache:'no-store'});
-    if(!r.ok) throw new Error('HTTP '+r.status);
-    const html=await r.text();
-    if(!html.includes('data-build="v9.8.1"')) throw new Error('Unexpected build');
-    document.open();
-    document.write(html);
-    document.close();
-  }catch(e){
-    document.body.innerHTML='<div class="boot"><div><b>Не удалось открыть приложение</b><br><small>Закройте Mini App и откройте снова.</small></div></div>';
-    console.error('v-ritme loader',e);
-  }
+ const state=document.getElementById('state');
+ try{
+   const controller=new AbortController();
+   const timer=setTimeout(()=>controller.abort(),12000);
+   const r=await fetch('./index-backup.html?v=10.1',{cache:'no-store',signal:controller.signal});
+   clearTimeout(timer);
+   if(!r.ok) throw new Error('HTTP '+r.status);
+   let html=await r.text();
+   if(!html.includes('id="activities"')||!html.includes('id="my"')) throw new Error('Неверная базовая сборка');
+   html=html.replace('</head>','<link rel="stylesheet" href="https://yrcogxmnqrebbzcnqbjc.supabase.co/functions/v1/v-ritme-frontcss?v=10.1"></head>');
+   html=html.replace('</body>','<script src="https://yrcogxmnqrebbzcnqbjc.supabase.co/functions/v1/v-ritme-frontjs?v=10.1"><\/script></body>');
+   document.open();
+   document.write(html);
+   document.close();
+ }catch(e){
+   state.textContent='Не удалось загрузить приложение';
+   console.error('bootstrap',e);
+ }
 })();
 </script>
 </body>
