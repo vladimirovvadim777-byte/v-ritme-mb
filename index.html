@@ -148,7 +148,7 @@ body{font-size:16px;padding-bottom:calc(80px + env(safe-area-inset-bottom))}
     </div>
     <div class="kicker" style="margin-top:18px">В ритме МБ</div>
     <h1 class="serif" id="profileName">Твой<br>ритм.</h1>
-    <div class="statement" id="profileThought">«Спорт — способ настроить голову.»</div>
+    <div id="profileThought" hidden></div>
   </section>
 
   <section class="passport">
@@ -186,7 +186,7 @@ body{font-size:16px;padding-bottom:calc(80px + env(safe-area-inset-bottom))}
     <div class="field"><label for="about">Пара слов о себе</label><textarea id="about" placeholder="Например: люблю длинные выезды, кофе после и без гонки за ваттами."></textarea></div>
     <div class="field"><label for="rhythm">Твой основной ритм</label><input id="rhythm" placeholder="Например: road, gravel, бег, всё понемногу"></div>
     <div class="field"><label for="status">Сегодня ты...</label><input id="status" placeholder="Например: готов катнуть вечером"></div>
-    <div class="field"><label for="thought">Фраза о себе · необязательно</label><textarea id="thought" placeholder="Короткая фраза, которая будет в профиле."></textarea></div>
+    <input id="thought" type="hidden">
     <input id="drive" type="hidden"><input id="connect" type="hidden">
     <details class="optional-profile">
       <summary>Добавить вайб и интересы</summary>
