@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ru" data-build="v14.10.1-route-frame-icon-tuning">
+<html lang="ru" data-build="v14.10.3-typography-fx-restored">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
@@ -850,10 +850,145 @@ button:disabled,input:disabled,textarea:disabled,select:disabled{opacity:.48;cur
   .route-modal-actions{grid-template-columns:1fr}
 }
 
+
+/* v14.10.2 — proof means a real achievement, never virtual points */
+.components .component-note{
+  display:block;
+  margin-top:9px;
+  max-width:100%;
+  font-family:var(--mono);
+  font-size:8px;
+  line-height:1.35;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:var(--muted);
+  overflow-wrap:anywhere;
+}
+.components div:last-child b{
+  font-size:clamp(34px,9vw,46px)!important;
+  line-height:.95!important;
+}
+
+
+/* v14.10.3 — typography FX restoration
+   Editorial FX only. Never apply to utility UI, forms, navigation or multiline People headings. */
+
+.fx-echo{
+  position:relative;
+  isolation:isolate;
+}
+.fx-echo::after{
+  content:attr(data-echo);
+  position:absolute;
+  inset:auto auto .01em .035em;
+  z-index:-1;
+  color:transparent;
+  -webkit-text-stroke:1px rgba(255,255,255,.26);
+  opacity:.72;
+  transform:translate(.025em,.035em);
+  pointer-events:none;
+}
+/* Hero markup may not carry data-echo; mirror current text visually with text-shadow instead. */
+.hero .fx-echo{
+  text-shadow:
+    .025em .035em 0 rgba(255,255,255,.18),
+    .055em .075em 0 rgba(255,255,255,.07);
+}
+
+/* Restrained chromatic aberration on Pulse only. */
+.fx-rgb{
+  position:relative;
+  text-shadow:
+    -1.2px 0 rgba(255,56,84,.36),
+     1.2px 0 rgba(49,191,255,.34);
+  animation:mb-text-vibration 5.8s steps(1,end) infinite;
+}
+@keyframes mb-text-vibration{
+  0%,7%,100%{
+    transform:translate3d(0,0,0);
+    text-shadow:
+      -1.2px 0 rgba(255,56,84,.36),
+       1.2px 0 rgba(49,191,255,.34);
+  }
+  1%{
+    transform:translate3d(.35px,0,0);
+    text-shadow:
+      -1.8px .15px rgba(255,56,84,.42),
+       1.4px -.1px rgba(49,191,255,.38);
+  }
+  2%{
+    transform:translate3d(-.3px,.15px,0);
+    text-shadow:
+      -.9px -.1px rgba(255,56,84,.32),
+       1.8px .1px rgba(49,191,255,.38);
+  }
+  3%{
+    transform:translate3d(.15px,-.1px,0);
+  }
+}
+
+/* Hard guards: these must never look glitched. */
+.section-title::before,
+.section-title::after,
+.person-name::before,
+.person-name::after,
+.person-viewer-name::before,
+.person-viewer-name::after,
+.bottom button::before,
+.bottom button::after,
+.btn::before,
+.btn::after,
+.btn-fill::before,
+.btn-fill::after,
+.field label::before,
+.field label::after{
+  content:none!important;
+}
+
+/* Keep utility typography clean. */
+.bottom,
+.btn,
+.btn-fill,
+.filter,
+.chip,
+.field,
+.passport-cell,
+.components,
+.person-editorial,
+.person-viewer,
+.modal{
+  text-shadow:none;
+}
+
+/* Refine Prata metrics without changing family. */
+.serif,
+.person-name,
+.person-viewer-name,
+.section-title,
+.hero h1{
+  font-kerning:normal;
+  font-feature-settings:"kern" 1,"liga" 1;
+  text-rendering:optimizeLegibility;
+}
+.hero h1{
+  letter-spacing:-.058em;
+}
+.section-title{
+  letter-spacing:-.052em;
+}
+
+/* Respect accessibility / motion preferences. */
+@media (prefers-reduced-motion:reduce){
+  .fx-rgb{
+    animation:none!important;
+    transform:none!important;
+  }
+}
+
 </style>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head><body><div class="app"><header class="topbar"><div class="topin" style="justify-content:flex-end"><div class="avatar" id="topAvatar">В</div></div></header><main>
-<section class="screen active" id="pulse"><div class="hero"><div class="hero-photo"><div><h1 class="serif fx-echo" data-text="собирает людей.">собирает людей.</h1><p>Люди, движение и истории, которые складываются в одно сообщество. Без таблицы лидеров.</p></div></div></div><div class="metrics" id="metrics"></div>
+<section class="screen active" id="pulse"><div class="hero"><div class="hero-photo"><div><h1 class="serif fx-echo fx-echo fx-rgb" data-text="собирает людей.">собирает людей.</h1><p>Люди, движение и истории, которые складываются в одно сообщество. Без таблицы лидеров.</p></div></div></div><div class="metrics" id="metrics"></div>
 <section class="section pulse-live" aria-labelledby="pulseLiveTitle">
   <div class="section-head-inline"><div><div class="kicker">Сейчас в сообществе</div><h2 class="serif pulse-live-title fx-rgb" id="pulseLiveTitle" data-text="Живой пульс.">Живой пульс.</h2></div><button class="text-link" type="button" data-screen-jump="people">Люди →</button></div>
   <div class="live-feed" id="pulseLiveFeed"><div class="empty">Собираем последние события…</div></div>
@@ -1131,7 +1266,12 @@ function bindPassportActions(){
   });
 }
 
-function proofStatus(s){return ({claimed:"Без проверки",pending:"Смотрим 👀",verified:"Зачтено ✓",rejected:"Нужно уточнить"})[String(s||"")]||"Без проверки"}function renderMe(){if(me?.profile){const p=me.profile;profileName.innerHTML=esc(p.first_name||"Твой")+"<br>в ритме.";profileThought.textContent=p.thought?`«${p.thought}»`:"«Спорт — способ настроить голову.»";profileAbout.textContent=p.about||peopleData.me?.about||"Расскажи пару слов о себе — без резюме и официоза.";["about","rhythm","status","drive","connect","thought"].forEach(k=>{const el=document.getElementById(k);if(el)el.value=p[k]||""});const telegramU=safeUrl(tgUser.photo_url)||safeUrl(p.telegram_photo_url),customU=safeUrl(p.avatar_override_url)||safeUrl(p.avatar_url),u=customU||telegramU||safeUrl(p.display_photo_url);if(u){profilePhoto.innerHTML=`<img src="${esc(u)}" alt="" onerror="this.remove()">`;topAvatar.innerHTML=`<img src="${esc(u)}" alt="" onerror="this.parentElement.textContent='${esc((p.first_name||"В").charAt(0))}'">`}else{profilePhoto.innerHTML="";topAvatar.textContent=(p.first_name||"В").charAt(0)}if(window.avatarSource&&window.avatarUploadLabel){if(customU){avatarSource.textContent="Своё фото";avatarUploadLabel.textContent="Сменить фото";avatarUploadLabel.classList.add("show")}else if(telegramU){avatarSource.textContent="Фото из Telegram";avatarUploadLabel.textContent="Сменить фото";avatarUploadLabel.classList.add("show")}else{avatarSource.textContent="Фото пока нет";avatarUploadLabel.textContent="Добавить фото";avatarUploadLabel.classList.add("show")}}const vibeList=(peopleData.me?.vibes||p.vibes||[]),myVibes=vibeList.length?`${vibeList[0]}${vibeList.length>1?` · +${vibeList.length-1}`:""}`:"добавь вайб";passportGrid.innerHTML=[["Мой ритм",p.rhythm||"пока не выбрал","rhythm"],["Сегодня",p.status||"без статуса","status"],["Вайб",myVibes,"vibe"],["Пруфы",(rep.achievements||[]).length?`${(rep.achievements||[]).length} шт.`:"пока нет","proof"]].map(x=>`<button class="passport-cell" type="button" data-passport-action="${x[2]}" aria-label="${esc(x[0])}: ${esc(x[1])}"><span class="kicker">${esc(x[0])}</span><b>${esc(x[1])}</b><span class="passport-go" aria-hidden="true">${mbIcon("arrow")}</span></button>`).join("");bindPassportActions();renderChipGroups({...p,...peopleData.me})}const i=rep.index||{},c=i.components||{};scoreValue.textContent=Number(i.score||0);scoreLevel.textContent=i.level||"Наблюдает";scoreBar.style.width=Math.min(100,Number(i.score||0))+"%";scoreComponents.innerHTML=[["Чат",c.chat||0],["Участие",c.participation||0],["Вклад",c.contribution||0],["Пруфы",c.proofs||0]].map(x=>`<div><span class="kicker">${x[0]}</span><b>${x[1]}</b></div>`).join("");achievementSelect.innerHTML='<option value="">Своё достижение</option>'+(rep.catalog||[]).map(x=>`<option value="${esc(x.id)}">${esc(x.title)}${x.proof_required?" · нужен пруф":""}</option>`).join("");achievementList.innerHTML=(rep.achievements||[]).length?rep.achievements.map(a=>{const title=a.achievement_catalog?.title||a.custom_title||"Достижение";const proof=safeUrl(a.proof_url);return `<article class="achievement-card"><div class="achievement-head"><div><div class="kicker">${esc(a.achievement_catalog?.category||"personal")}</div><h3>${esc(title)}</h3></div><span class="status-pill">${esc(proofStatus(a.verification_status))}</span></div><div class="achievement-facts">${a.event_name?`<div class="achievement-fact"><span class="kicker">Событие</span><b>${esc(a.event_name)}</b></div>`:""}${a.completed_at?`<div class="achievement-fact"><span class="kicker">Дата</span><b>${esc(new Date(a.completed_at).toLocaleDateString("ru-RU"))}</b></div>`:""}${a.result_text?`<div class="achievement-fact"><span class="kicker">Результат / время</span><b>${esc(a.result_text)}</b></div>`:""}${a.place_text?`<div class="achievement-fact"><span class="kicker">Место</span><b>${esc(a.place_text)}</b></div>`:""}</div>${a.proof_note?`<p class="copy">${esc(a.proof_note)}</p>`:""}${proof?`<a class="proof-link" href="${esc(proof)}" target="_blank" rel="noopener noreferrer"><span>Смотреть пруф</span>${mbIcon("external")}</a>`:""}</article>`}).join(""):'<div class="people-empty"><div class="kicker">Sports Passport</div><h3>Тут пока без пруфов.</h3><p class="copy">Закинь первый результат: гонку, бревет, Gran Fondo, триатлон или личный рекорд. Фото, скрин или ссылка — всё ок.</p></div>';const b=me?.bike||(Array.isArray(me?.bikes)?me.bikes[0]:null);if(b){const bu=safeUrl(b.photo_url||b.image_url);bikePhoto.innerHTML=bu?`<img src="${esc(bu)}" alt="Велосипед участника">`:"";bikeMeta.innerHTML=`<b>${esc(b.name||[b.brand,b.model].filter(Boolean).join(" ")||"Мой велосипед")}</b>${b.note?`<p>${esc(b.note)}</p>`:""}`;bikeName.value=b.name||[b.brand,b.model].filter(Boolean).join(" ")||"";bikeNote.value=b.note||""}else{bikePhoto.innerHTML="";bikeMeta.innerHTML='<div class="bike-empty"><div><span class="kicker">Personal object</span><strong>Добавь велик, на котором сейчас больше всего катаешь.</strong></div><span>↗</span></div>';bikeName.value="";bikeNote.value=""}}
+function proofStatus(s){return ({claimed:"Без проверки",pending:"Смотрим 👀",verified:"Зачтено ✓",rejected:"Нужно уточнить"})[String(s||"")]||"Без проверки"}function renderMe(){if(me?.profile){const p=me.profile;profileName.innerHTML=esc(p.first_name||"Твой")+"<br>в ритме.";profileThought.textContent=p.thought?`«${p.thought}»`:"«Спорт — способ настроить голову.»";profileAbout.textContent=p.about||peopleData.me?.about||"Расскажи пару слов о себе — без резюме и официоза.";["about","rhythm","status","drive","connect","thought"].forEach(k=>{const el=document.getElementById(k);if(el)el.value=p[k]||""});const telegramU=safeUrl(tgUser.photo_url)||safeUrl(p.telegram_photo_url),customU=safeUrl(p.avatar_override_url)||safeUrl(p.avatar_url),u=customU||telegramU||safeUrl(p.display_photo_url);if(u){profilePhoto.innerHTML=`<img src="${esc(u)}" alt="" onerror="this.remove()">`;topAvatar.innerHTML=`<img src="${esc(u)}" alt="" onerror="this.parentElement.textContent='${esc((p.first_name||"В").charAt(0))}'">`}else{profilePhoto.innerHTML="";topAvatar.textContent=(p.first_name||"В").charAt(0)}if(window.avatarSource&&window.avatarUploadLabel){if(customU){avatarSource.textContent="Своё фото";avatarUploadLabel.textContent="Сменить фото";avatarUploadLabel.classList.add("show")}else if(telegramU){avatarSource.textContent="Фото из Telegram";avatarUploadLabel.textContent="Сменить фото";avatarUploadLabel.classList.add("show")}else{avatarSource.textContent="Фото пока нет";avatarUploadLabel.textContent="Добавить фото";avatarUploadLabel.classList.add("show")}}const vibeList=(peopleData.me?.vibes||p.vibes||[]),myVibes=vibeList.length?`${vibeList[0]}${vibeList.length>1?` · +${vibeList.length-1}`:""}`:"добавь вайб";passportGrid.innerHTML=[["Мой ритм",p.rhythm||"пока не выбрал","rhythm"],["Сегодня",p.status||"без статуса","status"],["Вайб",myVibes,"vibe"],["Пруфы",(rep.achievements||[]).length?`${(rep.achievements||[]).length} шт.`:"пока нет","proof"]].map(x=>`<button class="passport-cell" type="button" data-passport-action="${x[2]}" aria-label="${esc(x[0])}: ${esc(x[1])}"><span class="kicker">${esc(x[0])}</span><b>${esc(x[1])}</b><span class="passport-go" aria-hidden="true">${mbIcon("arrow")}</span></button>`).join("");bindPassportActions();renderChipGroups({...p,...peopleData.me})}const i=rep.index||{},c=i.components||{};scoreValue.textContent=Number(i.score||0);scoreLevel.textContent=i.level||"Наблюдает";scoreBar.style.width=Math.min(100,Number(i.score||0))+"%";const proofCount=(rep.achievements||[]).length,proofActivity=Number(c.proofs||0);scoreComponents.innerHTML=[
+["Чат · баллы",c.chat||0,""],
+["Участие · баллы",c.participation||0,""],
+["Вклад · баллы",c.contribution||0,""],
+["Пруфы",proofCount?`${proofCount} шт.`:"0",proofActivity?`+${proofActivity} к активности`:""]
+].map(x=>`<div><span class="kicker">${esc(x[0])}</span><b>${esc(x[1])}</b>${x[2]?`<small class="component-note">${esc(x[2])}</small>`:""}</div>`).join("");achievementSelect.innerHTML='<option value="">Своё достижение</option>'+(rep.catalog||[]).map(x=>`<option value="${esc(x.id)}">${esc(x.title)}${x.proof_required?" · нужен пруф":""}</option>`).join("");achievementList.innerHTML=(rep.achievements||[]).length?rep.achievements.map(a=>{const title=a.achievement_catalog?.title||a.custom_title||"Достижение";const proof=safeUrl(a.proof_url);return `<article class="achievement-card"><div class="achievement-head"><div><div class="kicker">${esc(a.achievement_catalog?.category||"personal")}</div><h3>${esc(title)}</h3></div><span class="status-pill">${esc(proofStatus(a.verification_status))}</span></div><div class="achievement-facts">${a.event_name?`<div class="achievement-fact"><span class="kicker">Событие</span><b>${esc(a.event_name)}</b></div>`:""}${a.completed_at?`<div class="achievement-fact"><span class="kicker">Дата</span><b>${esc(new Date(a.completed_at).toLocaleDateString("ru-RU"))}</b></div>`:""}${a.result_text?`<div class="achievement-fact"><span class="kicker">Результат / время</span><b>${esc(a.result_text)}</b></div>`:""}${a.place_text?`<div class="achievement-fact"><span class="kicker">Место</span><b>${esc(a.place_text)}</b></div>`:""}</div>${a.proof_note?`<p class="copy">${esc(a.proof_note)}</p>`:""}${proof?`<a class="proof-link" href="${esc(proof)}" target="_blank" rel="noopener noreferrer"><span>Смотреть пруф</span>${mbIcon("external")}</a>`:""}</article>`}).join(""):'<div class="people-empty"><div class="kicker">Sports Passport</div><h3>Тут пока без пруфов.</h3><p class="copy">Закинь первый результат: гонку, бревет, Gran Fondo, триатлон или личный рекорд. Фото, скрин или ссылка — всё ок.</p></div>';const b=me?.bike||(Array.isArray(me?.bikes)?me.bikes[0]:null);if(b){const bu=safeUrl(b.photo_url||b.image_url);bikePhoto.innerHTML=bu?`<img src="${esc(bu)}" alt="Велосипед участника">`:"";bikeMeta.innerHTML=`<b>${esc(b.name||[b.brand,b.model].filter(Boolean).join(" ")||"Мой велосипед")}</b>${b.note?`<p>${esc(b.note)}</p>`:""}`;bikeName.value=b.name||[b.brand,b.model].filter(Boolean).join(" ")||"";bikeNote.value=b.note||""}else{bikePhoto.innerHTML="";bikeMeta.innerHTML='<div class="bike-empty"><div><span class="kicker">Personal object</span><strong>Добавь велик, на котором сейчас больше всего катаешь.</strong></div><span>↗</span></div>';bikeName.value="";bikeNote.value=""}}
 const routeInfo={"morning-flow":["Morning Flow","18 км · набережные Москвы","Москва"],"coffee-ride":["Coffee Ride","24 км · ritual","Москва"],"gravel-day":["Gravel Day","56 км · Московская область","Московская область"],"social-ride":["Social Ride","28 км · Москва","Москва"]};let currentRoute="";function renderRouteModal(){if(!currentRoute)return;const x=routeInfo[currentRoute],live=(club.activities||[]).find(a=>a.slug===currentRoute);routeTitle.textContent=x[0];routeText.textContent=x[1];routePeople.innerHTML=`<div class="avatars">${(live?.participants||[]).slice(0,8).map(avatar).join("")}<span style="margin-left:12px">${Number(live?.participant_count||0)} участников</span></div>`;joinRoute.textContent=live?.joined?"Я в теме ✓":"Присоединиться";openRouteMap.innerHTML=`${mbIcon("map")}<span>Яндекс Карты</span>`;openRouteMap.onclick=()=>openYandexBikeRoute("",x[0],x[2])}document.querySelectorAll("[data-route]").forEach(b=>b.onclick=()=>{currentRoute=b.dataset.route;telemetry("activity_open",{slug:currentRoute});renderRouteModal();routeModal.classList.add("open")});joinRoute.onclick=()=>withBusy(joinRoute,async()=>{if(!currentRoute)return;const live=(club.activities||[]).find(a=>a.slug===currentRoute);if(live?.joined){const ok=await new Promise(resolve=>{if(tg?.showConfirm)tg.showConfirm("Выйти из активности?",resolve);else resolve(window.confirm("Выйти из активности?"))});if(!ok)return;await authJson(`${BASE}/v-ritme-mb-api/api/leave-activity`,"POST",{activity_slug:currentRoute})}else await authJson(`${BASE}/v-ritme-mb-api/api/join-activity`,"POST",{activity_slug:currentRoute});club=await authJson(`${BASE}/v-ritme-club`);renderActivities();renderRouteModal();toast(live?.joined?"Ты вышел из активности":"Ты в теме ✓")},"Обновляем…");submitActivity.onclick=()=>withBusy(submitActivity,async()=>{telemetry("activity_open",{action:"proposal_submit"});club=await authJson(`${BASE}/v-ritme-club`,"POST",{action:"propose_activity",title:actTitle.value,description:actDesc.value,route_area:actWhere.value,proposed_date:actDate.value});renderActivities();activityModal.classList.remove("open");toast("Предложение отправлено")},"Отправляем…");publishMeaning.onclick=()=>withBusy(publishMeaning,async()=>{const t=meaningInput.value.trim();if(!t)return;telemetry("meaning_form_completed",{length:t.length});await authJson(`${BASE}/v-ritme-mb-api/api/meaning`,"POST",{text:t});meaningInput.value="";pulse=await retry(()=>json(`${BASE}/v-ritme-pulse`),1);renderMeanings();toast("Мысль опубликована")},"Публикуем…");saveProfile.onclick=()=>withBusy(saveProfile,async()=>{const vibes=selected(vibeChips),interests=selected(interestChips);telemetry("profile_form_completed",{vibes:vibes.length,interests:interests.length,about_length:about.value.trim().length});const [profileResult,peopleResult]=await Promise.all([authJson(`${BASE}/v-ritme-mb-api/api/profile`,"POST",{rhythm:rhythm.value,status:status.value,drive:drive.value,connect:connect.value,thought:thought.value,is_visible:true}),authJson(`${BASE}/v-ritme-people`,"POST",{action:"update_profile",about:about.value,vibes,interests})]);if(profileResult?.profile)me={...(me||{}),profile:profileResult.profile};if(peopleResult?.me)peopleData={...peopleData,me:peopleResult.me};renderMe();tg?.HapticFeedback?.notificationOccurred?.("success");toast("Профиль сохранён");authJson(`${BASE}/v-ritme-people`).then(x=>{peopleData=x;renderMe();renderPeople()}).catch(e=>console.error("people refresh",e))},"Сохраняем…");async function uploadAvatar(file){if(!file)return;const d=await uploadWithTimeout(`${BASE}/v-ritme-avatar-upload`,{file,kind:"avatar",headers:{"content-type":file.type||"application/octet-stream","x-telegram-init-data":initData}});return d.url}
 avatarFile?.addEventListener("change",async()=>{const f=avatarFile.files?.[0];if(!f)return;try{avatarUploadLabel.textContent="Загружаем…";avatarUploadLabel.classList.add("show");await uploadAvatar(f);me=await authJson(`${BASE}/v-ritme-mb-api/api/me`);peopleData=await authJson(`${BASE}/v-ritme-people`);rep=await authJson(`${BASE}/v-ritme-reputation`);renderMe();renderPeople();renderEvent();avatarFile.value="";tg?.HapticFeedback?.notificationOccurred?.("success");toast("Фото обновлено")}catch(e){console.error(e);alertError(e)}finally{avatarUploadLabel.textContent="Сменить фото"}});
 async function normalizeUserImage(file,label="photo"){
