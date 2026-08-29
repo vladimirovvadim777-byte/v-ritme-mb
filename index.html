@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ru" data-build="v14.8.12-people-card-redesign">
+<html lang="ru" data-build="v14.8.13-people-balanced-photo">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
@@ -481,6 +481,86 @@ html,body{font-family:var(--sans);font-feature-settings:"kern" 1,"liga" 1;text-r
   .person-name{font-size:clamp(40px,11vw,54px)}
 }
 
+
+/* v14.8.13 — balanced portrait, no hero-photo takeover */
+.person-editorial{
+  display:block;
+  position:relative;
+  padding-top:0;
+  background:linear-gradient(180deg,rgba(250,248,242,.9),rgba(246,243,235,.82));
+}
+.person-editorial::after{top:18px;right:18px}
+.person-index{
+  position:absolute;
+  top:18px;
+  left:18px;
+  z-index:6;
+}
+.person-body{padding:28px 22px 18px}
+.person-headline{
+  display:grid;
+  grid-template-columns:104px minmax(0,1fr) auto;
+  gap:16px;
+  align-items:start;
+  padding:18px 18px 0 0;
+}
+.person-portrait{
+  position:relative;
+  width:104px;
+  height:122px;
+  overflow:hidden;
+  border-radius:20px;
+  border:1px solid rgba(17,17,15,.10);
+  background:
+    radial-gradient(circle at 76% 14%,rgba(62,207,126,.18),transparent 36%),
+    linear-gradient(145deg,#ece7dc,#d7cfc1);
+  box-shadow:0 10px 24px rgba(17,17,15,.065),0 1px 0 rgba(255,255,255,.55) inset;
+}
+.person-portrait img{
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  object-position:center;
+  background:rgba(242,239,230,.28);
+}
+.person-portrait .person-initial{
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:flex-end;
+  justify-content:flex-start;
+  padding:12px;
+  font-family:var(--serif);
+  font-size:56px;
+  line-height:.75;
+  letter-spacing:-.06em;
+  color:rgba(17,17,15,.88);
+}
+.person-portrait.portrait-failed::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:radial-gradient(circle at 76% 14%,rgba(62,207,126,.18),transparent 36%),linear-gradient(145deg,#ece7dc,#d7cfc1);
+}
+.person-title-wrap{min-width:0;padding-top:7px}
+.person-name{font-size:clamp(38px,9.5vw,56px);line-height:.92}
+.person-user{margin-top:7px}
+.person-score{margin-top:8px}
+.person-about{margin-top:20px}
+.person-tags{margin-top:15px}
+.person-match{margin-top:16px}
+.person-open{margin-top:18px}
+.person-media,.person-media-bg,.person-media-fg{display:none!important}
+@media(max-width:520px){
+  .person-body{padding:26px 18px 16px}
+  .person-headline{grid-template-columns:88px minmax(0,1fr);gap:14px;padding:16px 8px 0 0}
+  .person-portrait{width:88px;height:104px;border-radius:17px}
+  .person-score{display:none}
+  .person-name{font-size:clamp(36px,10vw,48px)}
+  .person-portrait .person-initial{font-size:48px;padding:10px}
+}
+
 </style>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head><body><div class="app"><header class="topbar"><div class="topin" style="justify-content:flex-end"><div class="avatar" id="topAvatar">В</div></div></header><main>
@@ -603,12 +683,12 @@ function liveText(x){const name=x.first_name||x.username||"Кто-то из св
 function renderLiveFeed(){const seen=new Set(),rows=[];for(const x of (pulse.feed||[])){if(!liveText(x))continue;const key=`${x.event_type}:${x.username||x.first_name||"anon"}`;if(seen.has(key))continue;seen.add(key);rows.push(x);if(rows.length===5)break}pulseLiveFeed.innerHTML=rows.length?rows.map(x=>`<div class="live-row"><span class="live-dot"></span><div class="live-copy">${liveText(x)}</div><time class="live-time">${esc(relativeTime(x.occurred_at))}</time></div>`).join(""):'<div class="empty">Пульс только собирается. Новые действия людей появятся здесь.</div>'}
 function renderPulse(){const m=pulse.metrics||{};const vals=[{value:m.people_count||m.members||0,label:"людей",hint:"смотреть людей",screen:"people"},{value:m.km_together||m.distance_km||0,label:"км вместе",hint:"к активностям",screen:"activities"},{value:m.activities_count||m.activities||0,label:"активностей",hint:"что впереди",screen:"activities"},{value:m.meanings_count||m.meanings||0,label:"мыслей",hint:"читать",screen:"meanings"}];metrics.innerHTML=vals.map(v=>`<div class="metric" role="button" tabindex="0" data-kpi-screen="${v.screen}" aria-label="${esc(v.label)}: ${esc(v.value)}. ${esc(v.hint)}"><strong>${esc(v.value)}</strong><span>${esc(v.label)}</span><small>${esc(v.hint)}</small></div>`).join("");metrics.querySelectorAll("[data-kpi-screen]").forEach(el=>{const go=()=>jumpToScreen(el.dataset.kpiScreen);el.onclick=go;el.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();go()}}});renderLiveFeed()}
 function renderPeople(){const mine=peopleData.me||{};let xs=(peopleData.people||[]).filter(p=>p.id!==mine.id).map((p,i)=>({...p,_overlap:overlap(mine,p),_i:i}));if(peopleFilter==="match")xs=xs.filter(p=>p._overlap.length);if(peopleFilter==="active")xs=xs.filter(p=>Number(p.activity?.score||0)>=35).sort((a,b)=>Number(b.activity?.score||0)-Number(a.activity?.score||0));if(peopleFilter==="new")xs=xs.slice(0,10);peopleFeed.innerHTML=xs.length?xs.map((p,idx)=>{const u=safeUrl(p.avatar_override_url)||safeUrl(p.telegram_photo_url)||safeUrl(p.avatar_url),n=p.first_name||p.username||"Участник",initial=n.charAt(0).toUpperCase(),tags=[...(p.vibes||[]).slice(0,2),...(p.interests||[]).slice(0,2)],about=String(p.about||p.thought||"").trim(),user=p.username?`@${p.username}`:"",score=Number(p.activity?.score||0),level=p.activity?.level||"",hasSignal=!!(about||tags.length||p._overlap.length||score);return `<article class="person-editorial ${u?"has-photo":"no-photo"}" data-person-card="${esc(p.id)}">
-  <div class="person-media">
-    ${u?`<img class="person-media-bg" src="${esc(u)}" alt="" aria-hidden="true" loading="lazy" decoding="async" onerror="this.remove()"><img class="person-media-fg" src="${esc(u)}" alt="" loading="lazy" decoding="async" onerror="this.remove();const bg=this.parentElement&&this.parentElement.querySelector('.person-media-bg');if(bg)bg.remove();this.parentElement&&this.parentElement.classList.add('media-failed')">`:`<div class="person-initial">${esc(initial)}</div>`}
-    <div class="person-index">${String(idx+1).padStart(2,"0")}</div>
-  </div>
+  <div class="person-index">${String(idx+1).padStart(2,"0")}</div>
   <div class="person-body">
     <div class="person-headline">
+      <div class="person-portrait">
+        ${u?`<img src="${esc(u)}" alt="" loading="lazy" decoding="async" onerror="this.remove();this.parentElement.classList.add('portrait-failed')">`:`<div class="person-initial">${esc(initial)}</div>`}
+      </div>
       <div class="person-title-wrap"><h2 class="person-name">${esc(n)}</h2>${user?`<div class="person-user">${esc(user)}</div>`:""}</div>
       ${score?`<div class="person-score"><b>${score}</b><span>${esc(level)}</span></div>`:""}
     </div>
