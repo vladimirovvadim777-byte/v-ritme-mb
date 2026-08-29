@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ru" data-build="v14.8.8-people-editorial-feed">
+<html lang="ru" data-build="v14.8.9-people-feed-fallback">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
@@ -283,6 +283,39 @@ html,body{font-family:var(--sans);font-feature-settings:"kern" 1,"liga" 1;text-r
   .person-name{font-size:42px}
 }
 
+
+/* v14.8.9 — resilient, tighter People feed */
+.person-editorial{grid-template-columns:104px 1fr;border-radius:24px}
+.person-media{min-height:184px}
+.person-media .person-initial{
+  position:absolute;inset:0;z-index:0;min-height:0;height:100%;
+  padding:14px 10px;font-size:68px;align-items:flex-end;
+}
+.person-media img{
+  position:absolute;inset:0;z-index:1;width:100%;height:100%;
+  object-fit:cover;object-position:center top;
+}
+.person-index{z-index:2;top:10px;left:10px}
+.person-body{padding:16px 16px 14px}
+.person-name{font-size:40px;line-height:.9}
+.person-user{margin-top:5px;font-size:9px}
+.person-about{margin-top:13px;font-size:14px;-webkit-line-clamp:2}
+.person-tags{margin-top:12px;gap:5px}
+.person-tags span{padding:6px 8px;font-size:8px}
+.person-match{margin-top:12px;padding-top:10px}
+.person-empty-note{
+  margin-top:14px;font-family:var(--mono);font-size:9px;line-height:1;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--muted)
+}
+.person-open{padding-top:12px;font-size:12px}
+@media(max-width:520px){
+  .person-editorial{grid-template-columns:96px 1fr;border-radius:22px}
+  .person-media{min-height:176px}
+  .person-media,.person-initial{min-height:176px}
+  .person-body{padding:15px 14px 13px}
+  .person-name{font-size:38px}
+}
+
 </style>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head><body><div class="app"><header class="topbar"><div class="topin" style="justify-content:flex-end"><div class="avatar" id="topAvatar">В</div></div></header><main>
@@ -405,13 +438,13 @@ function liveText(x){const name=x.first_name||x.username||"Кто-то из св
 function renderLiveFeed(){const seen=new Set(),rows=[];for(const x of (pulse.feed||[])){if(!liveText(x))continue;const key=`${x.event_type}:${x.username||x.first_name||"anon"}`;if(seen.has(key))continue;seen.add(key);rows.push(x);if(rows.length===5)break}pulseLiveFeed.innerHTML=rows.length?rows.map(x=>`<div class="live-row"><span class="live-dot"></span><div class="live-copy">${liveText(x)}</div><time class="live-time">${esc(relativeTime(x.occurred_at))}</time></div>`).join(""):'<div class="empty">Пульс только собирается. Новые действия людей появятся здесь.</div>'}
 function renderPulse(){const m=pulse.metrics||{};const vals=[{value:m.people_count||m.members||0,label:"людей",hint:"смотреть людей",screen:"people"},{value:m.km_together||m.distance_km||0,label:"км вместе",hint:"к активностям",screen:"activities"},{value:m.activities_count||m.activities||0,label:"активностей",hint:"что впереди",screen:"activities"},{value:m.meanings_count||m.meanings||0,label:"мыслей",hint:"читать",screen:"meanings"}];metrics.innerHTML=vals.map(v=>`<div class="metric" role="button" tabindex="0" data-kpi-screen="${v.screen}" aria-label="${esc(v.label)}: ${esc(v.value)}. ${esc(v.hint)}"><strong>${esc(v.value)}</strong><span>${esc(v.label)}</span><small>${esc(v.hint)}</small></div>`).join("");metrics.querySelectorAll("[data-kpi-screen]").forEach(el=>{const go=()=>jumpToScreen(el.dataset.kpiScreen);el.onclick=go;el.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();go()}}});renderLiveFeed()}
 function renderPeople(){const mine=peopleData.me||{};let xs=(peopleData.people||[]).filter(p=>p.id!==mine.id).map((p,i)=>({...p,_overlap:overlap(mine,p),_i:i}));if(peopleFilter==="match")xs=xs.filter(p=>p._overlap.length);if(peopleFilter==="active")xs=xs.filter(p=>Number(p.activity?.score||0)>=35).sort((a,b)=>Number(b.activity?.score||0)-Number(a.activity?.score||0));if(peopleFilter==="new")xs=xs.slice(0,10);peopleFeed.innerHTML=xs.length?xs.map((p,idx)=>{const u=safeUrl(p.avatar_override_url)||safeUrl(p.telegram_photo_url)||safeUrl(p.avatar_url),n=p.first_name||p.username||"Участник",initial=n.charAt(0).toUpperCase(),tags=[...(p.vibes||[]).slice(0,2),...(p.interests||[]).slice(0,2)],about=String(p.about||p.thought||"").trim(),user=p.username?`@${p.username}`:"",score=Number(p.activity?.score||0),level=p.activity?.level||"",hasSignal=!!(about||tags.length||p._overlap.length||score);return `<article class="person-editorial ${u?"has-photo":"no-photo"}" data-person-card="${esc(p.id)}">
-  <div class="person-media">${u?`<img src="${esc(u)}" alt="${esc(n)}">`:`<div class="person-initial">${esc(initial)}</div>`}<div class="person-index">${String(idx+1).padStart(2,"0")}</div></div>
+  <div class="person-media"><div class="person-initial">${esc(initial)}</div>${u?`<img src="${esc(u)}" alt="" loading="lazy" decoding="async" onerror="this.remove()">`:""}<div class="person-index">${String(idx+1).padStart(2,"0")}</div></div>
   <div class="person-body">
     <div class="person-headline"><div><h2 class="person-name">${esc(n)}</h2>${user?`<div class="person-user">${esc(user)}</div>`:""}</div>${score?`<div class="person-score"><b>${score}</b><span>${esc(level)}</span></div>`:""}</div>
     ${about?`<p class="person-about">${esc(about)}</p>`:""}
     ${tags.length?`<div class="person-tags">${tags.map(t=>`<span>${esc(t)}</span>`).join("")}</div>`:""}
     ${p._overlap.length?`<div class="person-match"><span>Совпало</span><b>${p._overlap.slice(0,3).map(esc).join(" · ")}</b></div>`:""}
-    ${!hasSignal?`<div class="person-empty-note">Пока без описания — можно открыть профиль и посмотреть, кто это.</div>`:""}
+    ${!hasSignal?`<div class="person-empty-note">профиль без описания</div>`:""}
     <button class="person-open" data-person="${esc(p.id)}"><span>Открыть профиль</span><span>↗</span></button>
   </div>
 </article>`}).join(""):'<div class="people-empty"><div class="kicker">People Discovery</div><h3>Люди появятся здесь, когда участники откроют профили.</h3><p class="copy">Заполни свой вайб и интересы — совпадения строятся по общему ритму, а не по проценту совместимости.</p></div>';document.querySelectorAll("[data-person]").forEach(b=>b.onclick=()=>openPerson(b.dataset.person))}
