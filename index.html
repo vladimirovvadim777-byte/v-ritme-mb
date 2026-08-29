@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ru" data-build="v14.9.2-person-viewer-fix">
+<html lang="ru" data-build="v14.9.3-photo-views-fix">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
@@ -312,7 +312,7 @@ html,body{font-family:var(--sans);font-feature-settings:"kern" 1,"liga" 1;text-r
   .person-portrait{width:88px;height:104px;border-radius:17px}
   .person-score{display:none}
   .person-name{font-size:clamp(36px,10vw,48px)}
-  .person-portrait .person-initial,}
+  
 
 
 /* v14.9.0 — QA hardening */
@@ -602,6 +602,86 @@ html.modal-lock,body.modal-lock{overflow:hidden!important;overscroll-behavior:no
   .person-viewer-name{font-size:50px!important}
 }
 
+
+/* v14.9.3 — portrait fallback + real profile views */
+.person-portrait{isolation:isolate}
+.person-portrait img{
+  position:absolute;
+  inset:0;
+  z-index:2;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center;
+  background:#ded8cc;
+}
+.person-portrait .person-initial{
+  position:absolute;
+  inset:0;
+  z-index:1;
+  display:flex;
+  align-items:flex-end;
+  justify-content:flex-start;
+  padding:12px;
+  font-family:var(--serif);
+  font-size:56px;
+  line-height:.75;
+  letter-spacing:-.06em;
+  color:rgba(17,17,15,.88);
+}
+.person-social-proof{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-top:16px;
+  padding-top:12px;
+  border-top:1px solid rgba(17,17,15,.10);
+  font-family:var(--mono);
+  font-size:9px;
+  line-height:1;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  color:var(--muted);
+}
+.person-social-proof b{
+  min-width:28px;
+  text-align:right;
+  font-family:var(--serif);
+  font-size:24px;
+  line-height:.8;
+  font-weight:400;
+  color:var(--ink);
+  letter-spacing:-.03em;
+}
+.person-open{margin-top:12px}
+.person-viewer-views{
+  display:flex;
+  align-items:baseline;
+  justify-content:space-between;
+  gap:12px;
+  margin-top:13px;
+  padding-bottom:13px;
+  border-bottom:1px solid rgba(17,17,15,.10);
+  font-family:var(--mono);
+  font-size:9px;
+  line-height:1;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  color:var(--muted);
+}
+.person-viewer-views b{
+  font-family:var(--serif);
+  font-size:28px;
+  line-height:.8;
+  font-weight:400;
+  color:var(--ink);
+  letter-spacing:-.04em;
+}
+@media(max-width:520px){
+  .person-portrait .person-initial{font-size:48px;padding:10px}
+}
+
 </style>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head><body><div class="app"><header class="topbar"><div class="topin" style="justify-content:flex-end"><div class="avatar" id="topAvatar">В</div></div></header><main>
@@ -752,12 +832,12 @@ function relativeTime(iso){if(!iso)return "";const d=new Date(iso),s=Math.max(0,
 function liveText(x){const name=x.first_name||x.username||"Кто-то из своих",t=String(x.event_type||"");if(t==="profile_created")return `<b>${esc(name)}</b> появился в «В ритме МБ».`;if(t==="profile_saved"||t==="profile_complete")return `<b>${esc(name)}</b> обновил профиль — теперь проще совпасть по вайбу.`;if(t==="bike_saved")return `<b>${esc(name)}</b> добавил свой велосипед.`;if(t==="app_open")return `<b>${esc(name)}</b> сейчас в «В ритме МБ».`;if(t==="activity_join"||t==="joined_activity")return `<b>${esc(name)}</b> присоединился к активности.`;if(t==="new_activity_proposal")return `<b>${esc(name)}</b> предложил новую поездку.`;if(t==="chat_join")return `<b>${esc(name)}</b> появился в сообществе.`;if(t==="proof_upload"||t==="achievement_added")return `<b>${esc(name)}</b> добавил новый пруф.`;return ""}
 function renderLiveFeed(){const seen=new Set(),rows=[];for(const x of (pulse.feed||[])){if(!liveText(x))continue;const key=`${x.event_type}:${x.username||x.first_name||"anon"}`;if(seen.has(key))continue;seen.add(key);rows.push(x);if(rows.length===5)break}pulseLiveFeed.innerHTML=rows.length?rows.map(x=>`<div class="live-row"><span class="live-dot"></span><div class="live-copy">${liveText(x)}</div><time class="live-time">${esc(relativeTime(x.occurred_at))}</time></div>`).join(""):'<div class="empty">Пульс только собирается. Новые действия людей появятся здесь.</div>'}
 function renderPulse(){const m=pulse.metrics||{};const vals=[{value:m.people_count||m.members||0,label:"людей",hint:"смотреть людей",screen:"people"},{value:m.km_together||m.distance_km||0,label:"км вместе",hint:"к активностям",screen:"activities"},{value:m.activities_count||m.activities||0,label:"активностей",hint:"что впереди",screen:"activities"},{value:m.meanings_count||m.meanings||0,label:"мыслей",hint:"читать",screen:"meanings"}];metrics.innerHTML=vals.map(v=>`<div class="metric" role="button" tabindex="0" data-kpi-screen="${v.screen}" aria-label="${esc(v.label)}: ${esc(v.value)}. ${esc(v.hint)}"><strong>${esc(v.value)}</strong><span>${esc(v.label)}</span><small>${esc(v.hint)}</small></div>`).join("");metrics.querySelectorAll("[data-kpi-screen]").forEach(el=>{const go=()=>jumpToScreen(el.dataset.kpiScreen);el.onclick=go;el.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();go()}}});renderLiveFeed()}
-function renderPeople(){const mine=peopleData.me||{};let xs=(peopleData.people||[]).filter(p=>p.id!==mine.id).map((p,i)=>({...p,_overlap:overlap(mine,p),_i:i}));if(peopleFilter==="match")xs=xs.filter(p=>p._overlap.length);if(peopleFilter==="active")xs=xs.filter(p=>Number(p.activity?.score||0)>=35).sort((a,b)=>Number(b.activity?.score||0)-Number(a.activity?.score||0));if(peopleFilter==="new")xs=xs.slice(0,10);peopleFeed.innerHTML=xs.length?xs.map((p,idx)=>{const u=safeUrl(p.avatar_override_url)||safeUrl(p.telegram_photo_url)||safeUrl(p.avatar_url),n=p.first_name||p.username||"Участник",initial=n.charAt(0).toUpperCase(),tags=[...(p.vibes||[]).slice(0,2),...(p.interests||[]).slice(0,2)],about=String(p.about||p.thought||"").trim(),user=p.username?`@${p.username}`:"",score=Number(p.activity?.score||0),level=p.activity?.level||"",hasSignal=!!(about||tags.length||p._overlap.length||score);return `<article class="person-editorial ${u?"has-photo":"no-photo"}" data-person-card="${esc(p.id)}">
+function renderPeople(){const mine=peopleData.me||{};let xs=(peopleData.people||[]).filter(p=>p.id!==mine.id).map((p,i)=>({...p,_overlap:overlap(mine,p),_i:i}));if(peopleFilter==="match")xs=xs.filter(p=>p._overlap.length);if(peopleFilter==="active")xs=xs.filter(p=>Number(p.activity?.score||0)>=35).sort((a,b)=>Number(b.activity?.score||0)-Number(a.activity?.score||0));if(peopleFilter==="new")xs=xs.slice(0,10);peopleFeed.innerHTML=xs.length?xs.map((p,idx)=>{const u=safeUrl(p.avatar_override_url)||safeUrl(p.telegram_photo_url)||safeUrl(p.avatar_url),n=p.first_name||p.username||"Участник",initial=n.charAt(0).toUpperCase(),tags=[...(p.vibes||[]).slice(0,2),...(p.interests||[]).slice(0,2)],about=String(p.about||p.thought||"").trim(),user=p.username?`@${p.username}`:"",score=Number(p.activity?.score||0),level=p.activity?.level||"",views=Number(p.profile_views||0),hasSignal=!!(about||tags.length||p._overlap.length||score);return `<article class="person-editorial ${u?"has-photo":"no-photo"}" data-person-card="${esc(p.id)}">
   <div class="person-index">${String(idx+1).padStart(2,"0")}</div>
   <div class="person-body">
     <div class="person-headline">
       <div class="person-portrait">
-        <div class="person-initial">${esc(initial)}</div>${u?`<img src="${esc(u)}" alt="" loading="lazy" decoding="async" onerror="this.remove()">`:""}
+        ${u?`<img src="${esc(u)}" alt="" loading="lazy" decoding="async" onerror="this.remove();this.parentElement.innerHTML='<div class=&quot;person-initial&quot;>${esc(initial)}</div>'">`:`<div class="person-initial">${esc(initial)}</div>`}
       </div>
       <div class="person-title-wrap"><h2 class="person-name">${esc(n)}</h2>${user?`<div class="person-user">${esc(user)}</div>`:""}</div>
       ${score?`<div class="person-score"><b>${score}</b><span>${esc(level)}</span></div>`:""}
@@ -766,6 +846,7 @@ function renderPeople(){const mine=peopleData.me||{};let xs=(peopleData.people||
     ${tags.length?`<div class="person-tags">${tags.map(t=>`<span>${esc(t)}</span>`).join("")}</div>`:""}
     ${p._overlap.length?`<div class="person-match"><span>Совпало</span><b>${p._overlap.slice(0,3).map(esc).join(" · ")}</b></div>`:""}
     ${!hasSignal?`<div class="person-empty-note">профиль без описания</div>`:""}
+    <div class="person-social-proof"><span>Смотрят профиль</span><b>${views}</b></div>
     <button class="person-open" data-person="${esc(p.id)}" type="button"><span>Открыть профиль</span><span>↗</span></button>
   </div>
 </article>`}).join(""):'<div class="people-empty"><div class="kicker">People Discovery</div><h3>Люди появятся здесь, когда участники откроют профили.</h3><p class="copy">Заполни свой вайб и интересы — совпадения строятся по общему ритму, а не по проценту совместимости.</p></div>';document.querySelectorAll("[data-person]").forEach(b=>b.onclick=()=>openPerson(b.dataset.person))}
@@ -782,6 +863,7 @@ function openPerson(id){
   personModalBody.innerHTML=`
     ${u?`<div class="person-viewer-photo"><img src="${esc(u)}" alt="Фото ${esc(p.first_name||p.username||"участника")}" onerror="this.closest('.person-viewer-photo')?.remove()"></div>`:""}
     <div class="person-viewer-meta kicker">Community Activity · ${esc(p.activity?.score||0)} · ${esc(p.activity?.level||"Наблюдает")}</div>
+    <div class="person-viewer-views"><span>Смотрят профиль</span><b>${Number(p.profile_views||0)}</b></div>
     <h2 class="person-viewer-name">${esc(p.first_name||p.username||"Участник")}</h2>
     ${p.about||p.thought?`<p class="person-viewer-about">${esc(p.about||p.thought||"")}</p>`:""}
     ${o.length?`<section class="person-viewer-section"><div class="kicker">У вас совпало</div><div class="person-viewer-match">${o.slice(0,6).map(esc).join(" · ")}</div></section>`:""}
