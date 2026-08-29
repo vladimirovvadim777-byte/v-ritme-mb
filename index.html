@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ru" data-build="v14.8.11-final">
+<html lang="ru" data-build="v14.8.12-people-card-redesign">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
@@ -426,6 +426,61 @@ html,body{font-family:var(--sans);font-feature-settings:"kern" 1,"liga" 1;text-r
   .person-body{padding:18px 15px 14px 15px}
 }
 
+
+/* v14.8.12 — People card redesign */
+#peopleFeed{gap:26px}
+.person-editorial{
+  display:block;
+  position:relative;
+  overflow:hidden;
+  border-radius:28px;
+  background:rgba(248,246,239,.82);
+  border:1px solid rgba(17,17,15,.14);
+  box-shadow:0 22px 54px rgba(17,17,15,.07),0 1px 0 rgba(255,255,255,.72) inset;
+}
+.person-editorial::before{content:"";position:absolute;inset:8px;border:1px solid rgba(17,17,15,.05);border-radius:21px;pointer-events:none;z-index:5}
+.person-editorial::after{content:"";position:absolute;top:20px;right:20px;width:24px;height:3px;background:var(--green);border-radius:999px;z-index:6}
+.person-media{
+  position:relative;
+  margin:0;
+  width:100%;
+  height:228px;
+  min-height:0;
+  border:0;
+  border-radius:0;
+  overflow:hidden;
+  background:radial-gradient(circle at 78% 16%,rgba(62,207,126,.18),transparent 34%),linear-gradient(145deg,#ece7dc,#d8d0c2);
+  box-shadow:none;
+}
+.person-editorial.no-photo .person-media{height:118px}
+.person-media-bg{position:absolute;inset:-18px;width:calc(100% + 36px);height:calc(100% + 36px);object-fit:cover;filter:blur(18px) saturate(.72) brightness(.92);opacity:.42;transform:scale(1.06)}
+.person-media-fg{position:absolute;inset:14px 18px;width:calc(100% - 36px);height:calc(100% - 28px);object-fit:contain;object-position:center;border-radius:18px;filter:none;z-index:2;background:rgba(242,239,230,.28)}
+.person-initial{position:absolute;inset:0;display:flex;align-items:flex-end;justify-content:flex-start;padding:18px 20px;font-family:var(--serif);font-size:82px;line-height:.72;letter-spacing:-.07em;color:rgba(17,17,15,.88);background:radial-gradient(circle at 76% 10%,rgba(62,207,126,.20),transparent 35%),linear-gradient(145deg,#ede8dd,#d7cfc1)}
+.person-index{position:absolute;z-index:7;top:16px;left:16px;background:rgba(246,243,235,.9);border:1px solid rgba(17,17,15,.08);box-shadow:0 4px 12px rgba(17,17,15,.05)}
+.person-body{position:relative;z-index:2;display:block;padding:22px 22px 18px}
+.person-headline{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;padding-right:22px}
+.person-title-wrap{min-width:0;flex:1}
+.person-name{margin:0;font-family:var(--serif);font-size:clamp(42px,10vw,62px);line-height:.9;letter-spacing:-.055em;overflow-wrap:anywhere}
+.person-user{margin-top:7px;font-size:10px}
+.person-score{margin-top:2px}
+.person-about{margin:18px 0 0;font-size:16px;line-height:1.42;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.person-tags{margin-top:16px;gap:7px}
+.person-tags span{padding:7px 10px;font-size:9px}
+.person-match{margin-top:17px;padding-top:13px}
+.person-empty-note{margin-top:17px;display:inline-flex;padding:7px 10px;border-radius:999px;border:1px solid rgba(17,17,15,.10);background:rgba(255,255,255,.18);font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase}
+.person-open{margin-top:20px;padding:14px 0 2px;border-top:1px solid rgba(17,17,15,.12)}
+.person-open span:last-child{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:1px solid rgba(17,17,15,.12);background:rgba(255,255,255,.24)}
+@media(max-width:520px){
+  .person-editorial{border-radius:26px}
+  .person-editorial::before{inset:7px;border-radius:19px}
+  .person-media{height:218px}
+  .person-editorial.no-photo .person-media{height:108px}
+  .person-media-fg{inset:12px 14px;width:calc(100% - 28px);height:calc(100% - 24px);border-radius:16px}
+  .person-initial{font-size:74px;padding:16px 18px}
+  .person-body{padding:20px 18px 16px}
+  .person-name{font-size:clamp(40px,11vw,54px)}
+}
+
 </style>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head><body><div class="app"><header class="topbar"><div class="topin" style="justify-content:flex-end"><div class="avatar" id="topAvatar">В</div></div></header><main>
@@ -548,9 +603,15 @@ function liveText(x){const name=x.first_name||x.username||"Кто-то из св
 function renderLiveFeed(){const seen=new Set(),rows=[];for(const x of (pulse.feed||[])){if(!liveText(x))continue;const key=`${x.event_type}:${x.username||x.first_name||"anon"}`;if(seen.has(key))continue;seen.add(key);rows.push(x);if(rows.length===5)break}pulseLiveFeed.innerHTML=rows.length?rows.map(x=>`<div class="live-row"><span class="live-dot"></span><div class="live-copy">${liveText(x)}</div><time class="live-time">${esc(relativeTime(x.occurred_at))}</time></div>`).join(""):'<div class="empty">Пульс только собирается. Новые действия людей появятся здесь.</div>'}
 function renderPulse(){const m=pulse.metrics||{};const vals=[{value:m.people_count||m.members||0,label:"людей",hint:"смотреть людей",screen:"people"},{value:m.km_together||m.distance_km||0,label:"км вместе",hint:"к активностям",screen:"activities"},{value:m.activities_count||m.activities||0,label:"активностей",hint:"что впереди",screen:"activities"},{value:m.meanings_count||m.meanings||0,label:"мыслей",hint:"читать",screen:"meanings"}];metrics.innerHTML=vals.map(v=>`<div class="metric" role="button" tabindex="0" data-kpi-screen="${v.screen}" aria-label="${esc(v.label)}: ${esc(v.value)}. ${esc(v.hint)}"><strong>${esc(v.value)}</strong><span>${esc(v.label)}</span><small>${esc(v.hint)}</small></div>`).join("");metrics.querySelectorAll("[data-kpi-screen]").forEach(el=>{const go=()=>jumpToScreen(el.dataset.kpiScreen);el.onclick=go;el.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();go()}}});renderLiveFeed()}
 function renderPeople(){const mine=peopleData.me||{};let xs=(peopleData.people||[]).filter(p=>p.id!==mine.id).map((p,i)=>({...p,_overlap:overlap(mine,p),_i:i}));if(peopleFilter==="match")xs=xs.filter(p=>p._overlap.length);if(peopleFilter==="active")xs=xs.filter(p=>Number(p.activity?.score||0)>=35).sort((a,b)=>Number(b.activity?.score||0)-Number(a.activity?.score||0));if(peopleFilter==="new")xs=xs.slice(0,10);peopleFeed.innerHTML=xs.length?xs.map((p,idx)=>{const u=safeUrl(p.avatar_override_url)||safeUrl(p.telegram_photo_url)||safeUrl(p.avatar_url),n=p.first_name||p.username||"Участник",initial=n.charAt(0).toUpperCase(),tags=[...(p.vibes||[]).slice(0,2),...(p.interests||[]).slice(0,2)],about=String(p.about||p.thought||"").trim(),user=p.username?`@${p.username}`:"",score=Number(p.activity?.score||0),level=p.activity?.level||"",hasSignal=!!(about||tags.length||p._overlap.length||score);return `<article class="person-editorial ${u?"has-photo":"no-photo"}" data-person-card="${esc(p.id)}">
-  <div class="person-media"><div class="person-initial">${esc(initial)}</div>${u?`<img src="${esc(u)}" alt="" loading="lazy" decoding="async" onerror="this.remove()">`:""}<div class="person-index">${String(idx+1).padStart(2,"0")}</div></div>
+  <div class="person-media">
+    ${u?`<img class="person-media-bg" src="${esc(u)}" alt="" aria-hidden="true" loading="lazy" decoding="async" onerror="this.remove()"><img class="person-media-fg" src="${esc(u)}" alt="" loading="lazy" decoding="async" onerror="this.remove();const bg=this.parentElement&&this.parentElement.querySelector('.person-media-bg');if(bg)bg.remove();this.parentElement&&this.parentElement.classList.add('media-failed')">`:`<div class="person-initial">${esc(initial)}</div>`}
+    <div class="person-index">${String(idx+1).padStart(2,"0")}</div>
+  </div>
   <div class="person-body">
-    <div class="person-headline"><div><h2 class="person-name">${esc(n)}</h2>${user?`<div class="person-user">${esc(user)}</div>`:""}</div>${score?`<div class="person-score"><b>${score}</b><span>${esc(level)}</span></div>`:""}</div>
+    <div class="person-headline">
+      <div class="person-title-wrap"><h2 class="person-name">${esc(n)}</h2>${user?`<div class="person-user">${esc(user)}</div>`:""}</div>
+      ${score?`<div class="person-score"><b>${score}</b><span>${esc(level)}</span></div>`:""}
+    </div>
     ${about?`<p class="person-about">${esc(about)}</p>`:""}
     ${tags.length?`<div class="person-tags">${tags.map(t=>`<span>${esc(t)}</span>`).join("")}</div>`:""}
     ${p._overlap.length?`<div class="person-match"><span>Совпало</span><b>${p._overlap.slice(0,3).map(esc).join(" · ")}</b></div>`:""}
