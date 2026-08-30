@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ru" data-build="v15.5.0-stories-journal">
+<html lang="ru" data-build="v15.5.1-ux-cleanup">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Onest:wght@400;500;600;700;800&family=Prata&display=swap" rel="stylesheet">
 
-<title>В ритме МБ — v15.5.0-stories-journal</title>
+<title>В ритме МБ — v15.5.1-ux-cleanup</title>
 <link rel="preload" as="image" href="https://yrcogxmnqrebbzcnqbjc.supabase.co/storage/v1/object/public/activity-media/hero-community.webp" type="image/webp" fetchpriority="high">
 
 <style>
@@ -1318,7 +1318,67 @@ body.movement-recording{overflow:hidden}body.movement-recording .bottom{transfor
   letter-spacing:.035em;
   color:var(--muted);
 }
-\n/* v15.5.0 — curated personal journal. No feed mechanics, likes or counters. */\n.journal-section{min-width:0}\n.story-list{display:grid;gap:26px;margin-top:22px}\n.story-card{border-top:1px solid var(--ink);padding-top:14px;min-width:0}\n.story-card:first-child{border-top:0;padding-top:0}\n.story-photo{margin:0 0 16px;overflow:hidden;border-radius:18px;background:#ded8cc}\n.story-photo img{display:block;width:100%;height:auto;max-height:62dvh;object-fit:contain;object-position:center;background:#ded8cc}\n.story-meta{display:flex;flex-wrap:wrap;gap:8px 14px;margin-bottom:7px;font:500 9px/1.35 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}\n.story-card h3{margin:0;font-family:var(--serif);font-size:clamp(34px,9.5vw,54px);font-weight:400;line-height:.98;letter-spacing:-.04em}\n.story-card .copy{margin-top:12px;white-space:pre-wrap}\n.story-tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:14px}\n.story-tags span{border:1px solid var(--line);border-radius:999px;padding:7px 10px;font:500 8px/1 var(--mono);letter-spacing:.07em;text-transform:uppercase}\n.story-owner-actions{display:flex;gap:8px;margin-top:14px}\n.story-owner-actions .btn{min-height:42px;padding:9px 13px}\n.story-preview{display:none;margin-top:12px;padding:10px;border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.24)}\n.story-preview.show{display:block}\n.story-preview img{display:block;width:100%;height:auto;max-height:46dvh;object-fit:contain;object-position:center;border-radius:12px;background:#ded8cc}\n.story-preview-note{margin-top:8px;font:500 9px/1.35 var(--mono);letter-spacing:.035em;color:var(--muted)}\n.person-viewer-stories{display:grid;gap:20px}\n.person-viewer-stories .story-card h3{font-size:clamp(30px,8vw,44px)}\n</style>
+\n/* v15.5.0 — curated personal journal. No feed mechanics, likes or counters. */\n.journal-section{min-width:0}\n.story-list{display:grid;gap:26px;margin-top:22px}\n.story-card{border-top:1px solid var(--ink);padding-top:14px;min-width:0}\n.story-card:first-child{border-top:0;padding-top:0}\n.story-photo{margin:0 0 16px;overflow:hidden;border-radius:18px;background:#ded8cc}\n.story-photo img{display:block;width:100%;height:auto;max-height:62dvh;object-fit:contain;object-position:center;background:#ded8cc}\n.story-meta{display:flex;flex-wrap:wrap;gap:8px 14px;margin-bottom:7px;font:500 9px/1.35 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}\n.story-card h3{margin:0;font-family:var(--serif);font-size:clamp(34px,9.5vw,54px);font-weight:400;line-height:.98;letter-spacing:-.04em}\n.story-card .copy{margin-top:12px;white-space:pre-wrap}\n.story-tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:14px}\n.story-tags span{border:1px solid var(--line);border-radius:999px;padding:7px 10px;font:500 8px/1 var(--mono);letter-spacing:.07em;text-transform:uppercase}\n.story-owner-actions{display:flex;gap:8px;margin-top:14px}\n.story-owner-actions .btn{min-height:42px;padding:9px 13px}\n.story-preview{display:none;margin-top:12px;padding:10px;border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.24)}\n.story-preview.show{display:block}\n.story-preview img{display:block;width:100%;height:auto;max-height:46dvh;object-fit:contain;object-position:center;border-radius:12px;background:#ded8cc}\n.story-preview-note{margin-top:8px;font:500 9px/1.35 var(--mono);letter-spacing:.035em;color:var(--muted)}\n.person-viewer-stories{display:grid;gap:20px}\n.person-viewer-stories .story-card h3{font-size:clamp(30px,8vw,44px)}\n
+/* v15.5.1 — UX cleanup: actionable About, calmer event card, journal safety zones. */
+.profile-about-action{
+  appearance:none;
+  -webkit-appearance:none;
+  display:block;
+  width:100%;
+  padding:0;
+  border:0;
+  background:transparent;
+  color:inherit;
+  text-align:left;
+  cursor:pointer;
+}
+.profile-about-action:focus-visible{outline:2px solid var(--green);outline-offset:6px}
+.profile-about-quick{
+  margin-top:18px;
+  padding-top:16px;
+  border-top:1px solid var(--line);
+}
+.profile-about-quick textarea{
+  width:100%;
+  min-height:120px;
+  margin-top:9px;
+  resize:vertical;
+}
+.profile-about-quick-actions{
+  display:flex;
+  justify-content:flex-start;
+  margin-top:12px;
+}
+.journal-section>.actions{
+  margin-top:22px!important;
+  margin-bottom:34px!important;
+}
+.journal-section .story-list{
+  margin-top:0!important;
+  padding-top:0;
+}
+.journal-section .people-empty{
+  margin-top:0!important;
+}
+.event-primary-actions{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) minmax(0,.62fr);
+  gap:10px!important;
+}
+.minsk-route-actions .btn,
+.minsk-route-actions .btn-fill{
+  min-width:0;
+}
+.minsk-route-actions span{
+  white-space:nowrap;
+}
+@media(max-width:380px){
+  .minsk-route-actions{
+    display:grid!important;
+    grid-template-columns:1fr!important;
+  }
+}
+</style>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head><body><div class="app"><header class="topbar"><div class="topin" style="justify-content:flex-end"><div class="avatar" id="topAvatar">В</div></div></header><main>
 <section class="screen active" id="pulse"><div class="hero"><div class="hero-photo"><div><h1 class="serif fx-echo fx-echo fx-rgb" data-text="собирает людей.">собирает людей.</h1><p>Люди, движение и истории, которые складываются в одно сообщество. Без таблицы лидеров.</p></div></div></div><div class="metrics" id="metrics"></div>
@@ -1417,7 +1477,12 @@ body.movement-recording{overflow:hidden}body.movement-recording .bottom{transfor
     </div>
     <div class="profile-about">
       <div class="kicker">О себе</div>
-      <div class="profile-about-text" id="profileAbout">Расскажи пару слов о себе — без резюме и официоза.</div>
+      <button class="profile-about-text profile-about-action" id="profileAbout" type="button" aria-controls="aboutQuick" aria-label="Редактировать раздел о себе">Расскажи пару слов о себе — без резюме и официоза.</button>
+      <div class="profile-about-quick">
+        <label class="kicker" for="aboutQuick">О себе</label>
+        <textarea id="aboutQuick" maxlength="700" placeholder="Например: люблю длинные выезды, кофе после и без гонки за ваттами."></textarea>
+        <div class="profile-about-quick-actions"><button class="btn" id="saveAboutQuick" type="button">Сохранить о себе</button></div>
+      </div>
     </div>
     <div class="kicker" style="margin-top:18px">В ритме МБ</div>
     <h1 class="serif" id="profileName">Твой<br>ритм.</h1>
@@ -1429,12 +1494,6 @@ body.movement-recording{overflow:hidden}body.movement-recording .bottom{transfor
     <div class="passport-grid" id="passportGrid"></div>
   </section>
 
-
-  <section class="section" id="myParticipation">
-    <div class="kicker">Моё участие</div>
-    <h2 class="serif section-title">Где я<br>вместе.</h2>
-    <div class="list" id="myParticipationList"><div class="empty">Участие появится здесь, когда ты присоединишься к событию или ритуалу.</div></div>
-  </section>
 
 
   <section class="section journal-section" id="storySection">
@@ -1835,7 +1894,7 @@ async function uploadWithTimeout(url,{file,headers={},kind="upload",timeout=2500
   }finally{clearTimeout(timer)}
 }
 function alertError(e){const m=e instanceof Error?e.message:String(e||"Ошибка");mbDiagnostics.push("caught",m);telemetry("ui_error",{message:m.slice(0,160)});toast(m,"error");if(tg?.showAlert)tg.showAlert(m);else window.alert(m)}async function withBusy(btn,fn,label="Подождите…"){if(!btn||btn.disabled)return;const old=btn.textContent;btn.disabled=true;btn.setAttribute("aria-busy","true");if(label)btn.textContent=label;try{return await fn()}catch(e){console.error(e);alertError(e)}finally{btn.disabled=false;btn.removeAttribute("aria-busy");btn.textContent=old}}const bgObserver=("IntersectionObserver" in window)?new IntersectionObserver(entries=>{for(const e of entries){if(!e.isIntersecting)continue;const el=e.target;if(!el.dataset.bgLoaded){el.style.backgroundImage=`url("${el.dataset.bg}")`;el.dataset.bgLoaded="1"}bgObserver.unobserve(el)}},{rootMargin:"320px 0px"}):null;
-function loadDeferredBackgrounds(root=document){const els=[...root.querySelectorAll("[data-bg]")];els.forEach((el,i)=>{if(el.dataset.bgLoaded)return;if(i===0||!bgObserver){el.style.backgroundImage=`url("${el.dataset.bg}")`;el.dataset.bgLoaded="1"}else bgObserver.observe(el)})}function show(id){document.querySelectorAll(".screen").forEach(x=>x.classList.toggle("active",x.id===id));telemetry("screen_view",{screen:id,build:"v15.5.0-stories-journal"});document.querySelectorAll(".bottom button").forEach(x=>x.classList.toggle("active",x.dataset.screen===id));const active=document.getElementById(id);if(active)loadDeferredBackgrounds(active);if(id==="pulse"){const t=document.getElementById("pulseLiveTitle");if(t&&!window.matchMedia("(prefers-reduced-motion: reduce)").matches){t.classList.remove("pulse-type-kick");void t.offsetWidth;t.classList.add("pulse-type-kick")}}window.scrollTo(0,0)}document.querySelectorAll("[data-screen]").forEach(b=>b.onclick=()=>show(b.dataset.screen));document.querySelectorAll("[data-screen-jump]").forEach(b=>b.onclick=()=>show(b.dataset.screenJump));const entryScreen=new URLSearchParams(location.search).get("screen");if(["pulse","people","activities","meanings","my"].includes(entryScreen))show(entryScreen);else{const pt=document.getElementById("pulseLiveTitle");if(pt&&!window.matchMedia("(prefers-reduced-motion: reduce)").matches)pt.classList.add("pulse-type-kick")}let modalReturnFocus=null;
+function loadDeferredBackgrounds(root=document){const els=[...root.querySelectorAll("[data-bg]")];els.forEach((el,i)=>{if(el.dataset.bgLoaded)return;if(i===0||!bgObserver){el.style.backgroundImage=`url("${el.dataset.bg}")`;el.dataset.bgLoaded="1"}else bgObserver.observe(el)})}function show(id){document.querySelectorAll(".screen").forEach(x=>x.classList.toggle("active",x.id===id));telemetry("screen_view",{screen:id,build:"v15.5.1-ux-cleanup"});document.querySelectorAll(".bottom button").forEach(x=>x.classList.toggle("active",x.dataset.screen===id));const active=document.getElementById(id);if(active)loadDeferredBackgrounds(active);if(id==="pulse"){const t=document.getElementById("pulseLiveTitle");if(t&&!window.matchMedia("(prefers-reduced-motion: reduce)").matches){t.classList.remove("pulse-type-kick");void t.offsetWidth;t.classList.add("pulse-type-kick")}}window.scrollTo(0,0)}document.querySelectorAll("[data-screen]").forEach(b=>b.onclick=()=>show(b.dataset.screen));document.querySelectorAll("[data-screen-jump]").forEach(b=>b.onclick=()=>show(b.dataset.screenJump));const entryScreen=new URLSearchParams(location.search).get("screen");if(["pulse","people","activities","meanings","my"].includes(entryScreen))show(entryScreen);else{const pt=document.getElementById("pulseLiveTitle");if(pt&&!window.matchMedia("(prefers-reduced-motion: reduce)").matches)pt.classList.add("pulse-type-kick")}let modalReturnFocus=null;
 function openModalElement(modal){
   if(!modal)return;
   modalReturnFocus=document.activeElement instanceof HTMLElement?document.activeElement:null;
@@ -1849,7 +1908,7 @@ document.getElementById("openFeedback")?.addEventListener("click",()=>{telemetry
 document.getElementById("submitFeedback")?.addEventListener("click",()=>withBusy(document.getElementById("submitFeedback"),async()=>{
   const category=document.getElementById("feedbackCategory")?.value||"other",message=String(document.getElementById("feedbackMessage")?.value||"").trim();
   if(message.length<3)throw new Error("Напиши пару слов");
-  await authJson(`${BASE}/v-ritme-feedback`,"POST",{category,message,build:"v15.5.0-stories-journal",screen:activeScreenId(),user_agent:navigator.userAgent,online:navigator.onLine,context:feedbackContext()});
+  await authJson(`${BASE}/v-ritme-feedback`,"POST",{category,message,build:"v15.5.1-ux-cleanup",screen:activeScreenId(),user_agent:navigator.userAgent,online:navigator.onLine,context:feedbackContext()});
   telemetry("feedback_submit",{category,screen:activeScreenId()});
   document.getElementById("feedbackMessage").value="";
   closeModalElement(document.getElementById("feedbackModal"));
@@ -1940,7 +1999,7 @@ function renderMyParticipation(){if(!myParticipationList)return;const rows=[];if
 function renderActivities(){renderActivitiesMainEvent();renderMyParticipation();const routeDistances={"morning-flow":"18 км","coffee-ride":"24 км","gravel-day":"56 км","social-ride":"28 км"};document.querySelectorAll("[data-route]").forEach(btn=>{const slug=btn.dataset.route,live=(club.activities||[]).find(a=>a.slug===slug),a=(pulse.activities||[]).find(x=>x.slug===slug)||live||{},parent=btn.parentElement;let meta=parent.querySelector(".route-live-meta");if(!meta){meta=document.createElement("div");meta.className="route-live-meta";parent.insertBefore(meta,btn)}const when=a.starts_at?new Date(a.starts_at).toLocaleString("ru-RU",{day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"}):"дата скоро";const people=Number(live?.participant_count||0);meta.innerHTML=`<span>${esc(when)}</span><span>${esc(a.location||"Москва")}</span><span>${esc(routeDistances[slug]||"")}</span><span>${people} ${people===1?"участник":"участников"}</span>`;btn.textContent="Открыть активность"});activityList.innerHTML=(pulse.activities||[]).slice(0,4).map(a=>{const live=(club.activities||[]).find(x=>x.slug===a.slug),people=Number(live?.participant_count||0),known=["morning-flow","coffee-ride","gravel-day","social-ride"].includes(a.slug),tag=known?"button":"div",attrs=known?` type="button" data-activity-row="${esc(a.slug)}"`:"";return `<${tag} class="list-row${known?" activity-list-row":""}"${attrs}><time>${a.starts_at?new Date(a.starts_at).toLocaleDateString("ru-RU",{day:"2-digit",month:"short"}):"план"}</time><div><h3>${esc(a.title)}</h3><div class="kicker">${esc(a.location||a.subtitle||"сообщество")} · ${people} ${people===1?"участник":"участников"}</div></div></${tag}>`}).join("")||'<div class="empty">Пока без ближайших встреч.</div>';activityList.querySelectorAll("[data-activity-row]").forEach(b=>b.addEventListener("click",()=>{currentRoute=b.dataset.activityRow;telemetry("activity_open",{slug:currentRoute,source:"upcoming"});renderRouteModal();openModalElement(routeModal)}))}function renderMeanings(){meaningsList.innerHTML=(pulse.meanings||[]).slice(0,8).map(x=>{const author=x.profiles?.first_name||x.profiles?.username||"Кто-то из своих",context=x.activity_title||x.event_title||x.context_title||"";return `<article class="meaning-card user"><div><div class="kicker">${context?`После · ${esc(context)}`:esc(author)}</div><h3>${esc(x.text)}</h3></div><div class="caption">${context?`${esc(author)} · `:""}${x.created_at?esc(new Date(x.created_at).toLocaleDateString("ru-RU",{day:"2-digit",month:"long"})):"Новая мысль"}</div></article>`}).join("")}
 function eventPersonChip(p){const q=participantProfile(p),name=q?.first_name||q?.username||"Участник";return `<span class="event-person">${avatar(q)}<b>${esc(name)}</b></span>`}
 function eventPeopleModal(list){return (list||[]).length?`<div class="event-modal-people">${list.map(p=>{const q=participantProfile(p),name=q?.first_name||q?.username||"Участник";return `<div class="event-modal-person">${avatar(q)}<div><b>${esc(name)}</b>${q?.username?`<small>@${esc(q.username)}</small>`:""}</div></div>`}).join("")}</div>`:'<div class="empty">Пока никто не записался.</div>'}
-function renderEvent(){const e=rep.event,box=currentEvent;if(e&&!renderEvent._avatarReported){renderEvent._avatarReported=true;const ps=e.participants||[];telemetry("avatar_state",{surface:"minsk",total:ps.length,with_photo:ps.filter(x=>!!profilePhotoUrl(participantProfile(x))).length})}if(!e){box.innerHTML='<div class="kicker">Общее событие</div><h2 class="serif section-title">Что едем дальше?</h2><p class="copy">Текущее событие завершено. Следующее рождается внутри сообщества.</p><div class="actions"><button class="btn-fill" id="proposeEventBtn" type="button">Предложить мероприятие</button></div>';document.getElementById("proposeEventBtn")?.addEventListener("click",()=>openModalElement(activityModal));return}const dates=`${new Date(e.starts_at).toLocaleDateString("ru-RU",{day:"2-digit",month:"2-digit"})} — ${new Date(e.ends_at).toLocaleDateString("ru-RU",{day:"2-digit",month:"2-digit"})}`;const cover=safeUrl(e.cover_url)||(e.slug==="minsk-green-ring-2026"?MINSK_COVER:"");box.innerHTML=`<div class="kicker">Главное событие сообщества</div><h2 class="serif section-title">${esc(e.title)}</h2><article class="event-card ${cover?"has-cover":"minsk-plate"}" ${cover?`style="background-image:linear-gradient(180deg,rgba(0,0,0,.08),rgba(0,0,0,.8)),url('${esc(cover)}')"`:""}><div class="kicker" style="color:#ddd">COMMUNITY WEEKEND / 2026</div><h3 class="serif">${esc(e.title)}</h3><p>${esc(e.description||"")}</p><div class="event-meta-grid"><div><span class="kicker" style="color:#bbb">Когда</span><b>${esc(dates)}</b></div><div><span class="kicker" style="color:#bbb">Где</span><b>${esc(e.location||"—")}</b></div></div><div class="event-people">${(e.participants||[]).slice(0,8).map(eventPersonChip).join("")}</div><div class="kicker" style="color:#ddd;margin-top:8px">${Number(e.participant_count||0)} ${Number(e.participant_count||0)===1?"участник":"участников"}</div><div class="actions"><button class="btn" id="eventDetails" type="button">Подробнее</button><button class="btn-fill" id="eventJoin" type="button">${e.joined?"Буду ✓":"Буду"}</button>${e.slug==="minsk-green-ring-2026"?`<div class="minsk-card-route-actions"><button class="btn-fill event-route" id="eventStartMap" type="button">${mbIcon("map")}<span>Маршрут в Яндекс</span></button><button class="btn event-route" id="eventTrack" type="button">${mbIcon("external")}<span>Полный трек</span></button></div>`:(safeUrl(e.route_url)?`<button class="btn event-route" id="eventRouteMap" type="button">${mbIcon("map")}<span>Маршрут</span></button>`:"")}</div></article>`;document.getElementById("eventDetails").onclick=()=>{telemetry("event_open",{title:String(e.title||"").slice(0,100)},"community_event",e.id);eventModalTitle.textContent=e.title;eventModalBody.innerHTML=`<p class="copy">${esc(e.description||"")}</p><div class="list"><div class="list-row"><time>Когда</time><div>${esc(dates)}</div></div><div class="list-row"><time>Где</time><div>${esc(e.location||"—")}</div></div><div class="list-row"><time>Маршрут</time><div>${esc(e.route_text||"Будет опубликован ближе к старту")}</div></div><div class="list-row"><time>Участники</time><div>${Number(e.participant_count||0)}${eventPeopleModal(e.participants||[])}</div></div></div>${e.slug==="minsk-green-ring-2026"?`<div class="actions minsk-route-actions"><button class="btn-fill" id="eventStartMapModal" type="button">${mbIcon("map")}<span>Маршрут в Яндекс Картах</span></button><button class="btn" id="eventTrackModal" type="button">${mbIcon("external")}<span>Открыть полный трек</span></button></div>`:(safeUrl(e.route_url)?`<div class="actions"><button class="btn-fill" id="eventRouteMapModal" type="button">${mbIcon("map")}<span>Открыть в Яндекс Картах</span></button></div>`:"")}`;openModalElement(eventModal);
+function renderEvent(){const e=rep.event,box=currentEvent;if(e&&!renderEvent._avatarReported){renderEvent._avatarReported=true;const ps=e.participants||[];telemetry("avatar_state",{surface:"minsk",total:ps.length,with_photo:ps.filter(x=>!!profilePhotoUrl(participantProfile(x))).length})}if(!e){box.innerHTML='<div class="kicker">Общее событие</div><h2 class="serif section-title">Что едем дальше?</h2><p class="copy">Текущее событие завершено. Следующее рождается внутри сообщества.</p><div class="actions"><button class="btn-fill" id="proposeEventBtn" type="button">Предложить мероприятие</button></div>';document.getElementById("proposeEventBtn")?.addEventListener("click",()=>openModalElement(activityModal));return}const dates=`${new Date(e.starts_at).toLocaleDateString("ru-RU",{day:"2-digit",month:"2-digit"})} — ${new Date(e.ends_at).toLocaleDateString("ru-RU",{day:"2-digit",month:"2-digit"})}`;const cover=safeUrl(e.cover_url)||(e.slug==="minsk-green-ring-2026"?MINSK_COVER:"");box.innerHTML=`<div class="kicker">Главное событие сообщества</div><h2 class="serif section-title">${esc(e.title)}</h2><article class="event-card ${cover?"has-cover":"minsk-plate"}" ${cover?`style="background-image:linear-gradient(180deg,rgba(0,0,0,.08),rgba(0,0,0,.8)),url('${esc(cover)}')"`:""}><div class="kicker" style="color:#ddd">COMMUNITY WEEKEND / 2026</div><h3 class="serif">${esc(e.title)}</h3><p>${esc(e.description||"")}</p><div class="event-meta-grid"><div><span class="kicker" style="color:#bbb">Когда</span><b>${esc(dates)}</b></div><div><span class="kicker" style="color:#bbb">Где</span><b>${esc(e.location||"—")}</b></div></div><div class="event-people">${(e.participants||[]).slice(0,8).map(eventPersonChip).join("")}</div><div class="kicker" style="color:#ddd;margin-top:8px">${Number(e.participant_count||0)} ${Number(e.participant_count||0)===1?"участник":"участников"}</div><div class="actions event-primary-actions"><button class="btn" id="eventDetails" type="button">Подробнее</button><button class="btn-fill" id="eventJoin" type="button">${e.joined?"Буду ✓":"Буду"}</button></div></article>`;document.getElementById("eventDetails").onclick=()=>{telemetry("event_open",{title:String(e.title||"").slice(0,100)},"community_event",e.id);eventModalTitle.textContent=e.title;eventModalBody.innerHTML=`<p class="copy">${esc(e.description||"")}</p><div class="list"><div class="list-row"><time>Когда</time><div>${esc(dates)}</div></div><div class="list-row"><time>Где</time><div>${esc(e.location||"—")}</div></div><div class="list-row"><time>Маршрут</time><div>${esc(e.route_text||"Будет опубликован ближе к старту")}</div></div><div class="list-row"><time>Участники</time><div>${Number(e.participant_count||0)}${eventPeopleModal(e.participants||[])}</div></div></div>${e.slug==="minsk-green-ring-2026"?`<div class="actions minsk-route-actions"><button class="btn-fill" id="eventStartMapModal" type="button">${mbIcon("map")}<span>Маршрут в Яндекс Картах</span></button><button class="btn" id="eventTrackModal" type="button">${mbIcon("external")}<span>Открыть полный трек</span></button></div>`:(safeUrl(e.route_url)?`<div class="actions"><button class="btn-fill" id="eventRouteMapModal" type="button">${mbIcon("map")}<span>Открыть в Яндекс Картах</span></button></div>`:"")}`;openModalElement(eventModal);
 const modalRouteBtn=document.getElementById("eventRouteMapModal");
 if(modalRouteBtn)modalRouteBtn.onclick=()=>openYandexBikeRoute(e.route_url,e.route_text||e.title,e.location);
 const minskTrackModal=document.getElementById("eventTrackModal");
@@ -1980,12 +2039,29 @@ function bindPassportActions(){
   });
 }
 
-function proofStatus(s){return ({claimed:"Без проверки",pending:"Смотрим 👀",verified:"Зачтено ✓",rejected:"Нужно уточнить"})[String(s||"")]||"Без проверки"}function renderMe(){if(me?.profile){const p=me.profile;profileName.innerHTML=esc(p.first_name||"Твой")+"<br>в ритме.";profileThought.textContent=p.thought?`«${p.thought}»`:"«Спорт — способ настроить голову.»";profileAbout.textContent=p.about||peopleData.me?.about||"Расскажи пару слов о себе — без резюме и официоза.";["about","rhythm","status","drive","connect","thought"].forEach(k=>{const el=document.getElementById(k);if(el)el.value=p[k]||""});const telegramU=safeUrl(tgUser.photo_url)||safeUrl(p.telegram_photo_url),customU=safeUrl(p.avatar_override_url)||safeUrl(p.avatar_url),u=customU||telegramU||safeUrl(p.display_photo_url);if(u){profilePhoto.innerHTML=`<img src="${esc(u)}" alt="" onerror="this.remove()">`;topAvatar.innerHTML=`<img src="${esc(u)}" alt="" onerror="this.parentElement.textContent='${esc((p.first_name||"В").charAt(0))}'">`}else{profilePhoto.innerHTML="";topAvatar.textContent=(p.first_name||"В").charAt(0)}if(window.avatarSource&&window.avatarUploadLabel){if(customU){avatarSource.textContent="Своё фото";avatarUploadLabel.textContent="Сменить фото";avatarUploadLabel.classList.add("show")}else if(telegramU){avatarSource.textContent="Фото из Telegram";avatarUploadLabel.textContent="Сменить фото";avatarUploadLabel.classList.add("show")}else{avatarSource.textContent="Фото пока нет";avatarUploadLabel.textContent="Добавить фото";avatarUploadLabel.classList.add("show")}}const vibeList=(peopleData.me?.vibes||p.vibes||[]),myVibes=vibeList.length?`${vibeList[0]}${vibeList.length>1?` · +${vibeList.length-1}`:""}`:"добавь вайб",proofCountNow=(rep.achievements||[]).length,cards=[
+function proofStatus(s){return ({claimed:"Без проверки",pending:"Смотрим 👀",verified:"Зачтено ✓",rejected:"Нужно уточнить"})[String(s||"")]||"Без проверки"}function renderMe(){if(me?.profile){const p=me.profile;profileName.innerHTML=esc(p.first_name||"Твой")+"<br>в ритме.";profileThought.textContent=p.thought?`«${p.thought}»`:"«Спорт — способ настроить голову.»";profileAbout.textContent=p.about||peopleData.me?.about||"Расскажи пару слов о себе — без резюме и официоза.";if(aboutQuick)aboutQuick.value=p.about||peopleData.me?.about||"";["about","rhythm","status","drive","connect","thought"].forEach(k=>{const el=document.getElementById(k);if(el)el.value=p[k]||""});const telegramU=safeUrl(tgUser.photo_url)||safeUrl(p.telegram_photo_url),customU=safeUrl(p.avatar_override_url)||safeUrl(p.avatar_url),u=customU||telegramU||safeUrl(p.display_photo_url);if(u){profilePhoto.innerHTML=`<img src="${esc(u)}" alt="" onerror="this.remove()">`;topAvatar.innerHTML=`<img src="${esc(u)}" alt="" onerror="this.parentElement.textContent='${esc((p.first_name||"В").charAt(0))}'">`}else{profilePhoto.innerHTML="";topAvatar.textContent=(p.first_name||"В").charAt(0)}if(window.avatarSource&&window.avatarUploadLabel){if(customU){avatarSource.textContent="Своё фото";avatarUploadLabel.textContent="Сменить фото";avatarUploadLabel.classList.add("show")}else if(telegramU){avatarSource.textContent="Фото из Telegram";avatarUploadLabel.textContent="Сменить фото";avatarUploadLabel.classList.add("show")}else{avatarSource.textContent="Фото пока нет";avatarUploadLabel.textContent="Добавить фото";avatarUploadLabel.classList.add("show")}}const vibeList=(peopleData.me?.vibes||p.vibes||[]),myVibes=vibeList.length?`${vibeList[0]}${vibeList.length>1?` · +${vibeList.length-1}`:""}`:"добавь вайб",proofCountNow=(rep.achievements||[]).length,cards=[
 ["Мой ритм",p.rhythm||"пока не выбрал","rhythm",!!String(p.rhythm||"").trim()],
 ["Сегодня",p.status||"без статуса","status",!!String(p.status||"").trim()],
 ["Вайб",myVibes,"vibe",vibeList.length>0],
 ["Пруфы",proofCountNow?`${proofCountNow} шт.`:"пока нет","proof",proofCountNow>0]
 ];passportGrid.innerHTML=cards.map(x=>`<button class="passport-cell" type="button" data-passport-action="${x[2]}" data-filled="${x[3]?"true":"false"}" aria-label="${esc(x[0])}: ${esc(x[1])}. ${x[3]?"Открыть заполненный блок":"Заполнить"}"><span class="kicker">${esc(x[0])}</span><b>${esc(x[1])}</b><span class="passport-go" aria-hidden="true">${mbIcon("arrow")}</span></button>`).join("");bindPassportActions();renderChipGroups({...p,...peopleData.me})}achievementSelect.innerHTML='<option value="">Своё достижение</option>'+(rep.catalog||[]).map(x=>`<option value="${esc(x.id)}">${esc(x.title)}${x.proof_required?" · нужен пруф":""}</option>`).join("");achievementList.innerHTML=(rep.achievements||[]).length?rep.achievements.map(a=>{const title=a.achievement_catalog?.title||a.custom_title||"Достижение";const proof=safeUrl(a.proof_url);return `<article class="achievement-card"><div class="achievement-head"><div><div class="kicker">${esc(a.achievement_catalog?.category||"personal")}</div><h3>${esc(title)}</h3></div><span class="status-pill">${esc(proofStatus(a.verification_status))}</span></div><div class="achievement-facts">${a.event_name?`<div class="achievement-fact"><span class="kicker">Событие</span><b>${esc(a.event_name)}</b></div>`:""}${a.completed_at?`<div class="achievement-fact"><span class="kicker">Дата</span><b>${esc(new Date(a.completed_at).toLocaleDateString("ru-RU"))}</b></div>`:""}${a.result_text?`<div class="achievement-fact"><span class="kicker">Результат / время</span><b>${esc(a.result_text)}</b></div>`:""}${a.place_text?`<div class="achievement-fact"><span class="kicker">Место</span><b>${esc(a.place_text)}</b></div>`:""}</div>${a.proof_note?`<p class="copy">${esc(a.proof_note)}</p>`:""}${proof?`<a class="proof-link" href="${esc(proof)}" target="_blank" rel="noopener noreferrer"><span>Смотреть пруф</span>${mbIcon("external")}</a>`:""}</article>`}).join(""):'<div class="people-empty"><div class="kicker">Sports Passport</div><h3>Тут пока без пруфов.</h3><p class="copy">Закинь первый результат: гонку, бревет, Gran Fondo, триатлон или личный рекорд. Фото, скрин или ссылка — всё ок.</p></div>';const b=me?.bike||(Array.isArray(me?.bikes)?me.bikes[0]:null);if(b){const bu=safeUrl(b.photo_url||b.image_url);bikePhoto.innerHTML=bu?`<img src="${esc(bu)}" alt="Велосипед участника">`:"";bikeMeta.innerHTML=`<b>${esc(b.name||[b.brand,b.model].filter(Boolean).join(" ")||"Мой велосипед")}</b>${b.note?`<p>${esc(b.note)}</p>`:""}`;bikeName.value=b.name||[b.brand,b.model].filter(Boolean).join(" ")||"";bikeNote.value=b.note||""}else{bikePhoto.innerHTML="";bikeMeta.innerHTML='<div class="bike-empty"><div><span class="kicker">Personal object</span><strong>Добавь велик, на котором сейчас больше всего катаешь.</strong></div><span>↗</span></div>';bikeName.value="";bikeNote.value=""}}
+
+const aboutQuick=document.getElementById("aboutQuick"),saveAboutQuick=document.getElementById("saveAboutQuick");
+profileAbout?.addEventListener("click",()=>{
+  aboutQuick?.scrollIntoView({behavior:"smooth",block:"center"});
+  setTimeout(()=>aboutQuick?.focus({preventScroll:true}),320);
+});
+saveAboutQuick?.addEventListener("click",()=>withBusy(saveAboutQuick,async()=>{
+  const value=String(aboutQuick?.value||"").trim();
+  const currentVibes=peopleData.me?.vibes||[],currentInterests=peopleData.me?.interests||[];
+  telemetry("profile_form_completed",{source:"about_quick",about_length:value.length});
+  const d=await authJson(`${BASE}/v-ritme-people`,"POST",{action:"update_profile",about:value,vibes:currentVibes,interests:currentInterests});
+  if(d?.me)peopleData={...peopleData,me:d.me};
+  if(me?.profile)me={...me,profile:{...me.profile,about:value}};
+  renderMe();
+  toast("Раздел «О себе» сохранён");
+},"Сохраняем…"));
+
 const routeInfo={"morning-flow":["Morning Flow","18 км · набережные Москвы","Москва"],"coffee-ride":["Coffee Ride","24 км · ritual","Москва"],"gravel-day":["Gravel Day","56 км · Московская область","Московская область"],"social-ride":["Social Ride","28 км · Москва","Москва"]};let currentRoute="";function renderRouteModal(){if(!currentRoute)return;const x=routeInfo[currentRoute],live=(club.activities||[]).find(a=>a.slug===currentRoute);routeTitle.textContent=x[0];routeText.textContent=x[1];routePeople.innerHTML=`<div class="avatars">${(live?.participants||[]).slice(0,8).map(avatar).join("")}<span style="margin-left:12px">${Number(live?.participant_count||0)} участников</span></div>`;joinRoute.textContent=live?.joined?"Буду ✓":"Буду";openRouteMap.innerHTML=`${mbIcon("map")}<span>Яндекс Карты</span>`;openRouteMap.onclick=()=>openYandexBikeRoute("",x[0],x[2])}document.querySelectorAll("[data-route]").forEach(b=>b.onclick=()=>{currentRoute=b.dataset.route;telemetry("activity_open",{slug:currentRoute});renderRouteModal();openModalElement(routeModal)});joinRoute.onclick=()=>withBusy(joinRoute,async()=>{if(!currentRoute)return;const live=(club.activities||[]).find(a=>a.slug===currentRoute);if(live?.joined){const ok=await new Promise(resolve=>{if(tg?.showConfirm)tg.showConfirm("Отменить участие?",resolve);else resolve(window.confirm("Отменить участие?"))});if(!ok)return;await authJson(`${BASE}/v-ritme-mb-api/api/leave-activity`,"POST",{activity_slug:currentRoute})}else await authJson(`${BASE}/v-ritme-mb-api/api/join-activity`,"POST",{activity_slug:currentRoute});club=await authJson(`${BASE}/v-ritme-club`);renderActivities();renderMyParticipation();renderRouteModal();toast(live?.joined?"Участие отменено":"Участие отмечено ✓")},"Обновляем…");submitActivity.onclick=()=>withBusy(submitActivity,async()=>{telemetry("activity_open",{action:"proposal_submit"});club=await authJson(`${BASE}/v-ritme-club`,"POST",{action:"propose_activity",title:actTitle.value,description:actDesc.value,route_area:actWhere.value,proposed_date:actDate.value});renderActivities();activityModal.classList.remove("open");toast("Предложение отправлено на просмотр")},"Отправляем…");publishMeaning.onclick=()=>withBusy(publishMeaning,async()=>{const t=meaningInput.value.trim();if(!t)return;telemetry("meaning_form_completed",{length:t.length});await authJson(`${BASE}/v-ritme-mb-api/api/meaning`,"POST",{text:t});meaningInput.value="";pulse=await retry(()=>authJson(`${BASE}/v-ritme-pulse`),1);renderMeanings();toast("Мысль опубликована")},"Публикуем…");saveProfile.onclick=()=>withBusy(saveProfile,async()=>{const vibes=selected(vibeChips),interests=selected(interestChips);telemetry("profile_form_completed",{vibes:vibes.length,interests:interests.length,about_length:about.value.trim().length});const [profileResult,peopleResult]=await Promise.all([authJson(`${BASE}/v-ritme-mb-api/api/profile`,"POST",{rhythm:rhythm.value,status:status.value,drive:drive.value,connect:connect.value,thought:thought.value,is_visible:true}),authJson(`${BASE}/v-ritme-people`,"POST",{action:"update_profile",about:about.value,vibes,interests})]);if(profileResult?.profile)me={...(me||{}),profile:profileResult.profile};if(peopleResult?.me)peopleData={...peopleData,me:peopleResult.me};renderMe();tg?.HapticFeedback?.notificationOccurred?.("success");toast("Профиль сохранён");authJson(`${BASE}/v-ritme-people`).then(x=>{peopleData=x;renderMe();renderPeople()}).catch(e=>console.error("people refresh",e))},"Сохраняем…");async function uploadAvatar(file){if(!file)return;const d=await uploadWithTimeout(`${BASE}/v-ritme-avatar-upload`,{file,kind:"avatar",headers:{"content-type":file.type||"application/octet-stream","x-telegram-init-data":initData}});return d.url}
 avatarFile?.addEventListener("change",async()=>{const f=avatarFile.files?.[0];if(!f)return;try{avatarUploadLabel.textContent="Загружаем…";avatarUploadLabel.classList.add("show");await uploadAvatar(f);me=await authJson(`${BASE}/v-ritme-mb-api/api/me`);peopleData=await authJson(`${BASE}/v-ritme-people`);rep=await authJson(`${BASE}/v-ritme-reputation`);renderMe();renderPeople();renderEvent();avatarFile.value="";tg?.HapticFeedback?.notificationOccurred?.("success");toast("Фото обновлено")}catch(e){console.error(e);alertError(e)}finally{avatarUploadLabel.textContent="Сменить фото"}});
 async function normalizeUserImage(file,label="photo"){
@@ -2087,7 +2163,7 @@ window.addEventListener("unhandledrejection",e=>{const m=String(e.reason?.messag
 
 async function boot(){
   try{renderChipGroups({vibes:[],interests:[]})}catch(e){}
-  telemetry("app_open",{build:"v15.5.0-stories-journal"});const pulseP=retry(()=>authJson(`${BASE}/v-ritme-pulse`),1,350);
+  telemetry("app_open",{build:"v15.5.1-ux-cleanup"});const pulseP=retry(()=>authJson(`${BASE}/v-ritme-pulse`),1,350);
   if(initData){
     const meP=authJson(`${BASE}/v-ritme-mb-api/api/me`);
     const peopleP=retry(()=>authJson(`${BASE}/v-ritme-people`),1,300);
@@ -2121,8 +2197,8 @@ async function boot(){
   }
   pulseP.then(x=>{pulse=x;renderPulse();renderMeanings();renderActivities();if(x?.degraded)telemetry("api_failed",{endpoint:"v-ritme-pulse",reason:"degraded"})}).catch(e=>{console.error("pulse",e);metrics.innerHTML='<div class="error-state">Пульс временно не обновился.<br><button class="btn" type="button" id="retryPulse">Повторить</button></div>';document.getElementById("retryPulse")?.addEventListener("click",()=>retry(()=>authJson(`${BASE}/v-ritme-pulse`),1).then(x=>{pulse=x;renderPulse();renderMeanings();renderActivities()}).catch(alertError))});
 }boot();
-</script><!-- build: v15.5.0-stories-journal -->
-<div id="qaBuild" hidden>v15.5.0-stories-journal</div><div id="appToast" class="toast" role="status" aria-live="polite"></div></body></html>
+</script><!-- build: v15.5.1-ux-cleanup -->
+<div id="qaBuild" hidden>v15.5.1-ux-cleanup</div><div id="appToast" class="toast" role="status" aria-live="polite"></div></body></html>
 
 <!-- v14.3 approved-photo mapping: 1 Morning Flow; 2 Coffee Ride; 3 Gravel Day; 4 Social Ride; 5 secondary night editorial; 6 hero. Minsk = dedicated generated event plate. -->
 
