@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ru" data-build="v14.10.9-movement-action-dock">
+<html lang="ru" data-build="v14.10.10-yandex-only-map-safe">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
@@ -1194,6 +1194,28 @@ body.movement-recording{overflow:hidden}body.movement-recording .bottom{transfor
 .movement-stats{grid-template-columns:1fr}.movement-stats>div{padding-left:0!important}
 }
 
+
+/* v14.10.10 — no third-party basemaps. Only Yandex/2GIS allowed. */
+.movement-map,.movement-detail-map{
+  background:
+    linear-gradient(rgba(11,11,10,.045) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(11,11,10,.045) 1px,transparent 1px),
+    #e9e4d9;
+  background-size:24px 24px;
+}
+.mv-route-svg{position:absolute;inset:0;width:100%;height:100%}
+.mv-route-line{fill:none;stroke:var(--ink);stroke-width:4;stroke-linecap:round;stroke-linejoin:round}
+.mv-route-start{fill:var(--paper);stroke:var(--ink);stroke-width:3}
+.mv-route-now{fill:var(--green);stroke:var(--ink);stroke-width:3}
+.mv-yandex-link{
+  position:absolute;right:10px;bottom:10px;z-index:3;
+  min-height:38px;padding:0 12px;border:1px solid var(--ink);
+  background:rgba(242,239,230,.94);color:var(--ink);
+  display:flex;align-items:center;justify-content:center;
+  font:700 8px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;
+  text-decoration:none;
+}
+
 </style>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head><body><div class="app"><header class="topbar"><div class="topin" style="justify-content:flex-end"><div class="avatar" id="topAvatar">В</div></div></header><main>
@@ -1328,7 +1350,7 @@ body.movement-recording{overflow:hidden}body.movement-recording .bottom{transfor
     <button class="movement-recorder-close" id="movementRecorderClose" type="button" aria-label="Закрыть">×</button>
   </header>
   <div class="movement-recorder-status"><span class="movement-gps-dot" id="movementGpsDot"></span><span id="movementGpsStatus">Ищем геопозицию…</span><span id="movementSyncStatus">онлайн</span></div>
-  <div class="movement-map" id="movementMap"><div class="movement-map-fallback" id="movementMapFallback">Маршрут появится после первых GPS-точек.</div></div>
+  <div class="movement-map" id="movementMap"><div class="movement-map-fallback" id="movementMapFallback">Маршрут появится после первых GPS-точек. Карта — только Яндекс.</div></div>
   <div class="movement-distance"><div class="kicker">Дистанция</div><div><strong id="movementDistance">0,0</strong><span>км</span></div></div>
   <div class="movement-stats">
     <div><span>Время</span><b id="movementElapsed">00:00:00</b></div>
@@ -1348,7 +1370,7 @@ body.movement-recording{overflow:hidden}body.movement-recording .bottom{transfor
     <button class="close" data-close aria-label="Закрыть" type="button">×</button>
     <div class="kicker">Моя активность</div>
     <h2 id="movementDetailTitle">Маршрут</h2>
-    <div class="movement-detail-map" id="movementDetailMap"><div class="movement-map-fallback">Загружаем маршрут…</div></div>
+    <div class="movement-detail-map" id="movementDetailMap"><div class="movement-map-fallback">Маршрут сохранён.</div></div>
     <div class="movement-detail-stats" id="movementDetailStats"></div>
     <div class="movement-privacy">
       <div class="kicker">Приватность маршрута</div>
@@ -1395,14 +1417,33 @@ function mvRender(){
  movementEls.pause.textContent=movementState.status==="paused"?"Продолжить":"Пауза";
  const rec=["recording","paused"].includes(movementState.status);movementEls.launch.classList.toggle("recording",rec);movementEls.launchIcon.textContent=rec?"●":"▶";movementEls.launchLabel.textContent=rec?mvFmt(mvElapsed()):"В движение";
 }
-async function mvLeaflet(){
- if(window.L)return;
- await new Promise((ok,bad)=>{let l=document.querySelector("link[data-mv-leaflet]");if(!l){l=document.createElement("link");l.rel="stylesheet";l.href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css";l.dataset.mvLeaflet="1";document.head.appendChild(l)}let s=document.querySelector("script[data-mv-leaflet]");if(s){if(window.L)return ok();s.addEventListener("load",ok,{once:true});s.addEventListener("error",bad,{once:true});return}s=document.createElement("script");s.src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js";s.dataset.mvLeaflet="1";s.onload=ok;s.onerror=bad;document.head.appendChild(s)})
+function mvYandexHref(p){
+ if(!p)return "https://yandex.ru/maps/";
+ return `https://yandex.ru/maps/?pt=${encodeURIComponent(p.lng)},${encodeURIComponent(p.lat)}&z=16&l=map`;
+}
+function mvProject(points,w=1000,h=620,pad=44){
+ if(!points?.length)return [];
+ let minX=Math.min(...points.map(p=>p.lng)),maxX=Math.max(...points.map(p=>p.lng));
+ let minY=Math.min(...points.map(p=>p.lat)),maxY=Math.max(...points.map(p=>p.lat));
+ if(maxX-minX<0.00015){minX-=0.000075;maxX+=0.000075}
+ if(maxY-minY<0.00015){minY-=0.000075;maxY+=0.000075}
+ const sx=(w-pad*2)/(maxX-minX),sy=(h-pad*2)/(maxY-minY),s=Math.min(sx,sy);
+ const usedW=(maxX-minX)*s,usedH=(maxY-minY)*s;
+ const ox=(w-usedW)/2,oy=(h-usedH)/2;
+ return points.map(p=>({x:ox+(p.lng-minX)*s,y:h-(oy+(p.lat-minY)*s)}));
+}
+function mvRouteMarkup(points){
+ if(!points?.length)return '<div class="movement-map-fallback">Ждём первые GPS-точки…</div>';
+ const q=mvProject(points),path=q.map((p,i)=>`${i?"L":"M"} ${p.x.toFixed(1)} ${p.y.toFixed(1)}`).join(" ");
+ const a=q[0],b=q[q.length-1],last=points[points.length-1];
+ return `<svg class="mv-route-svg" viewBox="0 0 1000 620" preserveAspectRatio="none" aria-label="GPS-трек"><path class="mv-route-line" d="${path}"></path><circle class="mv-route-start" cx="${a.x}" cy="${a.y}" r="8"></circle><circle class="mv-route-now" cx="${b.x}" cy="${b.y}" r="10"></circle></svg><a class="mv-yandex-link" href="${mvYandexHref(last)}" target="_blank" rel="noopener">Открыть в Яндекс</a>`;
 }
 async function mvInitMap(){
- try{await mvLeaflet();if(!movementState.map){movementState.map=L.map(movementEls.map,{zoomControl:false,attributionControl:true}).setView([55.75,37.62],12);L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:19,attribution:"© OpenStreetMap"}).addTo(movementState.map);movementEls.mapFallback.style.display="none"}setTimeout(()=>movementState.map.invalidateSize(),40)}catch{movementEls.mapFallback.textContent="Карта не загрузилась. GPS-запись продолжит работать."}
+ movementEls.map.innerHTML=mvRouteMarkup(movementState.points);
 }
-function mvDraw(){if(!movementState.map||!window.L||!movementState.points.length)return;const latlng=movementState.points.map(p=>[p.lat,p.lng]);if(!movementState.line)movementState.line=L.polyline(latlng,{color:"#39d67d",weight:4,opacity:.95}).addTo(movementState.map);else movementState.line.setLatLngs(latlng);const p=movementState.points.at(-1);if(!movementState.marker)movementState.marker=L.circleMarker([p.lat,p.lng],{radius:5,color:"#111",weight:2,fillColor:"#39d67d",fillOpacity:1}).addTo(movementState.map);else movementState.marker.setLatLng([p.lat,p.lng]);if(movementState.points.length<3)movementState.map.setView([p.lat,p.lng],16);else movementState.map.panTo([p.lat,p.lng],{animate:false})}
+function mvDraw(){
+ movementEls.map.innerHTML=mvRouteMarkup(movementState.points);
+}
 function mvAcceptRaw(lat,lng,accuracy,speed,ts=Date.now()){
  if(movementState.status!=="recording")return;if(!Number.isFinite(lat)||!Number.isFinite(lng)||accuracy>50){movementEls.gpsDot.className="movement-gps-dot weak";movementEls.gpsStatus.textContent=`GPS ±${Math.round(accuracy||99)} м`;return}
  const p={lat,lng,accuracy:Number(accuracy||0),speed:Number.isFinite(speed)&&speed>=0?speed:null,recordedAt:Number(ts||Date.now())};const last=movementState.last;
@@ -1431,7 +1472,7 @@ async function mvPauseResume(){if(!movementState.trackId)return;if(movementState
 async function mvFinish(){
  await mvFlush();if(movementState.lastSyncIndex<movementState.points.length)await mvFlush();
  const d=await authJson(`${BASE}/v-ritme-track`,"POST",{action:"finish",track_id:movementState.trackId,visibility:"private"});
- mvGeoStop();movementState.status="idle";movementState.trackId=null;movementState.startedAt=null;movementState.points=[];movementState.last=null;movementState.distanceM=0;movementState.movingS=0;movementState.currentMps=0;movementState.line?.remove?.();movementState.marker?.remove?.();movementState.line=null;movementState.marker=null;tg?.disableClosingConfirmation?.();mvClose();mvRender();await loadMovement();show("my");movementEls.movementProfile?.scrollIntoView?.({behavior:"smooth"});toast(`${Number(d.workout?.distance_km||0).toLocaleString("ru-RU",{maximumFractionDigits:2})} км добавлено в твой ритм и общую копилку`)
+ mvGeoStop();movementState.status="idle";movementState.trackId=null;movementState.startedAt=null;movementState.points=[];movementState.last=null;movementState.distanceM=0;movementState.movingS=0;movementState.currentMps=0;movementState.line=null;movementState.marker=null;tg?.disableClosingConfirmation?.();mvClose();mvRender();await loadMovement();show("my");movementEls.movementProfile?.scrollIntoView?.({behavior:"smooth"});toast(`${Number(d.workout?.distance_km||0).toLocaleString("ru-RU",{maximumFractionDigits:2})} км добавлено в твой ритм и общую копилку`)
 }
 function mvSourceLabel(s){return s==="miniapp_gps"||s==="web"?"В ритме МБ":s==="strava"?"Strava":"Записано"}
 function mvRenderList(){
@@ -1441,7 +1482,9 @@ function mvRenderList(){
 }
 async function loadMovement(){if(!initData)return;try{movementState.data=await authJson(`${BASE}/v-ritme-workouts`);mvRenderList()}catch(e){console.error("movement",e)}}
 async function mvDrawDetail(track){
- try{await mvLeaflet();if(movementState.detailMap){movementState.detailMap.remove();movementState.detailMap=null}movementEls.detailMap.innerHTML="";movementState.detailMap=L.map(movementEls.detailMap,{zoomControl:false}).setView([55.75,37.62],12);L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:19,attribution:"© OpenStreetMap"}).addTo(movementState.detailMap);const c=track?.route_geojson?.coordinates||[];if(c.length>1){const line=L.polyline(c.map(p=>[p[1],p[0]]),{color:"#11110f",weight:4}).addTo(movementState.detailMap);movementState.detailMap.fitBounds(line.getBounds(),{padding:[18,18]})}}catch{movementEls.detailMap.innerHTML='<div class="movement-map-fallback">Маршрут сохранён, но карта сейчас не загрузилась.</div>'}
+ const c=track?.route_geojson?.coordinates||[];
+ const pts=c.map(p=>({lng:Number(p[0]),lat:Number(p[1])})).filter(p=>Number.isFinite(p.lng)&&Number.isFinite(p.lat));
+ movementEls.detailMap.innerHTML=mvRouteMarkup(pts);
 }
 function mvOpenDetail(id){
  const w=(movementState.data?.recent||[]).find(x=>x.id===id);if(!w)return;movementState.selected=w;const tr=w.track||null;
@@ -1711,8 +1754,8 @@ async function boot(){
   }
   pulseP.then(x=>{pulse=x;renderPulse();renderMeanings();renderActivities();if(x?.degraded)telemetry("api_failed",{endpoint:"v-ritme-pulse",reason:"degraded"})}).catch(e=>{console.error("pulse",e);metrics.innerHTML='<div class="error-state">Пульс временно не обновился.<br><button class="btn" type="button" id="retryPulse">Повторить</button></div>';document.getElementById("retryPulse")?.addEventListener("click",()=>retry(()=>json(`${BASE}/v-ritme-pulse`),1).then(x=>{pulse=x;renderPulse();renderMeanings();renderActivities()}).catch(alertError))});
 }boot();
-</script><!-- build: v14.10.9-movement-action-dock -->
-<div id="qaBuild" hidden>v14.10.9-movement-action-dock</div><div id="appToast" class="toast" role="status" aria-live="polite"></div></body></html>
+</script><!-- build: v14.10.10-yandex-only-map-safe -->
+<div id="qaBuild" hidden>v14.10.10-yandex-only-map-safe</div><div id="appToast" class="toast" role="status" aria-live="polite"></div></body></html>
 
 <!-- v14.3 approved-photo mapping: 1 Morning Flow; 2 Coffee Ride; 3 Gravel Day; 4 Social Ride; 5 secondary night editorial; 6 hero. Minsk = dedicated generated event plate. -->
 
