@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ru" data-build="v14.10.10-yandex-only-map-safe">
+<html lang="ru" data-build="v15.2.0-final">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
@@ -1091,80 +1091,7 @@ button:disabled,input:disabled,textarea:disabled,select:disabled{opacity:.48;cur
 }
 
 
-/* v14.10.9 — movement action dock: one primary action, five tabs remain untouched. */
-.bottom{
-  min-height:64px;
-  padding-top:0;
-  overflow:visible;
-  border:0;
-  box-shadow:0 12px 34px rgba(0,0,0,.22);
-}
-.bottom>button[data-screen]{
-  min-height:64px;
-  padding:0 3px;
-  display:block;
-}
-.bottom::before{
-  content:"";
-  position:absolute;
-  left:50%;
-  top:-58px;
-  width:188px;
-  height:58px;
-  transform:translateX(-50%);
-  background:var(--paper);
-  border-radius:18px 18px 0 0;
-  z-index:-1;
-}
-.movement-launch{
-  position:absolute!important;
-  left:50%;
-  top:-50px;
-  transform:translateX(-50%);
-  width:168px;
-  height:44px;
-  min-height:44px!important;
-  border-radius:20px!important;
-  border:1px solid var(--ink)!important;
-  background:var(--paper)!important;
-  color:var(--ink)!important;
-  display:flex!important;
-  flex-direction:row;
-  align-items:center;
-  justify-content:center;
-  gap:8px;
-  z-index:3;
-  box-shadow:0 8px 18px rgba(11,11,10,.10);
-  transition:transform .18s var(--mb-ease-out),background .18s ease,color .18s ease;
-}
-.movement-launch:active{transform:translateX(-50%) scale(.975)}
-.movement-launch>span{
-  display:grid;
-  place-items:center;
-  width:18px;
-  height:18px;
-  border-radius:50%;
-  background:var(--ink);
-  color:var(--paper);
-  font-size:8px;
-  line-height:1;
-}
-.movement-launch>small{
-  font:700 9px/1 var(--mono);
-  letter-spacing:.08em;
-  text-transform:uppercase;
-}
-.movement-launch.recording{
-  background:var(--green)!important;
-  color:var(--ink)!important;
-  border-color:var(--ink)!important;
-}
-.movement-launch.recording>span{
-  background:var(--ink);
-  color:var(--green);
-}
-.movement-launch:focus-visible{outline:2px solid var(--green);outline-offset:3px}
-
+/* Movement history + recorder */
 .movement-profile{border-top:1px solid var(--ink)}
 .movement-totals{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--ink);margin:18px 0 22px}
 .movement-totals>div{padding:14px 10px 14px 0;border-bottom:1px solid var(--line)}.movement-totals>div:nth-child(even){padding-left:10px}
@@ -1189,8 +1116,6 @@ button:disabled,input:disabled,textarea:disabled,select:disabled{opacity:.48;cur
 .movement-recorder-actions button{min-height:48px}.movement-detail-sheet{max-height:100dvh}.movement-privacy{padding:18px 0;border-top:1px solid var(--ink)}.movement-privacy p{font-size:12px;line-height:1.5;color:var(--muted)}
 body.movement-recording{overflow:hidden}body.movement-recording .bottom{transform:translateY(160%);opacity:0;pointer-events:none}
 @media(max-width:360px){
-.movement-launch{width:154px}
-.movement-launch>small{font-size:8px}
 .movement-stats{grid-template-columns:1fr}.movement-stats>div{padding-left:0!important}
 }
 
@@ -1216,17 +1141,153 @@ body.movement-recording{overflow:hidden}body.movement-recording .bottom{transfor
   text-decoration:none;
 }
 
+
+/* v15.0.0 — product-structure pass.
+   Existing images, fonts, colors and visual language are preserved. */
+.bottom{
+  min-height:64px!important;
+  padding:0 5px!important;
+  overflow:hidden!important;
+  border-top:1px solid rgba(255,255,255,.08)!important;
+  box-shadow:0 10px 35px rgba(0,0,0,.18)!important;
+}
+.bottom::before{content:none!important;display:none!important}
+.bottom>button[data-screen]{
+  min-height:64px!important;
+  padding:0 4px!important;
+  display:block!important;
+}
+.community-goal-head{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:18px;
+}
+.community-goal-value{
+  margin-top:7px;
+  font-family:var(--serif);
+  font-size:clamp(48px,12vw,70px);
+  line-height:.9;
+  letter-spacing:-.05em;
+}
+.community-goal-meta{
+  max-width:160px;
+  text-align:right;
+  font-family:var(--mono);
+  font-size:9px;
+  line-height:1.45;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  color:var(--muted);
+}
+.community-goal-track{
+  height:3px;
+  margin-top:16px;
+  background:#d7d2c7;
+}
+.community-goal-track i{
+  display:block;
+  height:100%;
+  background:var(--green);
+}
+.community-goal-foot{
+  display:flex;
+  justify-content:space-between;
+  gap:14px;
+  margin-top:9px;
+  font-family:var(--mono);
+  font-size:9px;
+  line-height:1.4;
+  color:var(--muted);
+}
+#activitiesMainEvent .event-card{margin-top:14px}
+#myParticipation .list-row h3{margin-bottom:6px}
+@media(max-width:390px){
+  .community-goal-head{display:block}
+  .community-goal-meta{max-width:none;text-align:left;margin-top:10px}
+}
+
+
+/* v15.1.0 — QA polish. Existing images, fonts and design system are preserved. */
+.movement-entry{min-width:0}
+.movement-entry-cta{
+  appearance:none;width:100%;min-height:68px;margin-top:18px;padding:12px 12px 12px 16px;
+  border:1px solid var(--ink);border-radius:14px;background:var(--ink);color:var(--paper);
+  display:flex;align-items:center;justify-content:space-between;gap:16px;text-align:left;cursor:pointer;
+  box-shadow:0 10px 26px rgba(11,11,10,.10);
+  transition:transform .14s var(--mb-ease-out),opacity .14s ease,background .16s ease,color .16s ease
+}
+.movement-entry-cta:active{transform:scale(.985);opacity:.9}
+.movement-entry-cta:focus-visible{outline:2px solid var(--green);outline-offset:3px}
+.movement-entry-cta-copy{display:block;min-width:0}
+.movement-entry-cta-copy b{display:block;font:800 15px/1.1 var(--sans);letter-spacing:-.015em}
+.movement-entry-cta-copy small{display:block;margin-top:5px;font:500 8px/1.2 var(--mono);letter-spacing:.075em;text-transform:uppercase;color:rgba(244,241,232,.62)}
+.movement-entry-cta-arrow{flex:0 0 38px;width:38px;height:38px;border-radius:50%;border:1px solid rgba(244,241,232,.26);display:grid;place-items:center;font:400 21px/1 var(--sans)}
+.movement-entry-cta.recording{background:var(--green);color:var(--ink);border-color:var(--ink)}
+.movement-entry-cta.recording .movement-entry-cta-copy small{color:rgba(11,11,10,.64)}
+.movement-entry-cta.recording .movement-entry-cta-arrow{border-color:rgba(11,11,10,.22)}
+.movement-discipline-list{display:grid!important;grid-template-columns:1fr!important;gap:8px!important}
+.movement-discipline-choice{width:100%;min-height:58px;display:flex!important;align-items:center!important;justify-content:space-between!important;text-align:left!important}
+.movement-discipline-choice span:last-child{font-size:18px;line-height:1}
+.activity-list-row{appearance:none;width:100%;border-left:0;border-right:0;border-top:0;background:transparent;color:inherit;text-align:left;font-family:inherit;cursor:pointer}
+.activity-list-row:active{background:rgba(17,17,15,.035)}
+@media(max-width:360px){
+  .movement-entry-cta{min-height:64px;padding-left:14px}
+  .movement-entry-cta-copy b{font-size:14px}
+  .movement-entry-cta-arrow{width:36px;height:36px;flex-basis:36px}
+}
+
 </style>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head><body><div class="app"><header class="topbar"><div class="topin" style="justify-content:flex-end"><div class="avatar" id="topAvatar">В</div></div></header><main>
 <section class="screen active" id="pulse"><div class="hero"><div class="hero-photo"><div><h1 class="serif fx-echo fx-echo fx-rgb" data-text="собирает людей.">собирает людей.</h1><p>Люди, движение и истории, которые складываются в одно сообщество. Без таблицы лидеров.</p></div></div></div><div class="metrics" id="metrics"></div>
+<section class="section rule" id="communityGoal"><div class="kicker">Общая цель</div><div class="empty">Собираем общий километраж…</div></section>
+<section class="section" id="currentEvent"><div class="kicker">Общее событие</div><div class="empty">Подключаем событие…</div></section>
 <section class="section pulse-live" aria-labelledby="pulseLiveTitle">
   <div class="section-head-inline"><div><div class="kicker">Сейчас в сообществе</div><h2 class="serif pulse-live-title fx-rgb" id="pulseLiveTitle" data-text="Живой пульс.">Живой пульс.</h2></div><button class="text-link" type="button" data-screen-jump="people">Люди →</button></div>
   <div class="live-feed" id="pulseLiveFeed"><div class="empty">Собираем последние события…</div></div>
+</section></section>
+<section class="screen" id="people"><section class="section"><div class="kicker">Люди / рабочее комьюнити</div><h1 class="serif section-title">Люди<br>в ритме.</h1><p class="copy">Профили помогают лучше узнать коллег через интересы, хобби, участие, достижения и инвентарь.</p><div class="people-controls"><button class="filter active" data-filter="all" type="button">Все</button><button class="filter" data-filter="match" type="button">Общие интересы</button></div><div class="people-feed" id="peopleFeed"></div></section></section>
+<section class="screen" id="activities">
+<section class="section">
+  <div class="kicker">Москва + Московская область</div>
+  <h1 class="serif section-title">Двигаться<br>вместе.</h1>
+  <p class="copy">Главное событие, регулярные ритуалы и идеи сообщества — всё, вокруг чего можно собраться вместе.</p>
 </section>
-<section class="section" id="currentEvent"><div class="kicker">Общее событие</div><div class="empty">Подключаем событие…</div></section></section>
-<section class="screen" id="people"><section class="section"><div class="kicker">People discovery / community editorial</div><h1 class="serif section-title">Люди<br>в ритме.</h1><p class="copy">Не каталог профилей. Люди, с которыми может совпасть темп, энергия, интерес или причина выйти из дома.</p><div class="people-controls"><button class="filter active" data-filter="all" type="button">Все</button><button class="filter" data-filter="match" type="button">Совпало по вайбу</button></div><div class="people-feed" id="peopleFeed"></div></section></section>
-<section class="screen" id="activities"><section class="section"><div class="kicker">Москва + Московская область</div><h1 class="serif section-title">Двигаться<br>вместе.</h1><p class="copy">Выбирай готовый маршрут или предложи свою поездку. Без лишних форм и согласований.</p><div class="actions"><button class="btn-fill" data-open="activityModal" type="button">Предложить идею</button></div></section><section class="section rule"><div class="kicker">Маршруты сообщества</div><h2 class="serif section-title">Четыре<br>ритма.</h2><div class="routes"><article class="route morning" data-bg="https://yrcogxmnqrebbzcnqbjc.supabase.co/storage/v1/object/public/activity-media/morning-flow.webp"><div class="route-top"><span>01 / ROAD</span><span>18 км</span></div><div><h3>Morning Flow</h3><p>Ранние набережные Москвы. Свет, мокрый асфальт и спокойный городской поток.</p><button class="btn" data-route="morning-flow" type="button">Открыть маршрут</button></div></article><article class="route coffee" data-bg="https://yrcogxmnqrebbzcnqbjc.supabase.co/storage/v1/object/public/activity-media/coffee-ride.webp"><div class="route-top"><span>02 / RITUAL</span><span>24 км</span></div><div><h3>Coffee Ride</h3><p>Разговорный темп вдоль реки. Кофе — ритуал после движения.</p><button class="btn" data-route="coffee-ride" type="button">Открыть маршрут</button></div></article><article class="route gravel" data-bg="https://yrcogxmnqrebbzcnqbjc.supabase.co/storage/v1/object/public/activity-media/gravel-day.webp"><div class="route-top"><span>03 / GRAVEL</span><span>56 км</span></div><div><h3>Gravel Day</h3><p>Подмосковные лесные дороги, грунт и тихий adventure без гонки за временем.</p><button class="btn" data-route="gravel-day" type="button">Открыть маршрут</button></div></article><article class="route social" data-bg="https://yrcogxmnqrebbzcnqbjc.supabase.co/storage/v1/object/public/activity-media/social-ride.webp"><div class="route-top"><span>04 / SOCIAL</span><span>28 км</span></div><div><h3>Social Ride</h3><p>Люди, город и вечерний разговорный темп. Без race-tech эстетики.</p><button class="btn" data-route="social-ride" type="button">Открыть маршрут</button></div></article></div></section><section class="section rule"><div class="kicker">Ближайшие встречи</div><div class="list" id="activityList"></div></section></section>
+<section class="section rule" id="activitiesMainEvent">
+  <div class="kicker">Главный фокус</div>
+  <div class="empty">Подключаем главное событие…</div>
+</section>
+<section class="section rule" id="personalMovementEntry">
+  <div class="movement-entry">
+    <div class="kicker">Личное движение · GPS private</div>
+    <h2 class="serif section-title">Записать<br>активность.</h2>
+    <p class="copy">Велосипед, бег или ходьба. В общую цель автоматически попадёт только дистанция; маршрут останется приватным, пока ты сам не решишь поделиться.</p>
+    <button class="movement-entry-cta" id="movementStartFromActivities" type="button" aria-label="Записать активность">
+      <span class="movement-entry-cta-copy">
+        <b id="movementEntryLabel">Записать активность</b>
+        <small id="movementEntryMeta">Велосипед · бег · ходьба</small>
+      </span>
+      <span class="movement-entry-cta-arrow" aria-hidden="true">→</span>
+    </button>
+  </div>
+</section>
+<section class="section rule">
+  <div class="kicker">Регулярные форматы</div>
+  <h2 class="serif section-title">Наши<br>ритуалы.</h2>
+  <div class="routes"><article class="route morning" data-bg="https://yrcogxmnqrebbzcnqbjc.supabase.co/storage/v1/object/public/activity-media/morning-flow.webp"><div class="route-top"><span>01 / ROAD</span><span>18 км</span></div><div><h3>Morning Flow</h3><p>Ранние набережные Москвы. Свет, мокрый асфальт и спокойный городской поток.</p><button class="btn" data-route="morning-flow" type="button">Открыть маршрут</button></div></article><article class="route coffee" data-bg="https://yrcogxmnqrebbzcnqbjc.supabase.co/storage/v1/object/public/activity-media/coffee-ride.webp"><div class="route-top"><span>02 / RITUAL</span><span>24 км</span></div><div><h3>Coffee Ride</h3><p>Разговорный темп вдоль реки. Кофе — ритуал после движения.</p><button class="btn" data-route="coffee-ride" type="button">Открыть маршрут</button></div></article><article class="route gravel" data-bg="https://yrcogxmnqrebbzcnqbjc.supabase.co/storage/v1/object/public/activity-media/gravel-day.webp"><div class="route-top"><span>03 / GRAVEL</span><span>56 км</span></div><div><h3>Gravel Day</h3><p>Подмосковные лесные дороги, грунт и тихий adventure без гонки за временем.</p><button class="btn" data-route="gravel-day" type="button">Открыть маршрут</button></div></article><article class="route social" data-bg="https://yrcogxmnqrebbzcnqbjc.supabase.co/storage/v1/object/public/activity-media/social-ride.webp"><div class="route-top"><span>04 / SOCIAL</span><span>28 км</span></div><div><h3>Social Ride</h3><p>Люди, город и вечерний разговорный темп. Без race-tech эстетики.</p><button class="btn" data-route="social-ride" type="button">Открыть маршрут</button></div></article></div>
+</section>
+<section class="section rule">
+  <div class="kicker">Ближайшие встречи</div>
+  <div class="list" id="activityList"></div>
+</section>
+<section class="section rule">
+  <div class="kicker">От сообщества</div>
+  <h2 class="serif section-title">Предложить<br>свой формат.</h2>
+  <p class="copy">Мы посмотрим детали и поможем оформить идею для сообщества.</p>
+  <div class="actions"><button class="btn-fill" data-open="activityModal" type="button">Предложить активность</button></div>
+</section>
+</section>
 <section class="screen" id="meanings">
 <section class="section meanings-intro">
   <div class="kicker">Смыслы / после движения</div>
@@ -1287,11 +1348,11 @@ body.movement-recording{overflow:hidden}body.movement-recording .bottom{transfor
     <div class="passport-grid" id="passportGrid"></div>
   </section>
 
-  <section class="score">
-    <div class="kicker">Активность в сообществе · не рейтинг</div>
-    <div class="scoreline"><div class="scoreval"><span id="scoreValue">—</span><small style="font-size:20px">/100</small></div><div class="kicker" id="scoreLevel">—</div></div>
-    <div class="track"><i id="scoreBar"></i></div>
-    <div class="components" id="scoreComponents"></div>
+
+  <section class="section" id="myParticipation">
+    <div class="kicker">Моё участие</div>
+    <h2 class="serif section-title">Где я<br>вместе.</h2>
+    <div class="list" id="myParticipationList"><div class="empty">Участие появится здесь, когда ты присоединишься к событию или ритуалу.</div></div>
   </section>
 
   <section class="movement-profile section" id="movementProfile">
@@ -1342,12 +1403,11 @@ body.movement-recording{overflow:hidden}body.movement-recording .bottom{transfor
 <button data-screen="activities" type="button">Активности</button>
 <button data-screen="meanings" type="button">Смыслы</button>
 <button data-screen="my" type="button">Мой ритм</button>
-<button class="movement-launch" id="movementLaunch" type="button" aria-label="Начать активность"><span id="movementLaunchIcon">▶</span><small id="movementLaunchLabel">В движение</small></button>
 </nav></div>
 <section class="movement-recorder" id="movementRecorder" hidden aria-labelledby="movementRecorderTitle">
   <header class="movement-recorder-head">
     <div><div class="kicker">Личная активность · маршрут приватный</div><h1 class="serif" id="movementRecorderTitle" tabindex="-1">В движение.</h1></div>
-    <button class="movement-recorder-close" id="movementRecorderClose" type="button" aria-label="Закрыть">×</button>
+    <button class="movement-recorder-close" id="movementRecorderClose" type="button" aria-label="Свернуть запись">×</button>
   </header>
   <div class="movement-recorder-status"><span class="movement-gps-dot" id="movementGpsDot"></span><span id="movementGpsStatus">Ищем геопозицию…</span><span id="movementSyncStatus">онлайн</span></div>
   <div class="movement-map" id="movementMap"><div class="movement-map-fallback" id="movementMapFallback">Маршрут появится после первых GPS-точек. Карта — только Яндекс.</div></div>
@@ -1358,13 +1418,26 @@ body.movement-recording{overflow:hidden}body.movement-recording .bottom{transfor
     <div><span>Сейчас</span><b id="movementSpeed">0 км/ч</b></div>
     <div><span>Средняя</span><b id="movementAvg">0 км/ч</b></div>
   </div>
-  <div class="movement-note" id="movementRecorderNote">Не блокируй экран: Telegram Mini App не гарантирует GPS в фоне.</div>
+  <div class="movement-note" id="movementRecorderNote">Маршрут приватный. Короткую запись можно завершить в любой момент.</div>
   <footer class="movement-recorder-actions">
     <button class="btn" id="movementPause" type="button">Пауза</button>
     <button class="btn-fill" id="movementFinish" type="button">Завершить</button>
   </footer>
 </section>
 
+<div class="modal" id="movementDisciplineModal" role="dialog" aria-modal="true" aria-labelledby="movementDisciplineTitle">
+  <div class="sheet">
+    <button class="close" data-close aria-label="Закрыть" type="button">×</button>
+    <div class="kicker">Записать активность</div>
+    <h2 id="movementDisciplineTitle">Что сегодня?</h2>
+    <p class="copy">Выбери тип движения. Маршрут приватный по умолчанию.</p>
+    <div class="actions movement-discipline-list">
+      <button class="btn-fill movement-discipline-choice" type="button" data-movement-discipline="bike"><span>Велосипед</span><span aria-hidden="true">→</span></button>
+      <button class="btn movement-discipline-choice" type="button" data-movement-discipline="run"><span>Бег</span><span aria-hidden="true">→</span></button>
+      <button class="btn movement-discipline-choice" type="button" data-movement-discipline="walk"><span>Ходьба</span><span aria-hidden="true">→</span></button>
+    </div>
+  </div>
+</div>
 <div class="modal" id="movementDetailModal" role="dialog" aria-modal="true" aria-labelledby="movementDetailTitle">
   <div class="sheet movement-detail-sheet">
     <button class="close" data-close aria-label="Закрыть" type="button">×</button>
@@ -1390,21 +1463,22 @@ body.movement-recording{overflow:hidden}body.movement-recording .bottom{transfor
     </div>
     <div id="personModalBody" class="person-viewer-body"></div>
   </div>
-</div><div class="modal" id="eventModal" role="dialog" aria-modal="true" aria-labelledby="eventModalTitle"><div class="sheet"><button class="close" data-close aria-label="Закрыть" type="button">×</button><div class="kicker">Общее событие</div><h2 id="eventModalTitle"></h2><div id="eventModalBody"></div></div></div><div class="modal" id="routeModal" role="dialog" aria-modal="true" aria-labelledby="routeTitle"><div class="sheet"><button class="close" data-close aria-label="Закрыть" type="button">×</button><div class="kicker">Маршрут сообщества</div><h2 id="routeTitle"></h2><p id="routeText"></p><div id="routePeople"></div><div class="actions route-modal-actions"><button class="btn-fill" id="joinRoute" type="button">Присоединиться</button><button class="btn route-map-btn" id="openRouteMap" type="button">Яндекс Карты</button></div></div></div><div class="modal" id="activityModal" role="dialog" aria-modal="true" aria-labelledby="activityModalTitle"><div class="sheet"><button class="close" data-close aria-label="Закрыть" type="button">×</button><div class="kicker">Предложение сообщества</div><h2 id="activityModalTitle">Предложить идею</h2><div class="field"><label for="actTitle">Название</label><input id="actTitle" placeholder="Например: вечерний круг по набережным"></div><div class="field"><label for="actDesc">Пара слов</label><textarea id="actDesc"></textarea></div><div class="field"><label for="actWhere">Где примерно</label><input id="actWhere"></div><div class="field"><label for="actDate">Когда</label><input id="actDate" type="date"></div><button class="btn-fill" id="submitActivity" type="button">Предложить</button></div></div><div class="modal" id="bikeModal" role="dialog" aria-modal="true" aria-labelledby="bikeModalTitle"><div class="sheet"><button class="close" data-close aria-label="Закрыть" type="button">×</button><div class="kicker">Мой велик</div><h2 id="bikeModalTitle">Мой велосипед</h2><div class="field"><label for="bikeName">Модель / имя</label><input id="bikeName" placeholder="Например, Specialized Roubaix"></div><div class="field"><label for="bikeNote">Заметка</label><textarea id="bikeNote" placeholder="Что в нём твоего"></textarea></div><div class="field"><label for="bikeFile">Фото велосипеда</label><input id="bikeFile" type="file" accept="image/*,.heic,.heif"><div class="helper">Подойдут фото с iPhone, JPG, PNG, WebP · до 12 МБ</div></div><button class="btn-fill" id="saveBike" type="button">Сохранить</button></div></div><div class="modal" id="achievementModal" role="dialog" aria-modal="true" aria-labelledby="achievementModalTitle"><div class="sheet"><button class="close" data-close aria-label="Закрыть" type="button">×</button><div class="kicker">Новый пруф</div><h2 id="achievementModalTitle">Добавить пруф</h2><div class="field"><label for="achievementSelect">Достижение</label><select id="achievementSelect"><option value="">Своё достижение</option></select></div><div class="field"><label for="achievementCustom">Название</label><input id="achievementCustom"></div><div class="field"><label for="achievementEvent">Событие / гонка</label><input id="achievementEvent"></div><div class="field"><label for="achievementResult">Результат / время</label><input id="achievementResult"></div><div class="field"><label for="achievementPlace">Место</label><input id="achievementPlace"></div><div class="field"><label for="achievementDate">Дата</label><input id="achievementDate" type="date"></div><div class="field"><label for="achievementFile">Фото или скрин</label><input id="achievementFile" type="file" accept="image/*,.heic,.heif"></div><div class="field"><label for="achievementUrl">Или ссылка</label><input id="achievementUrl" type="url"></div><div class="field"><label for="achievementNote">Пара слов</label><textarea id="achievementNote" placeholder="Номер участника, источник результата или пояснение"></textarea></div><button class="btn-fill" id="saveAchievement" type="button">Сохранить пруф</button></div></div>
+</div><div class="modal" id="eventModal" role="dialog" aria-modal="true" aria-labelledby="eventModalTitle"><div class="sheet"><button class="close" data-close aria-label="Закрыть" type="button">×</button><div class="kicker">Общее событие</div><h2 id="eventModalTitle"></h2><div id="eventModalBody"></div></div></div><div class="modal" id="routeModal" role="dialog" aria-modal="true" aria-labelledby="routeTitle"><div class="sheet"><button class="close" data-close aria-label="Закрыть" type="button">×</button><div class="kicker">Маршрут сообщества</div><h2 id="routeTitle"></h2><p id="routeText"></p><div id="routePeople"></div><div class="actions route-modal-actions"><button class="btn-fill" id="joinRoute" type="button">Присоединиться</button><button class="btn route-map-btn" id="openRouteMap" type="button">Яндекс Карты</button></div></div></div><div class="modal" id="activityModal" role="dialog" aria-modal="true" aria-labelledby="activityModalTitle"><div class="sheet"><button class="close" data-close aria-label="Закрыть" type="button">×</button><div class="kicker">Предложение сообщества</div><h2 id="activityModalTitle">Предложить активность</h2><div class="field"><label for="actTitle">Название</label><input id="actTitle" placeholder="Например: вечерний круг по набережным"></div><div class="field"><label for="actDesc">Пара слов</label><textarea id="actDesc"></textarea></div><div class="field"><label for="actWhere">Где примерно</label><input id="actWhere"></div><div class="field"><label for="actDate">Когда</label><input id="actDate" type="date"></div><p class="copy" style="font-size:12px;color:var(--muted)">После отправки организатор посмотрит детали перед публикацией.</p><button class="btn-fill" id="submitActivity" type="button">Отправить на просмотр</button></div></div><div class="modal" id="bikeModal" role="dialog" aria-modal="true" aria-labelledby="bikeModalTitle"><div class="sheet"><button class="close" data-close aria-label="Закрыть" type="button">×</button><div class="kicker">Мой велик</div><h2 id="bikeModalTitle">Мой велосипед</h2><div class="field"><label for="bikeName">Модель / имя</label><input id="bikeName" placeholder="Например, Specialized Roubaix"></div><div class="field"><label for="bikeNote">Заметка</label><textarea id="bikeNote" placeholder="Что в нём твоего"></textarea></div><div class="field"><label for="bikeFile">Фото велосипеда</label><input id="bikeFile" type="file" accept="image/*,.heic,.heif"><div class="helper">Подойдут фото с iPhone, JPG, PNG, WebP · до 12 МБ</div></div><button class="btn-fill" id="saveBike" type="button">Сохранить</button></div></div><div class="modal" id="achievementModal" role="dialog" aria-modal="true" aria-labelledby="achievementModalTitle"><div class="sheet"><button class="close" data-close aria-label="Закрыть" type="button">×</button><div class="kicker">Новый пруф</div><h2 id="achievementModalTitle">Добавить пруф</h2><div class="field"><label for="achievementSelect">Достижение</label><select id="achievementSelect"><option value="">Своё достижение</option></select></div><div class="field"><label for="achievementCustom">Название</label><input id="achievementCustom"></div><div class="field"><label for="achievementEvent">Событие / гонка</label><input id="achievementEvent"></div><div class="field"><label for="achievementResult">Результат / время</label><input id="achievementResult"></div><div class="field"><label for="achievementPlace">Место</label><input id="achievementPlace"></div><div class="field"><label for="achievementDate">Дата</label><input id="achievementDate" type="date"></div><div class="field"><label for="achievementFile">Фото или скрин</label><input id="achievementFile" type="file" accept="image/*,.heic,.heif"></div><div class="field"><label for="achievementUrl">Или ссылка</label><input id="achievementUrl" type="url"></div><div class="field"><label for="achievementNote">Пара слов</label><textarea id="achievementNote" placeholder="Номер участника, источник результата или пояснение"></textarea></div><button class="btn-fill" id="saveAchievement" type="button">Сохранить пруф</button></div></div>
 <script>
 const BASE="https://yrcogxmnqrebbzcnqbjc.supabase.co/functions/v1",MINSK_TRACK="https://ttrails.ru/routes/velosipednyy-marshrut-zelyonoe-kolco--vokrug-minska",MINSK_START="Национальная библиотека Беларуси, Минск",MINSK_COVER="https://yrcogxmnqrebbzcnqbjc.supabase.co/storage/v1/object/public/activity-media/minsk-green-ring.webp",tg=window.Telegram?.WebApp,tgUser=tg?.initDataUnsafe?.user||{};const $=id=>document.getElementById(id);
 const [metrics,currentEvent,peopleFeed,meaningsList,activityList,personModal,personModalBody,eventModal,eventModalTitle,eventModalBody,routeModal,routeTitle,routeText,routePeople,activityModal,achievementModal,profileName,profileThought,profileAbout,profilePhoto,topAvatar,passportGrid,scoreValue,scoreLevel,scoreBar,scoreComponents,achievementSelect,achievementList,bikePhoto,bikeMeta,vibeChips,interestChips,about,rhythm,status,drive,connect,thought,actTitle,actDesc,actWhere,actDate,meaningInput,submitActivity,publishMeaning,saveProfile,joinRoute,openRouteMap,achievementUrl,achievementFile,achievementCustom,achievementEvent,achievementResult,achievementPlace,achievementDate,achievementNote,saveAchievement,bikeModal,bikeName,bikeNote,bikeFile,saveBike]=["metrics","currentEvent","peopleFeed","meaningsList","activityList","personModal","personModalBody","eventModal","eventModalTitle","eventModalBody","routeModal","routeTitle","routeText","routePeople","activityModal","achievementModal","profileName","profileThought","profileAbout","profilePhoto","topAvatar","passportGrid","scoreValue","scoreLevel","scoreBar","scoreComponents","achievementSelect","achievementList","bikePhoto","bikeMeta","vibeChips","interestChips","about","rhythm","status","drive","connect","thought","actTitle","actDesc","actWhere","actDate","meaningInput","submitActivity","publishMeaning","saveProfile","joinRoute","openRouteMap","achievementUrl","achievementFile","achievementCustom","achievementEvent","achievementResult","achievementPlace","achievementDate","achievementNote","saveAchievement","bikeModal","bikeName","bikeNote","bikeFile","saveBike"].map($);
+const communityGoal=$("communityGoal"),activitiesMainEvent=$("activitiesMainEvent"),myParticipationList=$("myParticipationList"),movementDisciplineModal=$("movementDisciplineModal");
 if(tg){tg.ready();tg.expand()}const initData=tg?.initData||"";const liveTelegramPhoto=(()=>{try{const u=new URL(String(tgUser.photo_url||""));return /^https?:$/.test(u.protocol)?u.href:""}catch{return ""}})();const esc=s=>String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));let pulse={metrics:null,people:[],meanings:[],activities:[]},club={activities:[],challenges:[],proposals:[]},rep={index:{score:0,level:"Наблюдает",components:{}},catalog:[],achievements:[],event:null},me=null,peopleData={me:null,people:[]},peopleFilter="all";
 
 /* v14.10.6 movement */
 const movementEls={
- launch:$("movementLaunch"),launchIcon:$("movementLaunchIcon"),launchLabel:$("movementLaunchLabel"),
+ launch:$("movementStartFromActivities"),entryLabel:$("movementEntryLabel"),entryMeta:$("movementEntryMeta"),recorderTitle:$("movementRecorderTitle"),
  recorder:$("movementRecorder"),close:$("movementRecorderClose"),gpsDot:$("movementGpsDot"),gpsStatus:$("movementGpsStatus"),sync:$("movementSyncStatus"),
  map:$("movementMap"),mapFallback:$("movementMapFallback"),distance:$("movementDistance"),elapsed:$("movementElapsed"),moving:$("movementMoving"),speed:$("movementSpeed"),avg:$("movementAvg"),note:$("movementRecorderNote"),
  pause:$("movementPause"),finish:$("movementFinish"),totals:$("movementTotals"),list:$("movementList"),movementProfile:$("movementProfile"),
  detailModal:$("movementDetailModal"),detailTitle:$("movementDetailTitle"),detailMap:$("movementDetailMap"),detailStats:$("movementDetailStats"),privacyText:$("movementPrivacyText"),share:$("movementShareRoute")
 };
-const movementState={trackId:null,status:"idle",startedAt:null,pausedAt:null,totalPauseMs:0,points:[],distanceM:0,movingS:0,currentMps:0,last:null,seq:0,lastSyncIndex:0,watch:null,timer:null,map:null,line:null,marker:null,detailMap:null,detailLine:null,selected:null,data:null,online:navigator.onLine};
+const movementState={trackId:null,status:"idle",startedAt:null,pausedAt:null,totalPauseMs:0,points:[],distanceM:0,movingS:0,currentMps:0,last:null,seq:0,lastSyncIndex:0,watch:null,timer:null,map:null,line:null,marker:null,detailMap:null,detailLine:null,selected:null,data:null,discipline:null,online:navigator.onLine};
 function mvFmt(s){s=Math.max(0,Math.floor(Number(s)||0));return [Math.floor(s/3600),Math.floor(s%3600/60),s%60].map(x=>String(x).padStart(2,"0")).join(":")}
 function mvHav(a,b){const R=6371000,r=Math.PI/180,dLat=(b.lat-a.lat)*r,dLon=(b.lng-a.lng)*r,q=Math.sin(dLat/2)**2+Math.cos(a.lat*r)*Math.cos(b.lat*r)*Math.sin(dLon/2)**2;return 2*R*Math.atan2(Math.sqrt(q),Math.sqrt(1-q))}
 function mvElapsed(){if(!movementState.startedAt)return 0;const end=movementState.status==="paused"&&movementState.pausedAt?movementState.pausedAt:Date.now();return Math.max(0,(end-movementState.startedAt-movementState.totalPauseMs)/1000)}
@@ -1415,7 +1489,7 @@ function mvRender(){
  movementEls.avg.textContent=`${Math.round((movementState.movingS?movementState.distanceM/movementState.movingS:0)*3.6)} км/ч`;
  movementEls.sync.textContent=movementState.online?"онлайн":"офлайн";
  movementEls.pause.textContent=movementState.status==="paused"?"Продолжить":"Пауза";
- const rec=["recording","paused"].includes(movementState.status);movementEls.launch.classList.toggle("recording",rec);movementEls.launchIcon.textContent=rec?"●":"▶";movementEls.launchLabel.textContent=rec?mvFmt(mvElapsed()):"В движение";
+ const rec=["recording","paused"].includes(movementState.status);if(movementEls.launch){movementEls.launch.classList.toggle("recording",rec);movementEls.launch.setAttribute("aria-label",rec?`Вернуться к записи, ${mvFmt(mvElapsed())}`:"Записать активность");if(movementEls.entryLabel)movementEls.entryLabel.textContent=rec?"Вернуться к записи":"Записать активность";if(movementEls.entryMeta)movementEls.entryMeta.textContent=rec?`${mvFmt(mvElapsed())} · ${movementState.status==="paused"?"пауза":"запись идёт"}`:"Велосипед · бег · ходьба"}
 }
 function mvYandexHref(p){
  if(!p)return "https://yandex.ru/maps/";
@@ -1459,28 +1533,68 @@ async function mvFlush(){
  if(!movementState.trackId||!movementState.online)return;const from=movementState.lastSyncIndex,pts=movementState.points.slice(from,from+100);if(!pts.length)return;
  try{await authJson(`${BASE}/v-ritme-track`,"POST",{action:"append",track_id:movementState.trackId,seq:movementState.seq,points:pts});movementState.lastSyncIndex+=pts.length;movementState.seq++;if(movementState.lastSyncIndex<movementState.points.length)setTimeout(mvFlush,10)}catch(e){movementEls.note.textContent="Нет синхронизации — точки останутся в текущей сессии до восстановления сети."}
 }
-async function mvStart(){
+async function mvStart(discipline="bike"){
  if(!initData){alertError(new Error("Запись доступна внутри Telegram"));return}
+ movementState.discipline=discipline;
+ const disciplineLabel=({"bike":"Велосипед","run":"Бег","walk":"Ходьба"})[discipline]||"Активность";
+ if(movementEls.recorderTitle)movementEls.recorderTitle.textContent=`${disciplineLabel}.`;
  movementEls.recorder.hidden=false;document.body.classList.add("movement-recording");movementEls.note.textContent="Маршрут приватный. В общую копилку попадут только километры.";
- const d=await authJson(`${BASE}/v-ritme-track`,"POST",{action:"start",discipline:"bike"});
+ const d=await authJson(`${BASE}/v-ritme-track`,"POST",{action:"start",discipline});
  const tr=d.track||{};movementState.trackId=d.track_id;movementState.status=tr.status||"recording";movementState.startedAt=tr.started_at?new Date(tr.started_at).getTime():Date.now();movementState.pausedAt=null;movementState.totalPauseMs=0;movementState.points=[];movementState.distanceM=0;movementState.movingS=0;movementState.currentMps=0;movementState.last=null;movementState.seq=Math.floor(Date.now()/1000);movementState.lastSyncIndex=0;
  await mvInitMap();mvGeoStart();tg?.enableClosingConfirmation?.();mvRender();movementEls.recorderTitle?.focus?.()
 }
-function mvOpen(){if(["recording","paused"].includes(movementState.status)){movementEls.recorder.hidden=false;document.body.classList.add("movement-recording");mvInitMap();if(movementState.status==="recording")mvGeoStart();mvRender()}else withBusy(movementEls.launch,mvStart,"Старт…")}
+function mvOpen(){if(["recording","paused"].includes(movementState.status)){const disciplineLabel=({"bike":"Велосипед","run":"Бег","walk":"Ходьба"})[movementState.discipline]||"Активность";if(movementEls.recorderTitle)movementEls.recorderTitle.textContent=`${disciplineLabel}.`;movementEls.recorder.hidden=false;document.body.classList.add("movement-recording");mvInitMap();if(movementState.status==="recording")mvGeoStart();mvRender()}else openModalElement(movementDisciplineModal)}
 function mvClose(){movementEls.recorder.hidden=true;document.body.classList.remove("movement-recording")}
 async function mvPauseResume(){if(!movementState.trackId)return;if(movementState.status==="recording"){movementState.status="paused";movementState.pausedAt=Date.now();mvGeoStop();await authJson(`${BASE}/v-ritme-track`,"POST",{action:"pause",track_id:movementState.trackId})}else{movementState.totalPauseMs+=Date.now()-(movementState.pausedAt||Date.now());movementState.pausedAt=null;movementState.status="recording";await authJson(`${BASE}/v-ritme-track`,"POST",{action:"resume",track_id:movementState.trackId});mvGeoStart()}mvRender()}
+function mvResetLocalSession(){
+ mvGeoStop();
+ movementState.status="idle";movementState.trackId=null;movementState.startedAt=null;movementState.points=[];movementState.last=null;
+ movementState.distanceM=0;movementState.movingS=0;movementState.currentMps=0;movementState.line=null;movementState.marker=null;movementState.discipline=null;
+ tg?.disableClosingConfirmation?.();mvClose();mvRender()
+}
 async function mvFinish(){
  await mvFlush();if(movementState.lastSyncIndex<movementState.points.length)await mvFlush();
- const d=await authJson(`${BASE}/v-ritme-track`,"POST",{action:"finish",track_id:movementState.trackId,visibility:"private"});
- mvGeoStop();movementState.status="idle";movementState.trackId=null;movementState.startedAt=null;movementState.points=[];movementState.last=null;movementState.distanceM=0;movementState.movingS=0;movementState.currentMps=0;movementState.line=null;movementState.marker=null;tg?.disableClosingConfirmation?.();mvClose();mvRender();await loadMovement();show("my");movementEls.movementProfile?.scrollIntoView?.({behavior:"smooth"});toast(`${Number(d.workout?.distance_km||0).toLocaleString("ru-RU",{maximumFractionDigits:2})} км добавлено в твой ритм и общую копилку`)
+ let d=null;
+ try{
+   d=await authJson(`${BASE}/v-ritme-track`,"POST",{action:"finish",track_id:movementState.trackId,visibility:"private"});
+ }catch(e){
+   const reason=String(e?.message||e||"").toLowerCase();
+   if(reason.includes("not_enough_points")||reason.includes("not enough points")){
+     mvResetLocalSession();
+     await loadMovement();
+     show("my");movementEls.movementProfile?.scrollIntoView?.({behavior:"smooth"});
+     toast("Запись завершена. Слишком короткая активность не добавлена в статистику.");
+     telemetry("movement_short_finish",{reason:"not_enough_points"});
+     return
+   }
+   throw e
+ }
+ mvResetLocalSession();
+ await loadMovement();show("my");movementEls.movementProfile?.scrollIntoView?.({behavior:"smooth"});
+ const km=Number(d?.workout?.distance_km||0);
+ if(km>0)toast(`${km.toLocaleString("ru-RU",{maximumFractionDigits:2})} км добавлено в твой ритм и общую копилку`);
+ else toast("Активность завершена и сохранена.");
+ refreshAfterMovement().catch(e=>console.error("movement refresh",e))
+}
+async function mvRequestFinish(){
+ const elapsed=mvElapsed(),km=movementState.distanceM/1000;
+ const short=movementState.points.length<2||movementState.distanceM<20;
+ const msg=short
+   ?"Завершить короткую запись? Если дистанции недостаточно, она не попадёт в статистику."
+   :"Завершить активность? Результат сохранится в «Мой ритм», а дистанция попадёт в общую цель.";
+ const ok=await new Promise(resolve=>{if(tg?.showConfirm)tg.showConfirm(msg,resolve);else resolve(window.confirm(msg))});
+ if(!ok)return;
+ await withBusy(movementEls.finish,mvFinish,"Сохраняем…")
 }
 function mvSourceLabel(s){return s==="miniapp_gps"||s==="web"?"В ритме МБ":s==="strava"?"Strava":"Записано"}
 function mvRenderList(){
  const d=movementState.data||{},m=d.mine||{},c=d.community||{};movementEls.totals.innerHTML=`<div><span>Мой километраж</span><b>${Number(m.total_km||0).toLocaleString("ru-RU",{maximumFractionDigits:1})} км</b></div><div><span>Вместе</span><b>${Number(c.total_km||0).toLocaleString("ru-RU",{maximumFractionDigits:0})} км</b></div>`;
- const rows=d.recent||[];movementEls.list.innerHTML=rows.length?rows.map(w=>{const tr=w.track,km=Number(w.distance_km||0),date=w.ended_at?new Date(w.ended_at).toLocaleDateString("ru-RU",{day:"2-digit",month:"short"}):"";return `<button class="movement-card" type="button" data-workout="${esc(w.id)}"><div><div class="movement-card-meta">${esc(date)} · ${esc(mvSourceLabel(w.source))}</div><div class="movement-card-distance">🚲 ${km.toLocaleString("ru-RU",{maximumFractionDigits:2})} км</div><div class="movement-card-share">${tr?.shared_at?"Маршрут опубликован полностью":"Маршрут приватный"}</div></div><div class="movement-card-side"><div class="movement-card-source">${mvFmt(w.duration_seconds||0)}</div><div class="movement-card-source">${tr?.avg_speed_mps?`${Math.round(Number(tr.avg_speed_mps)*3.6)} км/ч`:""}</div></div></button>`}).join(""):'<div class="empty">Первая активность появится здесь после финиша.</div>';
+ const rows=d.recent||[];movementEls.list.innerHTML=rows.length?rows.map(w=>{const tr=w.track,km=Number(w.distance_km||0),date=w.ended_at?new Date(w.ended_at).toLocaleDateString("ru-RU",{day:"2-digit",month:"short"}):"";return `<button class="movement-card" type="button" data-workout="${esc(w.id)}"><div><div class="movement-card-meta">${esc(date)} · ${esc(mvSourceLabel(w.source))}</div><div class="movement-card-distance">${esc(({"bike":"Велосипед","run":"Бег","walk":"Ходьба"})[w.discipline||tr?.discipline]||"Активность")} · ${km.toLocaleString("ru-RU",{maximumFractionDigits:2})} км</div><div class="movement-card-share">${tr?.shared_at?"Маршрут опубликован полностью":"Маршрут приватный"}</div></div><div class="movement-card-side"><div class="movement-card-source">${mvFmt(w.duration_seconds||0)}</div><div class="movement-card-source">${tr?.avg_speed_mps?`${Math.round(Number(tr.avg_speed_mps)*3.6)} км/ч`:""}</div></div></button>`}).join(""):'<div class="empty">Первая активность появится здесь после финиша.</div>';
  movementEls.list.querySelectorAll("[data-workout]").forEach(b=>b.addEventListener("click",()=>mvOpenDetail(b.dataset.workout)))
 }
-async function loadMovement(){if(!initData)return;try{movementState.data=await authJson(`${BASE}/v-ritme-workouts`);mvRenderList()}catch(e){console.error("movement",e)}}
+function syncCommunityKmFromMovement(){const total=Number(movementState.data?.community?.total_km);if(!Number.isFinite(total))return;pulse.metrics={...(pulse.metrics||{}),km_together:total,distance_km:total};renderPulse()}
+async function loadMovement(){if(!initData)return;try{movementState.data=await authJson(`${BASE}/v-ritme-workouts`);mvRenderList();syncCommunityKmFromMovement()}catch(e){console.error("movement",e)}}
+async function refreshAfterMovement(){const [p,r]=await Promise.allSettled([retry(()=>json(`${BASE}/v-ritme-pulse`),1,250),authJson(`${BASE}/v-ritme-reputation`)]);if(p.status==="fulfilled"){pulse=p.value;renderPulse();renderMeanings();renderActivities()}if(r.status==="fulfilled"){rep=r.value;renderEvent();renderActivitiesMainEvent();renderMyParticipation();renderCommunityGoal();renderMe()}}
 async function mvDrawDetail(track){
  const c=track?.route_geojson?.coordinates||[];
  const pts=c.map(p=>({lng:Number(p[0]),lat:Number(p[1])})).filter(p=>Number.isFinite(p.lng)&&Number.isFinite(p.lat));
@@ -1492,12 +1606,13 @@ function mvOpenDetail(id){
  movementEls.detailStats.innerHTML=[["Время",mvFmt(w.duration_seconds||0)],["В движении",mvFmt(tr?.moving_seconds||w.duration_seconds||0)],["Средняя",tr?.avg_speed_mps?`${Math.round(Number(tr.avg_speed_mps)*3.6)} км/ч`:"—"],["Источник",mvSourceLabel(w.source)]].map(x=>`<div><span>${x[0]}</span><b>${x[1]}</b></div>`).join("");
  if(tr?.route_geojson){mvDrawDetail(tr)}else movementEls.detailMap.innerHTML='<div class="movement-map-fallback">Для этой активности GPS-трек не сохранён.</div>';
  const shared=!!tr?.shared_at;movementEls.share.hidden=!tr?.route_geojson;movementEls.share.textContent=shared?"Скрыть маршрут":"Поделиться маршрутом";movementEls.privacyText.textContent=shared?`Маршрут опубликован полностью. Полный трек виден community, пока ты сам не скроешь его.`:"Полный трек доступен только тебе. В community автоматически попадают только километры.";
- movementEls.detailModal.classList.add("open")
+ openModalElement(movementEls.detailModal)
 }
 async function mvToggleShare(){
  const w=movementState.selected,tr=w?.track;if(!w||!tr)return;const action=tr.shared_at?"unshare_route":"share_route";const d=await authJson(`${BASE}/v-ritme-workouts`,"POST",{action,workout_id:w.id});movementState.data=d;mvRenderList();const nw=(d.recent||[]).find(x=>x.id===w.id);if(nw){movementState.selected=nw;const nt=nw.track,shared=!!nt?.shared_at;movementEls.share.textContent=shared?"Скрыть маршрут":"Поделиться маршрутом";movementEls.privacyText.textContent=shared?`Маршрут опубликован полностью. Полный трек виден community, пока ты сам не скроешь его.`:"Полный трек доступен только тебе. В community автоматически попадают только километры."}toast(action==="share_route"?"Полный маршрут опубликован":"Маршрут снова приватный")
 }
-movementEls.launch?.addEventListener("click",mvOpen);movementEls.close?.addEventListener("click",mvClose);movementEls.pause?.addEventListener("click",()=>withBusy(movementEls.pause,mvPauseResume,movementState.status==="paused"?"Продолжаем…":"Пауза…"));movementEls.finish?.addEventListener("click",()=>withBusy(movementEls.finish,mvFinish,"Сохраняем…"));movementEls.share?.addEventListener("click",()=>withBusy(movementEls.share,mvToggleShare,"Сохраняем…"));
+movementEls.launch?.addEventListener("click",mvOpen);
+document.querySelectorAll("[data-movement-discipline]").forEach(b=>b.addEventListener("click",()=>withBusy(b,async()=>{const discipline=b.dataset.movementDiscipline||"bike";movementDisciplineModal?.classList.remove("open");await mvStart(discipline)},"Старт…")));movementEls.close?.addEventListener("click",mvClose);movementEls.pause?.addEventListener("click",()=>withBusy(movementEls.pause,mvPauseResume,movementState.status==="paused"?"Продолжаем…":"Пауза…"));movementEls.finish?.addEventListener("click",mvRequestFinish);movementEls.share?.addEventListener("click",()=>withBusy(movementEls.share,mvToggleShare,"Сохраняем…"));
 window.addEventListener("online",()=>{movementState.online=true;mvFlush();mvRender()});window.addEventListener("offline",()=>{movementState.online=false;mvRender()});
 setInterval(()=>{if(["recording","paused"].includes(movementState.status))mvRender()},1000);setInterval(()=>{if(movementState.status==="recording")mvFlush()},15000);
 
@@ -1557,12 +1672,23 @@ async function uploadWithTimeout(url,{file,headers={},kind="upload",timeout=2500
   }finally{clearTimeout(timer)}
 }
 function alertError(e){const m=e instanceof Error?e.message:String(e||"Ошибка");toast(m,"error");if(tg?.showAlert)tg.showAlert(m);else window.alert(m)}async function withBusy(btn,fn,label="Подождите…"){if(!btn||btn.disabled)return;const old=btn.textContent;btn.disabled=true;btn.setAttribute("aria-busy","true");if(label)btn.textContent=label;try{return await fn()}catch(e){console.error(e);alertError(e)}finally{btn.disabled=false;btn.removeAttribute("aria-busy");btn.textContent=old}}const bgObserver=("IntersectionObserver" in window)?new IntersectionObserver(entries=>{for(const e of entries){if(!e.isIntersecting)continue;const el=e.target;if(!el.dataset.bgLoaded){el.style.backgroundImage=`url("${el.dataset.bg}")`;el.dataset.bgLoaded="1"}bgObserver.unobserve(el)}},{rootMargin:"320px 0px"}):null;
-function loadDeferredBackgrounds(root=document){const els=[...root.querySelectorAll("[data-bg]")];els.forEach((el,i)=>{if(el.dataset.bgLoaded)return;if(i===0||!bgObserver){el.style.backgroundImage=`url("${el.dataset.bg}")`;el.dataset.bgLoaded="1"}else bgObserver.observe(el)})}function show(id){document.querySelectorAll(".screen").forEach(x=>x.classList.toggle("active",x.id===id));telemetry("screen_view",{screen:id,build:"v14.10.0"});document.querySelectorAll(".bottom button").forEach(x=>x.classList.toggle("active",x.dataset.screen===id));const active=document.getElementById(id);if(active)loadDeferredBackgrounds(active);if(id==="pulse"){const t=document.getElementById("pulseLiveTitle");if(t&&!window.matchMedia("(prefers-reduced-motion: reduce)").matches){t.classList.remove("pulse-type-kick");void t.offsetWidth;t.classList.add("pulse-type-kick")}}window.scrollTo(0,0)}document.querySelectorAll("[data-screen]").forEach(b=>b.onclick=()=>show(b.dataset.screen));document.querySelectorAll("[data-screen-jump]").forEach(b=>b.onclick=()=>show(b.dataset.screenJump));const entryScreen=new URLSearchParams(location.search).get("screen");if(["pulse","people","activities","meanings","my"].includes(entryScreen))show(entryScreen);else{const pt=document.getElementById("pulseLiveTitle");if(pt&&!window.matchMedia("(prefers-reduced-motion: reduce)").matches)pt.classList.add("pulse-type-kick")}document.querySelectorAll("[data-open]").forEach(b=>b.onclick=()=>document.getElementById(b.dataset.open).classList.add("open"));function closeModalElement(modal){
+function loadDeferredBackgrounds(root=document){const els=[...root.querySelectorAll("[data-bg]")];els.forEach((el,i)=>{if(el.dataset.bgLoaded)return;if(i===0||!bgObserver){el.style.backgroundImage=`url("${el.dataset.bg}")`;el.dataset.bgLoaded="1"}else bgObserver.observe(el)})}function show(id){document.querySelectorAll(".screen").forEach(x=>x.classList.toggle("active",x.id===id));telemetry("screen_view",{screen:id,build:"v15.2.0-final"});document.querySelectorAll(".bottom button").forEach(x=>x.classList.toggle("active",x.dataset.screen===id));const active=document.getElementById(id);if(active)loadDeferredBackgrounds(active);if(id==="pulse"){const t=document.getElementById("pulseLiveTitle");if(t&&!window.matchMedia("(prefers-reduced-motion: reduce)").matches){t.classList.remove("pulse-type-kick");void t.offsetWidth;t.classList.add("pulse-type-kick")}}window.scrollTo(0,0)}document.querySelectorAll("[data-screen]").forEach(b=>b.onclick=()=>show(b.dataset.screen));document.querySelectorAll("[data-screen-jump]").forEach(b=>b.onclick=()=>show(b.dataset.screenJump));const entryScreen=new URLSearchParams(location.search).get("screen");if(["pulse","people","activities","meanings","my"].includes(entryScreen))show(entryScreen);else{const pt=document.getElementById("pulseLiveTitle");if(pt&&!window.matchMedia("(prefers-reduced-motion: reduce)").matches)pt.classList.add("pulse-type-kick")}let modalReturnFocus=null;
+function openModalElement(modal){
+  if(!modal)return;
+  modalReturnFocus=document.activeElement instanceof HTMLElement?document.activeElement:null;
+  modal.classList.add("open");
+  document.documentElement.classList.add("modal-lock");
+  document.body.classList.add("modal-lock");
+  requestAnimationFrame(()=>{const f=modal.querySelector('[data-close],button:not([disabled]),input:not([disabled]),textarea:not([disabled]),select:not([disabled]),[tabindex]:not([tabindex="-1"])');f?.focus?.()});
+}
+document.querySelectorAll("[data-open]").forEach(b=>b.onclick=()=>openModalElement(document.getElementById(b.dataset.open)));
+function closeModalElement(modal){
   if(!modal)return;
   modal.classList.remove("open");
   if(!document.querySelector(".modal.open")){
     document.documentElement.classList.remove("modal-lock");
     document.body.classList.remove("modal-lock");
+    const back=modalReturnFocus;modalReturnFocus=null;back?.focus?.();
   }
 }
 document.addEventListener("click",e=>{
@@ -1571,10 +1697,11 @@ document.addEventListener("click",e=>{
 });
 function avatar(p){const u=safeUrl(p?.avatar_override_url)||safeUrl(p?.telegram_photo_url)||safeUrl(p?.avatar_url),n=(p?.first_name||p?.username||"У").charAt(0).toUpperCase();return `<span class="mini">${u?`<img src="${esc(u)}" alt="" onerror="this.remove();this.parentElement.textContent='${esc(n)}'">`:esc(n)}</span>`}function overlap(a,b){const A=[...(a?.vibes||[]),...(a?.interests||[])].map(x=>String(x).toLowerCase()),B=[...(b?.vibes||[]),...(b?.interests||[])].map(x=>String(x).toLowerCase());return [...new Set(A.filter(x=>B.includes(x)))]}function jumpToScreen(id){show(id)}
 function relativeTime(iso){if(!iso)return "";const d=new Date(iso),s=Math.max(0,(Date.now()-d.getTime())/1000);if(s<60)return "сейчас";if(s<3600)return `${Math.floor(s/60)} мин`;if(s<86400)return `${Math.floor(s/3600)} ч`;return d.toLocaleDateString("ru-RU",{day:"2-digit",month:"short"})}
-function liveText(x){const name=x.first_name||x.username||"Кто-то из своих",t=String(x.event_type||"");if(t==="profile_created")return `<b>${esc(name)}</b> появился в «В ритме МБ».`;if(t==="profile_saved"||t==="profile_complete")return `<b>${esc(name)}</b> обновил профиль — теперь проще совпасть по вайбу.`;if(t==="bike_saved")return `<b>${esc(name)}</b> добавил свой велосипед.`;if(t==="app_open")return `<b>${esc(name)}</b> сейчас в «В ритме МБ».`;if(t==="activity_join"||t==="joined_activity")return `<b>${esc(name)}</b> присоединился к активности.`;if(t==="new_activity_proposal")return `<b>${esc(name)}</b> предложил новую поездку.`;if(t==="chat_join")return `<b>${esc(name)}</b> появился в сообществе.`;if(t==="proof_upload"||t==="achievement_added")return `<b>${esc(name)}</b> добавил новый пруф.`;return ""}
+function liveText(x){const name=x.first_name||x.username||"Кто-то из своих",t=String(x.event_type||"");if(t==="profile_created")return `<b>${esc(name)}</b> появился в «В ритме МБ».`;if(t==="profile_saved"||t==="profile_complete")return `<b>${esc(name)}</b> обновил профиль и рассказал о себе больше.`;if(t==="bike_saved")return `<b>${esc(name)}</b> добавил свой велосипед.`;if(t==="app_open"||t==="screen_view")return "";if(t==="activity_join"||t==="joined_activity")return `<b>${esc(name)}</b> присоединился к активности.`;if(t==="new_activity_proposal")return `<b>${esc(name)}</b> предложил новую поездку.`;if(t==="chat_join")return `<b>${esc(name)}</b> появился в сообществе.`;if(t==="proof_upload"||t==="achievement_added")return `<b>${esc(name)}</b> добавил новый пруф.`;return ""}
 function renderLiveFeed(){const seen=new Set(),rows=[];for(const x of (pulse.feed||[])){if(!liveText(x))continue;const key=`${x.event_type}:${x.username||x.first_name||"anon"}`;if(seen.has(key))continue;seen.add(key);rows.push(x);if(rows.length===5)break}pulseLiveFeed.innerHTML=rows.length?rows.map(x=>`<div class="live-row"><span class="live-dot"></span><div class="live-copy">${liveText(x)}</div><time class="live-time">${esc(relativeTime(x.occurred_at))}</time></div>`).join(""):'<div class="empty">Пульс только собирается. Новые действия людей появятся здесь.</div>'}
-function renderPulse(){const m=pulse.metrics||{};const vals=[{value:m.people_count||m.members||0,label:"людей",hint:"смотреть людей",screen:"people"},{value:m.km_together||m.distance_km||0,label:"км вместе",hint:"к активностям",screen:"activities"},{value:m.activities_count||m.activities||0,label:"активностей",hint:"что впереди",screen:"activities"},{value:m.meanings_count||m.meanings||0,label:"мыслей",hint:"читать",screen:"meanings"}];metrics.innerHTML=vals.map(v=>`<button class="metric" type="button" data-kpi-screen="${v.screen}" aria-label="${esc(v.label)}: ${esc(v.value)}. ${esc(v.hint)}"><strong>${esc(v.value)}</strong><span>${esc(v.label)}</span><small>${esc(v.hint)}</small></button>`).join("");metrics.querySelectorAll("[data-kpi-screen]").forEach(el=>{el.onclick=()=>jumpToScreen(el.dataset.kpiScreen)});renderLiveFeed()}
-function renderPeople(){const mine=peopleData.me||{};let xs=(peopleData.people||[]).filter(p=>p.id!==mine.id).map((p,i)=>({...p,_overlap:overlap(mine,p),_i:i}));if(peopleFilter==="match")xs=xs.filter(p=>p._overlap.length);if(peopleFilter==="active")xs=xs.filter(p=>Number(p.activity?.score||0)>=35).sort((a,b)=>Number(b.activity?.score||0)-Number(a.activity?.score||0));if(peopleFilter==="new")xs=xs.slice(0,10);peopleFeed.innerHTML=xs.length?xs.map((p,idx)=>{const u=safeUrl(p.avatar_override_url)||safeUrl(p.telegram_photo_url)||safeUrl(p.avatar_url),n=p.first_name||p.username||"Участник",initial=n.charAt(0).toUpperCase(),tags=[...(p.vibes||[]).slice(0,2),...(p.interests||[]).slice(0,2)],about=String(p.about||p.thought||"").trim(),user=p.username?`@${p.username}`:"",score=Number(p.activity?.score||0),level=p.activity?.level||"",views=Number(p.profile_views||0),hasSignal=!!(about||tags.length||p._overlap.length||score);return `<article class="person-editorial ${u?"has-photo":"no-photo"}" data-person-card="${esc(p.id)}">
+function renderCommunityGoal(){if(!communityGoal)return;const m=pulse.metrics||{},km=Number(m.km_together||m.distance_km||0),target=Number(m.challenge_target_km||m.goal_km||rep?.event?.challenge_target_km||20000),endRaw=m.challenge_ends_at||rep?.event?.starts_at,deadline=endRaw?new Date(endRaw).toLocaleDateString("ru-RU",{day:"2-digit",month:"long"}):"18 сентября",pct=Math.max(0,Math.min(100,target?km/target*100:0));communityGoal.innerHTML=`<div class="kicker">Общая цель</div><div class="community-goal-head"><div><div class="community-goal-value">${km.toLocaleString("ru-RU",{maximumFractionDigits:0})} / ${target.toLocaleString("ru-RU")} км</div></div><div class="community-goal-meta">движемся вместе<br>до ${esc(deadline)}</div></div><div class="community-goal-track" aria-label="Прогресс общей цели ${Math.round(pct)}%"><i style="width:${pct}%"></i></div><div class="community-goal-foot"><span>${Math.round(pct)}% общей цели</span><span>осталось ${Math.max(0,target-km).toLocaleString("ru-RU",{maximumFractionDigits:0})} км</span></div>`}
+function renderPulse(){const m=pulse.metrics||{};const vals=[{value:m.people_count||m.members||0,label:"людей",hint:"смотреть людей",screen:"people"},{value:m.km_together||m.distance_km||0,label:"км вместе",hint:"общая цель",screen:"pulse"},{value:m.activities_count||m.activities||0,label:"активностей",hint:"что впереди",screen:"activities"},{value:m.meanings_count||m.meanings||0,label:"мыслей",hint:"читать",screen:"meanings"}];metrics.innerHTML=vals.map(v=>`<button class="metric" type="button" data-kpi-screen="${v.screen}" aria-label="${esc(v.label)}: ${esc(v.value)}. ${esc(v.hint)}"><strong>${esc(v.value)}</strong><span>${esc(v.label)}</span><small>${esc(v.hint)}</small></button>`).join("");metrics.querySelectorAll("[data-kpi-screen]").forEach(el=>{el.onclick=()=>jumpToScreen(el.dataset.kpiScreen)});renderCommunityGoal();renderLiveFeed()}
+function renderPeople(){const mine=peopleData.me||{};let xs=(peopleData.people||[]).filter(p=>p.id!==mine.id).map((p,i)=>({...p,_overlap:overlap(mine,p),_i:i}));if(peopleFilter==="match")xs=xs.filter(p=>p._overlap.length);if(peopleFilter==="new")xs=xs.slice(0,10);peopleFeed.innerHTML=xs.length?xs.map((p,idx)=>{const u=safeUrl(p.avatar_override_url)||safeUrl(p.telegram_photo_url)||safeUrl(p.avatar_url),n=p.first_name||p.username||"Участник",initial=n.charAt(0).toUpperCase(),tags=[...(p.vibes||[]).slice(0,2),...(p.interests||[]).slice(0,2)],about=String(p.about||p.thought||"").trim(),user=p.username?`@${p.username}`:"",hasSignal=!!(about||tags.length||p._overlap.length);return `<article class="person-editorial ${u?"has-photo":"no-photo"}" data-person-card="${esc(p.id)}">
   <div class="person-index">${String(idx+1).padStart(2,"0")}</div>
   <div class="person-body">
     <div class="person-headline">
@@ -1582,16 +1709,14 @@ function renderPeople(){const mine=peopleData.me||{};let xs=(peopleData.people||
         ${u?`<img src="${esc(u)}" alt="" loading="lazy" decoding="async" onerror="this.remove();this.parentElement.innerHTML='<div class=&quot;person-initial&quot;>${esc(initial)}</div>'">`:`<div class="person-initial">${esc(initial)}</div>`}
       </div>
       <div class="person-title-wrap"><h2 class="person-name">${esc(n)}</h2>${user?`<div class="person-user">${esc(user)}</div>`:""}</div>
-      ${score?`<div class="person-score"><b>${score}</b><span>${esc(level)}</span></div>`:""}
     </div>
     ${about?`<p class="person-about">${esc(about)}</p>`:""}
     ${tags.length?`<div class="person-tags">${tags.map(t=>`<span>${esc(t)}</span>`).join("")}</div>`:""}
-    ${p._overlap.length?`<div class="person-match"><span>Совпало</span><b>${p._overlap.slice(0,3).map(esc).join(" · ")}</b></div>`:""}
+    ${p._overlap.length?`<div class="person-match"><span>Пересекается</span><b>${p._overlap.slice(0,3).map(esc).join(" · ")}</b></div>`:""}
     ${!hasSignal?`<div class="person-empty-note">профиль без описания</div>`:""}
-    <div class="person-social-proof"><span>Смотрят профиль</span><b>${views}</b></div>
     <button class="person-open" data-person="${esc(p.id)}" type="button"><span>Открыть профиль</span><span class="person-open-icon">${mbIcon("arrow")}</span></button>
   </div>
-</article>`}).join(""):'<div class="people-empty"><div class="kicker">People Discovery</div><h3>Люди появятся здесь, когда участники откроют профили.</h3><p class="copy">Заполни свой вайб и интересы — совпадения строятся по общему ритму, а не по проценту совместимости.</p></div>';document.querySelectorAll("[data-person]").forEach(b=>b.onclick=()=>openPerson(b.dataset.person))}
+</article>`}).join(""):'<div class="people-empty"><div class="kicker">Люди</div><h3>Профили появятся здесь, когда участники расскажут о себе.</h3><p class="copy">Общие интересы помогают быстрее понять, что у вас уже есть общий контекст.</p></div>';document.querySelectorAll("[data-person]").forEach(b=>b.onclick=()=>openPerson(b.dataset.person))}
 function achievementMini(a){const proof=safeUrl(a.proof_url),facts=[a.event_name,a.completed_at?new Date(a.completed_at).toLocaleDateString("ru-RU"):null,a.result_text,a.place_text].filter(Boolean);return `<div class="achievement-card" style="padding:14px 0"><div class="achievement-head"><div><div class="kicker">${esc(a.category||"achievement")}</div><h3 style="font-size:27px">${esc(a.title||"Достижение")}</h3></div><span class="status-pill">${esc(proofStatus(a.verification_status))}</span></div>${facts.length?`<p class="copy">${facts.map(esc).join(" · ")}</p>`:""}${proof?`<a class="proof-link" href="${esc(proof)}" target="_blank" rel="noopener noreferrer">Пруф ↗</a>`:""}</div>`}
 function openPerson(id){
   const p=(peopleData.people||[]).find(x=>String(x.id)===String(id));
@@ -1604,11 +1729,10 @@ function openPerson(id){
   const tags=[...(p.vibes||[]),...(p.interests||[])].slice(0,12);
   personModalBody.innerHTML=`
     ${u?`<div class="person-viewer-photo"><img src="${esc(u)}" alt="Фото ${esc(p.first_name||p.username||"участника")}" onerror="this.closest('.person-viewer-photo')?.remove()"></div>`:""}
-    <div class="person-viewer-meta kicker">Community Activity · ${esc(p.activity?.score||0)} · ${esc(p.activity?.level||"Наблюдает")}</div>
-    <div class="person-viewer-views"><span>Смотрят профиль</span><b>${Number(p.profile_views||0)}</b></div>
+    <div class="person-viewer-meta kicker">Участник сообщества</div>
     <h2 class="person-viewer-name">${esc(p.first_name||p.username||"Участник")}</h2>
     ${p.about||p.thought?`<p class="person-viewer-about">${esc(p.about||p.thought||"")}</p>`:""}
-    ${o.length?`<section class="person-viewer-section"><div class="kicker">У вас совпало</div><div class="person-viewer-match">${o.slice(0,6).map(esc).join(" · ")}</div></section>`:""}
+    ${o.length?`<section class="person-viewer-section"><div class="kicker">Общие интересы</div><div class="person-viewer-match">${o.slice(0,6).map(esc).join(" · ")}</div></section>`:""}
     ${tags.length?`<div class="person-viewer-tags">${tags.map(x=>`<span>${esc(x)}</span>`).join("")}</div>`:""}
     ${b?`<section class="person-viewer-section"><div class="kicker">Мой велосипед</div><h3>${esc(b.name||"Велосипед")}</h3>${safeUrl(b.photo_url)?`<div class="person-viewer-bike"><img src="${esc(safeUrl(b.photo_url))}" alt="Велосипед участника" onerror="this.closest('.person-viewer-bike')?.remove()"></div>`:""}${b.note?`<p class="person-viewer-about">${esc(b.note)}</p>`:""}</section>`:""}
     ${proofs.length?`<section class="person-viewer-section"><div class="kicker">Достижения / пруфы</div>${proofs.slice(0,4).map(achievementMini).join("")}</section>`:""}`;
@@ -1619,19 +1743,20 @@ function openPerson(id){
   document.body.classList.add("modal-lock");
   requestAnimationFrame(()=>{if(sheet)sheet.scrollTop=0});
 }
-function openInvite(id){const p=(peopleData.people||[]).find(x=>String(x.id)===String(id)),name=p?.first_name||p?.username||"участника";const msg=`Позвать ${name} присоединиться к активности?`;if(tg?.showPopup)tg.showPopup({title:"Позвать",message:msg,buttons:[{type:"ok",text:"Готово"}]});else alert(msg)}
 document.querySelectorAll("[data-filter]").forEach(b=>b.onclick=()=>{peopleFilter=b.dataset.filter;document.querySelectorAll("[data-filter]").forEach(x=>x.classList.toggle("active",x===b));renderPeople()});
-function renderActivities(){const routeDistances={"morning-flow":"18 км","coffee-ride":"24 км","gravel-day":"56 км","social-ride":"28 км"};document.querySelectorAll("[data-route]").forEach(btn=>{const slug=btn.dataset.route,live=(club.activities||[]).find(a=>a.slug===slug),a=(pulse.activities||[]).find(x=>x.slug===slug)||live||{},parent=btn.parentElement;let meta=parent.querySelector(".route-live-meta");if(!meta){meta=document.createElement("div");meta.className="route-live-meta";parent.insertBefore(meta,btn)}const when=a.starts_at?new Date(a.starts_at).toLocaleString("ru-RU",{day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"}):"дата скоро";const people=Number(live?.participant_count||0);meta.innerHTML=`<span>${esc(when)}</span><span>${esc(a.location||"Москва")}</span><span>${esc(routeDistances[slug]||"")}</span><span>${people} ${people===1?"участник":"участников"}</span>`;btn.textContent="Открыть активность"});activityList.innerHTML=(pulse.activities||[]).slice(0,4).map(a=>{const live=(club.activities||[]).find(x=>x.slug===a.slug),people=Number(live?.participant_count||0);return `<div class="list-row"><time>${a.starts_at?new Date(a.starts_at).toLocaleDateString("ru-RU",{day:"2-digit",month:"short"}):"план"}</time><div><h3>${esc(a.title)}</h3><div class="kicker">${esc(a.location||a.subtitle||"сообщество")} · ${people} ${people===1?"участник":"участников"}</div></div></div>`}).join("")||'<div class="empty">Пока без ближайших встреч.</div>'}function renderMeanings(){meaningsList.innerHTML=(pulse.meanings||[]).slice(0,8).map(x=>`<article class="meaning-card user"><div><div class="kicker">${esc(x.profiles?.first_name||x.profiles?.username||"Кто-то из своих")}</div><h3>${esc(x.text)}</h3></div><div class="caption">${x.created_at?esc(new Date(x.created_at).toLocaleDateString("ru-RU",{day:"2-digit",month:"long"})):"Новая мысль"}</div></article>`).join("")}
+function renderActivitiesMainEvent(){if(!activitiesMainEvent)return;const e=rep?.event;if(!e){activitiesMainEvent.innerHTML='<div class="kicker">Главный фокус</div><div class="empty">Следующее большое событие скоро появится здесь.</div>';return}const dates=`${new Date(e.starts_at).toLocaleDateString("ru-RU",{day:"2-digit",month:"2-digit"})} — ${new Date(e.ends_at).toLocaleDateString("ru-RU",{day:"2-digit",month:"2-digit"})}`,cover=safeUrl(e.cover_url)||(e.slug==="minsk-green-ring-2026"?MINSK_COVER:"");activitiesMainEvent.innerHTML=`<div class="kicker">Главное событие сообщества</div><article class="event-card ${cover?"has-cover":"minsk-plate"}" ${cover?`style="background-image:linear-gradient(180deg,rgba(0,0,0,.08),rgba(0,0,0,.8)),url('${esc(cover)}')"`:""}><div class="kicker" style="color:#ddd">ОБЩИЙ ФОКУС / 2026</div><h3 class="serif">${esc(e.title)}</h3><p>${esc(e.description||"")}</p><div class="event-meta-grid"><div><span class="kicker" style="color:#bbb">Когда</span><b>${esc(dates)}</b></div><div><span class="kicker" style="color:#bbb">Где</span><b>${esc(e.location||"—")}</b></div></div><div class="event-people">${(e.participants||[]).slice(0,8).map(eventPersonChip).join("")}</div><div class="kicker" style="color:#ddd;margin-top:8px">${Number(e.participant_count||0)} ${Number(e.participant_count||0)===1?"участник":"участников"}</div><div class="actions"><button class="btn" id="activitiesEventDetails" type="button">Подробнее</button><button class="btn-fill" id="activitiesEventJoin" type="button">${e.joined?"Буду ✓":"Буду"}</button></div></article>`;document.getElementById("activitiesEventDetails")?.addEventListener("click",()=>{if(!document.getElementById("eventDetails"))renderEvent();document.getElementById("eventDetails")?.click()});document.getElementById("activitiesEventJoin")?.addEventListener("click",()=>{if(!document.getElementById("eventJoin"))renderEvent();document.getElementById("eventJoin")?.click()})}
+function renderMyParticipation(){if(!myParticipationList)return;const rows=[];if(rep?.event?.joined)rows.push({title:rep.event.title||"Главное событие",meta:"Главное событие · буду"});for(const a of (club.activities||[])){if(a?.joined)rows.push({title:a.title||({"morning-flow":"Morning Flow","coffee-ride":"Coffee Ride","gravel-day":"Gravel Day","social-ride":"Social Ride"})[a.slug]||"Активность",meta:"Ритуал · буду"})}myParticipationList.innerHTML=rows.length?rows.map(x=>`<div class="list-row"><time>вместе</time><div><h3>${esc(x.title)}</h3><div class="kicker">${esc(x.meta)}</div></div></div>`).join(""):'<div class="empty">Участие появится здесь, когда ты присоединишься к событию или ритуалу.</div>'}
+function renderActivities(){renderActivitiesMainEvent();renderMyParticipation();const routeDistances={"morning-flow":"18 км","coffee-ride":"24 км","gravel-day":"56 км","social-ride":"28 км"};document.querySelectorAll("[data-route]").forEach(btn=>{const slug=btn.dataset.route,live=(club.activities||[]).find(a=>a.slug===slug),a=(pulse.activities||[]).find(x=>x.slug===slug)||live||{},parent=btn.parentElement;let meta=parent.querySelector(".route-live-meta");if(!meta){meta=document.createElement("div");meta.className="route-live-meta";parent.insertBefore(meta,btn)}const when=a.starts_at?new Date(a.starts_at).toLocaleString("ru-RU",{day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"}):"дата скоро";const people=Number(live?.participant_count||0);meta.innerHTML=`<span>${esc(when)}</span><span>${esc(a.location||"Москва")}</span><span>${esc(routeDistances[slug]||"")}</span><span>${people} ${people===1?"участник":"участников"}</span>`;btn.textContent="Открыть активность"});activityList.innerHTML=(pulse.activities||[]).slice(0,4).map(a=>{const live=(club.activities||[]).find(x=>x.slug===a.slug),people=Number(live?.participant_count||0),known=["morning-flow","coffee-ride","gravel-day","social-ride"].includes(a.slug),tag=known?"button":"div",attrs=known?` type="button" data-activity-row="${esc(a.slug)}"`:"";return `<${tag} class="list-row${known?" activity-list-row":""}"${attrs}><time>${a.starts_at?new Date(a.starts_at).toLocaleDateString("ru-RU",{day:"2-digit",month:"short"}):"план"}</time><div><h3>${esc(a.title)}</h3><div class="kicker">${esc(a.location||a.subtitle||"сообщество")} · ${people} ${people===1?"участник":"участников"}</div></div></${tag}>`}).join("")||'<div class="empty">Пока без ближайших встреч.</div>';activityList.querySelectorAll("[data-activity-row]").forEach(b=>b.addEventListener("click",()=>{currentRoute=b.dataset.activityRow;telemetry("activity_open",{slug:currentRoute,source:"upcoming"});renderRouteModal();openModalElement(routeModal)}))}function renderMeanings(){meaningsList.innerHTML=(pulse.meanings||[]).slice(0,8).map(x=>{const author=x.profiles?.first_name||x.profiles?.username||"Кто-то из своих",context=x.activity_title||x.event_title||x.context_title||"";return `<article class="meaning-card user"><div><div class="kicker">${context?`После · ${esc(context)}`:esc(author)}</div><h3>${esc(x.text)}</h3></div><div class="caption">${context?`${esc(author)} · `:""}${x.created_at?esc(new Date(x.created_at).toLocaleDateString("ru-RU",{day:"2-digit",month:"long"})):"Новая мысль"}</div></article>`}).join("")}
 function eventPersonChip(p){const name=p?.first_name||p?.username||"Участник";return `<span class="event-person">${avatar(p)}<b>${esc(name)}</b></span>`}
 function eventPeopleModal(list){return (list||[]).length?`<div class="event-modal-people">${list.map(p=>{const name=p?.first_name||p?.username||"Участник";return `<div class="event-modal-person">${avatar(p)}<div><b>${esc(name)}</b>${p?.username?`<small>@${esc(p.username)}</small>`:""}</div></div>`}).join("")}</div>`:'<div class="empty">Пока никто не записался.</div>'}
-function renderEvent(){const e=rep.event,box=currentEvent;if(!e){box.innerHTML='<div class="kicker">Общее событие</div><h2 class="serif section-title">Что едем дальше?</h2><p class="copy">Текущее событие завершено. Следующее рождается внутри сообщества.</p><div class="actions"><button class="btn-fill" id="proposeEventBtn" type="button">Предложить мероприятие</button></div>';document.getElementById("proposeEventBtn")?.addEventListener("click",()=>activityModal.classList.add("open"));return}const dates=`${new Date(e.starts_at).toLocaleDateString("ru-RU",{day:"2-digit",month:"2-digit"})} — ${new Date(e.ends_at).toLocaleDateString("ru-RU",{day:"2-digit",month:"2-digit"})}`;const cover=safeUrl(e.cover_url)||(e.slug==="minsk-green-ring-2026"?MINSK_COVER:"");box.innerHTML=`<div class="kicker">Главное событие сообщества</div><h2 class="serif section-title">${esc(e.title)}</h2><article class="event-card ${cover?"has-cover":"minsk-plate"}" ${cover?`style="background-image:linear-gradient(180deg,rgba(0,0,0,.08),rgba(0,0,0,.8)),url('${esc(cover)}')"`:""}><div class="kicker" style="color:#ddd">COMMUNITY WEEKEND / 2026</div><h3 class="serif">${esc(e.title)}</h3><p>${esc(e.description||"")}</p><div class="event-meta-grid"><div><span class="kicker" style="color:#bbb">Когда</span><b>${esc(dates)}</b></div><div><span class="kicker" style="color:#bbb">Где</span><b>${esc(e.location||"—")}</b></div></div><div class="event-people">${(e.participants||[]).slice(0,8).map(eventPersonChip).join("")}</div><div class="kicker" style="color:#ddd;margin-top:8px">${Number(e.participant_count||0)} ${Number(e.participant_count||0)===1?"участник":"участников"}</div><div class="actions"><button class="btn" id="eventDetails" type="button">Подробнее</button><button class="btn-fill" id="eventJoin" type="button">${e.joined?"Я в теме ✓":"Я в теме"}</button>${e.slug==="minsk-green-ring-2026"?`<div class="minsk-card-route-actions"><button class="btn-fill event-route" id="eventStartMap" type="button">${mbIcon("map")}<span>Маршрут в Яндекс</span></button><button class="btn event-route" id="eventTrack" type="button">${mbIcon("external")}<span>Полный трек</span></button></div>`:(safeUrl(e.route_url)?`<button class="btn event-route" id="eventRouteMap" type="button">${mbIcon("map")}<span>Маршрут</span></button>`:"")}</div></article>`;document.getElementById("eventDetails").onclick=()=>{telemetry("event_open",{title:String(e.title||"").slice(0,100)},"community_event",e.id);eventModalTitle.textContent=e.title;eventModalBody.innerHTML=`<p class="copy">${esc(e.description||"")}</p><div class="list"><div class="list-row"><time>Когда</time><div>${esc(dates)}</div></div><div class="list-row"><time>Где</time><div>${esc(e.location||"—")}</div></div><div class="list-row"><time>Маршрут</time><div>${esc(e.route_text||"Будет опубликован ближе к старту")}</div></div><div class="list-row"><time>Участники</time><div>${Number(e.participant_count||0)}${eventPeopleModal(e.participants||[])}</div></div></div>${e.slug==="minsk-green-ring-2026"?`<div class="actions minsk-route-actions"><button class="btn-fill" id="eventStartMapModal" type="button">${mbIcon("map")}<span>Маршрут в Яндекс Картах</span></button><button class="btn" id="eventTrackModal" type="button">${mbIcon("external")}<span>Открыть полный трек</span></button></div>`:(safeUrl(e.route_url)?`<div class="actions"><button class="btn-fill" id="eventRouteMapModal" type="button">${mbIcon("map")}<span>Открыть в Яндекс Картах</span></button></div>`:"")}`;eventModal.classList.add("open");
+function renderEvent(){const e=rep.event,box=currentEvent;if(!e){box.innerHTML='<div class="kicker">Общее событие</div><h2 class="serif section-title">Что едем дальше?</h2><p class="copy">Текущее событие завершено. Следующее рождается внутри сообщества.</p><div class="actions"><button class="btn-fill" id="proposeEventBtn" type="button">Предложить мероприятие</button></div>';document.getElementById("proposeEventBtn")?.addEventListener("click",()=>openModalElement(activityModal));return}const dates=`${new Date(e.starts_at).toLocaleDateString("ru-RU",{day:"2-digit",month:"2-digit"})} — ${new Date(e.ends_at).toLocaleDateString("ru-RU",{day:"2-digit",month:"2-digit"})}`;const cover=safeUrl(e.cover_url)||(e.slug==="minsk-green-ring-2026"?MINSK_COVER:"");box.innerHTML=`<div class="kicker">Главное событие сообщества</div><h2 class="serif section-title">${esc(e.title)}</h2><article class="event-card ${cover?"has-cover":"minsk-plate"}" ${cover?`style="background-image:linear-gradient(180deg,rgba(0,0,0,.08),rgba(0,0,0,.8)),url('${esc(cover)}')"`:""}><div class="kicker" style="color:#ddd">COMMUNITY WEEKEND / 2026</div><h3 class="serif">${esc(e.title)}</h3><p>${esc(e.description||"")}</p><div class="event-meta-grid"><div><span class="kicker" style="color:#bbb">Когда</span><b>${esc(dates)}</b></div><div><span class="kicker" style="color:#bbb">Где</span><b>${esc(e.location||"—")}</b></div></div><div class="event-people">${(e.participants||[]).slice(0,8).map(eventPersonChip).join("")}</div><div class="kicker" style="color:#ddd;margin-top:8px">${Number(e.participant_count||0)} ${Number(e.participant_count||0)===1?"участник":"участников"}</div><div class="actions"><button class="btn" id="eventDetails" type="button">Подробнее</button><button class="btn-fill" id="eventJoin" type="button">${e.joined?"Буду ✓":"Буду"}</button>${e.slug==="minsk-green-ring-2026"?`<div class="minsk-card-route-actions"><button class="btn-fill event-route" id="eventStartMap" type="button">${mbIcon("map")}<span>Маршрут в Яндекс</span></button><button class="btn event-route" id="eventTrack" type="button">${mbIcon("external")}<span>Полный трек</span></button></div>`:(safeUrl(e.route_url)?`<button class="btn event-route" id="eventRouteMap" type="button">${mbIcon("map")}<span>Маршрут</span></button>`:"")}</div></article>`;document.getElementById("eventDetails").onclick=()=>{telemetry("event_open",{title:String(e.title||"").slice(0,100)},"community_event",e.id);eventModalTitle.textContent=e.title;eventModalBody.innerHTML=`<p class="copy">${esc(e.description||"")}</p><div class="list"><div class="list-row"><time>Когда</time><div>${esc(dates)}</div></div><div class="list-row"><time>Где</time><div>${esc(e.location||"—")}</div></div><div class="list-row"><time>Маршрут</time><div>${esc(e.route_text||"Будет опубликован ближе к старту")}</div></div><div class="list-row"><time>Участники</time><div>${Number(e.participant_count||0)}${eventPeopleModal(e.participants||[])}</div></div></div>${e.slug==="minsk-green-ring-2026"?`<div class="actions minsk-route-actions"><button class="btn-fill" id="eventStartMapModal" type="button">${mbIcon("map")}<span>Маршрут в Яндекс Картах</span></button><button class="btn" id="eventTrackModal" type="button">${mbIcon("external")}<span>Открыть полный трек</span></button></div>`:(safeUrl(e.route_url)?`<div class="actions"><button class="btn-fill" id="eventRouteMapModal" type="button">${mbIcon("map")}<span>Открыть в Яндекс Картах</span></button></div>`:"")}`;openModalElement(eventModal);
 const modalRouteBtn=document.getElementById("eventRouteMapModal");
 if(modalRouteBtn)modalRouteBtn.onclick=()=>openYandexBikeRoute(e.route_url,e.route_text||e.title,e.location);
 const minskTrackModal=document.getElementById("eventTrackModal");
 if(minskTrackModal)minskTrackModal.onclick=()=>{telemetry("activity_open",{action:"minsk_published_track"});if(tg?.openLink)tg.openLink(MINSK_TRACK,{try_instant_view:false});else window.open(MINSK_TRACK,"_blank","noopener,noreferrer")};
 const minskStartModal=document.getElementById("eventStartMapModal");
 if(minskStartModal)minskStartModal.onclick=()=>openYandexBikeRoute("",MINSK_START,"Минск, Беларусь");
-};const eventRouteBtn=document.getElementById("eventRouteMap");if(eventRouteBtn)eventRouteBtn.onclick=()=>openYandexBikeRoute(e.route_url,e.route_text||e.title,e.location);const minskStart=document.getElementById("eventStartMap");if(minskStart)minskStart.onclick=()=>openYandexBikeRoute("",MINSK_START,"Минск, Беларусь");const minskTrack=document.getElementById("eventTrack");if(minskTrack)minskTrack.onclick=()=>{telemetry("activity_open",{action:"minsk_published_track"});if(tg?.openLink)tg.openLink(MINSK_TRACK,{try_instant_view:false});else window.open(MINSK_TRACK,"_blank","noopener,noreferrer")};document.getElementById("eventJoin").onclick=async ev=>withBusy(ev.currentTarget,async()=>{if(e.joined){const ok=await new Promise(resolve=>{if(tg?.showConfirm)tg.showConfirm("Выйти из активности?",resolve);else resolve(window.confirm("Выйти из активности?"))});if(!ok)return;await authJson(`${BASE}/v-ritme-event-membership`,"POST",{event_id:e.id});rep=await authJson(`${BASE}/v-ritme-reputation`);renderEvent();return}rep=await authJson(`${BASE}/v-ritme-reputation`,"POST",{action:"join_event",event_id:e.id});renderEvent();toast("Ты в теме ✓")},e.joined?"Выходим…":"Добавляем…")}
+};const eventRouteBtn=document.getElementById("eventRouteMap");if(eventRouteBtn)eventRouteBtn.onclick=()=>openYandexBikeRoute(e.route_url,e.route_text||e.title,e.location);const minskStart=document.getElementById("eventStartMap");if(minskStart)minskStart.onclick=()=>openYandexBikeRoute("",MINSK_START,"Минск, Беларусь");const minskTrack=document.getElementById("eventTrack");if(minskTrack)minskTrack.onclick=()=>{telemetry("activity_open",{action:"minsk_published_track"});if(tg?.openLink)tg.openLink(MINSK_TRACK,{try_instant_view:false});else window.open(MINSK_TRACK,"_blank","noopener,noreferrer")};document.getElementById("eventJoin").onclick=async ev=>withBusy(ev.currentTarget,async()=>{if(e.joined){const ok=await new Promise(resolve=>{if(tg?.showConfirm)tg.showConfirm("Отменить участие?",resolve);else resolve(window.confirm("Отменить участие?"))});if(!ok)return;await authJson(`${BASE}/v-ritme-event-membership`,"POST",{event_id:e.id});rep=await authJson(`${BASE}/v-ritme-reputation`);renderEvent();renderActivitiesMainEvent();renderMyParticipation();renderCommunityGoal();return}rep=await authJson(`${BASE}/v-ritme-reputation`,"POST",{action:"join_event",event_id:e.id});renderEvent();renderActivitiesMainEvent();renderMyParticipation();renderCommunityGoal();toast("Участие отмечено ✓")},e.joined?"Выходим…":"Добавляем…")}
 function renderChipGroups(p={}){const make=(root,arr,selected,limit)=>{root.innerHTML=arr.map(x=>`<button class="chip ${(selected||[]).includes(x)?"on":""}" type="button" aria-pressed="${(selected||[]).includes(x)?"true":"false"}" data-value="${esc(x)}">${esc(x)}</button>`).join("");root.querySelectorAll(".chip").forEach(b=>b.onclick=()=>{if(b.classList.contains("on")){b.classList.remove("on");b.setAttribute("aria-pressed","false");return}if(root.querySelectorAll(".on").length>=limit){tg?.HapticFeedback?.notificationOccurred?.("warning");return}b.classList.add("on");b.setAttribute("aria-pressed","true")})};make(vibeChips,VIBES,p.vibes,7);make(interestChips,INTERESTS,p.interests,12)}function selected(root){return [...root.querySelectorAll(".chip.on")].map(x=>x.dataset.value)}
 
 function scrollToProfileTarget(target){
@@ -1654,20 +1779,15 @@ function bindPassportActions(){
         return;
       }
       if(action==="proof"){
-        achievementModal?.classList.add("open");
+        openModalElement(achievementModal);
         setupModal(achievementModal);
       }
     };
   });
 }
 
-function proofStatus(s){return ({claimed:"Без проверки",pending:"Смотрим 👀",verified:"Зачтено ✓",rejected:"Нужно уточнить"})[String(s||"")]||"Без проверки"}function renderMe(){if(me?.profile){const p=me.profile;profileName.innerHTML=esc(p.first_name||"Твой")+"<br>в ритме.";profileThought.textContent=p.thought?`«${p.thought}»`:"«Спорт — способ настроить голову.»";profileAbout.textContent=p.about||peopleData.me?.about||"Расскажи пару слов о себе — без резюме и официоза.";["about","rhythm","status","drive","connect","thought"].forEach(k=>{const el=document.getElementById(k);if(el)el.value=p[k]||""});const telegramU=safeUrl(tgUser.photo_url)||safeUrl(p.telegram_photo_url),customU=safeUrl(p.avatar_override_url)||safeUrl(p.avatar_url),u=customU||telegramU||safeUrl(p.display_photo_url);if(u){profilePhoto.innerHTML=`<img src="${esc(u)}" alt="" onerror="this.remove()">`;topAvatar.innerHTML=`<img src="${esc(u)}" alt="" onerror="this.parentElement.textContent='${esc((p.first_name||"В").charAt(0))}'">`}else{profilePhoto.innerHTML="";topAvatar.textContent=(p.first_name||"В").charAt(0)}if(window.avatarSource&&window.avatarUploadLabel){if(customU){avatarSource.textContent="Своё фото";avatarUploadLabel.textContent="Сменить фото";avatarUploadLabel.classList.add("show")}else if(telegramU){avatarSource.textContent="Фото из Telegram";avatarUploadLabel.textContent="Сменить фото";avatarUploadLabel.classList.add("show")}else{avatarSource.textContent="Фото пока нет";avatarUploadLabel.textContent="Добавить фото";avatarUploadLabel.classList.add("show")}}const vibeList=(peopleData.me?.vibes||p.vibes||[]),myVibes=vibeList.length?`${vibeList[0]}${vibeList.length>1?` · +${vibeList.length-1}`:""}`:"добавь вайб";passportGrid.innerHTML=[["Мой ритм",p.rhythm||"пока не выбрал","rhythm"],["Сегодня",p.status||"без статуса","status"],["Вайб",myVibes,"vibe"],["Пруфы",(rep.achievements||[]).length?`${(rep.achievements||[]).length} шт.`:"пока нет","proof"]].map(x=>`<button class="passport-cell" type="button" data-passport-action="${x[2]}" aria-label="${esc(x[0])}: ${esc(x[1])}"><span class="kicker">${esc(x[0])}</span><b>${esc(x[1])}</b><span class="passport-go" aria-hidden="true">${mbIcon("arrow")}</span></button>`).join("");bindPassportActions();renderChipGroups({...p,...peopleData.me})}const i=rep.index||{},c=i.components||{};scoreValue.textContent=Number(i.score||0);scoreLevel.textContent=i.level||"Наблюдает";scoreBar.style.width=Math.min(100,Number(i.score||0))+"%";const proofCount=(rep.achievements||[]).length,proofActivity=Number(c.proofs||0);scoreComponents.innerHTML=[
-["Чат · баллы",c.chat||0,""],
-["Участие · баллы",c.participation||0,""],
-["Вклад · баллы",c.contribution||0,""],
-["Пруфы",proofCount?`${proofCount} шт.`:"0",proofActivity?`+${proofActivity} к активности`:""]
-].map(x=>`<div><span class="kicker">${esc(x[0])}</span><b>${esc(x[1])}</b>${x[2]?`<small class="component-note">${esc(x[2])}</small>`:""}</div>`).join("");achievementSelect.innerHTML='<option value="">Своё достижение</option>'+(rep.catalog||[]).map(x=>`<option value="${esc(x.id)}">${esc(x.title)}${x.proof_required?" · нужен пруф":""}</option>`).join("");achievementList.innerHTML=(rep.achievements||[]).length?rep.achievements.map(a=>{const title=a.achievement_catalog?.title||a.custom_title||"Достижение";const proof=safeUrl(a.proof_url);return `<article class="achievement-card"><div class="achievement-head"><div><div class="kicker">${esc(a.achievement_catalog?.category||"personal")}</div><h3>${esc(title)}</h3></div><span class="status-pill">${esc(proofStatus(a.verification_status))}</span></div><div class="achievement-facts">${a.event_name?`<div class="achievement-fact"><span class="kicker">Событие</span><b>${esc(a.event_name)}</b></div>`:""}${a.completed_at?`<div class="achievement-fact"><span class="kicker">Дата</span><b>${esc(new Date(a.completed_at).toLocaleDateString("ru-RU"))}</b></div>`:""}${a.result_text?`<div class="achievement-fact"><span class="kicker">Результат / время</span><b>${esc(a.result_text)}</b></div>`:""}${a.place_text?`<div class="achievement-fact"><span class="kicker">Место</span><b>${esc(a.place_text)}</b></div>`:""}</div>${a.proof_note?`<p class="copy">${esc(a.proof_note)}</p>`:""}${proof?`<a class="proof-link" href="${esc(proof)}" target="_blank" rel="noopener noreferrer"><span>Смотреть пруф</span>${mbIcon("external")}</a>`:""}</article>`}).join(""):'<div class="people-empty"><div class="kicker">Sports Passport</div><h3>Тут пока без пруфов.</h3><p class="copy">Закинь первый результат: гонку, бревет, Gran Fondo, триатлон или личный рекорд. Фото, скрин или ссылка — всё ок.</p></div>';const b=me?.bike||(Array.isArray(me?.bikes)?me.bikes[0]:null);if(b){const bu=safeUrl(b.photo_url||b.image_url);bikePhoto.innerHTML=bu?`<img src="${esc(bu)}" alt="Велосипед участника">`:"";bikeMeta.innerHTML=`<b>${esc(b.name||[b.brand,b.model].filter(Boolean).join(" ")||"Мой велосипед")}</b>${b.note?`<p>${esc(b.note)}</p>`:""}`;bikeName.value=b.name||[b.brand,b.model].filter(Boolean).join(" ")||"";bikeNote.value=b.note||""}else{bikePhoto.innerHTML="";bikeMeta.innerHTML='<div class="bike-empty"><div><span class="kicker">Personal object</span><strong>Добавь велик, на котором сейчас больше всего катаешь.</strong></div><span>↗</span></div>';bikeName.value="";bikeNote.value=""}}
-const routeInfo={"morning-flow":["Morning Flow","18 км · набережные Москвы","Москва"],"coffee-ride":["Coffee Ride","24 км · ritual","Москва"],"gravel-day":["Gravel Day","56 км · Московская область","Московская область"],"social-ride":["Social Ride","28 км · Москва","Москва"]};let currentRoute="";function renderRouteModal(){if(!currentRoute)return;const x=routeInfo[currentRoute],live=(club.activities||[]).find(a=>a.slug===currentRoute);routeTitle.textContent=x[0];routeText.textContent=x[1];routePeople.innerHTML=`<div class="avatars">${(live?.participants||[]).slice(0,8).map(avatar).join("")}<span style="margin-left:12px">${Number(live?.participant_count||0)} участников</span></div>`;joinRoute.textContent=live?.joined?"Я в теме ✓":"Присоединиться";openRouteMap.innerHTML=`${mbIcon("map")}<span>Яндекс Карты</span>`;openRouteMap.onclick=()=>openYandexBikeRoute("",x[0],x[2])}document.querySelectorAll("[data-route]").forEach(b=>b.onclick=()=>{currentRoute=b.dataset.route;telemetry("activity_open",{slug:currentRoute});renderRouteModal();routeModal.classList.add("open")});joinRoute.onclick=()=>withBusy(joinRoute,async()=>{if(!currentRoute)return;const live=(club.activities||[]).find(a=>a.slug===currentRoute);if(live?.joined){const ok=await new Promise(resolve=>{if(tg?.showConfirm)tg.showConfirm("Выйти из активности?",resolve);else resolve(window.confirm("Выйти из активности?"))});if(!ok)return;await authJson(`${BASE}/v-ritme-mb-api/api/leave-activity`,"POST",{activity_slug:currentRoute})}else await authJson(`${BASE}/v-ritme-mb-api/api/join-activity`,"POST",{activity_slug:currentRoute});club=await authJson(`${BASE}/v-ritme-club`);renderActivities();renderRouteModal();toast(live?.joined?"Ты вышел из активности":"Ты в теме ✓")},"Обновляем…");submitActivity.onclick=()=>withBusy(submitActivity,async()=>{telemetry("activity_open",{action:"proposal_submit"});club=await authJson(`${BASE}/v-ritme-club`,"POST",{action:"propose_activity",title:actTitle.value,description:actDesc.value,route_area:actWhere.value,proposed_date:actDate.value});renderActivities();activityModal.classList.remove("open");toast("Предложение отправлено")},"Отправляем…");publishMeaning.onclick=()=>withBusy(publishMeaning,async()=>{const t=meaningInput.value.trim();if(!t)return;telemetry("meaning_form_completed",{length:t.length});await authJson(`${BASE}/v-ritme-mb-api/api/meaning`,"POST",{text:t});meaningInput.value="";pulse=await retry(()=>json(`${BASE}/v-ritme-pulse`),1);renderMeanings();toast("Мысль опубликована")},"Публикуем…");saveProfile.onclick=()=>withBusy(saveProfile,async()=>{const vibes=selected(vibeChips),interests=selected(interestChips);telemetry("profile_form_completed",{vibes:vibes.length,interests:interests.length,about_length:about.value.trim().length});const [profileResult,peopleResult]=await Promise.all([authJson(`${BASE}/v-ritme-mb-api/api/profile`,"POST",{rhythm:rhythm.value,status:status.value,drive:drive.value,connect:connect.value,thought:thought.value,is_visible:true}),authJson(`${BASE}/v-ritme-people`,"POST",{action:"update_profile",about:about.value,vibes,interests})]);if(profileResult?.profile)me={...(me||{}),profile:profileResult.profile};if(peopleResult?.me)peopleData={...peopleData,me:peopleResult.me};renderMe();tg?.HapticFeedback?.notificationOccurred?.("success");toast("Профиль сохранён");authJson(`${BASE}/v-ritme-people`).then(x=>{peopleData=x;renderMe();renderPeople()}).catch(e=>console.error("people refresh",e))},"Сохраняем…");async function uploadAvatar(file){if(!file)return;const d=await uploadWithTimeout(`${BASE}/v-ritme-avatar-upload`,{file,kind:"avatar",headers:{"content-type":file.type||"application/octet-stream","x-telegram-init-data":initData}});return d.url}
+function proofStatus(s){return ({claimed:"Без проверки",pending:"Смотрим 👀",verified:"Зачтено ✓",rejected:"Нужно уточнить"})[String(s||"")]||"Без проверки"}function renderMe(){if(me?.profile){const p=me.profile;profileName.innerHTML=esc(p.first_name||"Твой")+"<br>в ритме.";profileThought.textContent=p.thought?`«${p.thought}»`:"«Спорт — способ настроить голову.»";profileAbout.textContent=p.about||peopleData.me?.about||"Расскажи пару слов о себе — без резюме и официоза.";["about","rhythm","status","drive","connect","thought"].forEach(k=>{const el=document.getElementById(k);if(el)el.value=p[k]||""});const telegramU=safeUrl(tgUser.photo_url)||safeUrl(p.telegram_photo_url),customU=safeUrl(p.avatar_override_url)||safeUrl(p.avatar_url),u=customU||telegramU||safeUrl(p.display_photo_url);if(u){profilePhoto.innerHTML=`<img src="${esc(u)}" alt="" onerror="this.remove()">`;topAvatar.innerHTML=`<img src="${esc(u)}" alt="" onerror="this.parentElement.textContent='${esc((p.first_name||"В").charAt(0))}'">`}else{profilePhoto.innerHTML="";topAvatar.textContent=(p.first_name||"В").charAt(0)}if(window.avatarSource&&window.avatarUploadLabel){if(customU){avatarSource.textContent="Своё фото";avatarUploadLabel.textContent="Сменить фото";avatarUploadLabel.classList.add("show")}else if(telegramU){avatarSource.textContent="Фото из Telegram";avatarUploadLabel.textContent="Сменить фото";avatarUploadLabel.classList.add("show")}else{avatarSource.textContent="Фото пока нет";avatarUploadLabel.textContent="Добавить фото";avatarUploadLabel.classList.add("show")}}const vibeList=(peopleData.me?.vibes||p.vibes||[]),myVibes=vibeList.length?`${vibeList[0]}${vibeList.length>1?` · +${vibeList.length-1}`:""}`:"добавь вайб";passportGrid.innerHTML=[["Мой ритм",p.rhythm||"пока не выбрал","rhythm"],["Сегодня",p.status||"без статуса","status"],["Вайб",myVibes,"vibe"],["Пруфы",(rep.achievements||[]).length?`${(rep.achievements||[]).length} шт.`:"пока нет","proof"]].map(x=>`<button class="passport-cell" type="button" data-passport-action="${x[2]}" aria-label="${esc(x[0])}: ${esc(x[1])}"><span class="kicker">${esc(x[0])}</span><b>${esc(x[1])}</b><span class="passport-go" aria-hidden="true">${mbIcon("arrow")}</span></button>`).join("");bindPassportActions();renderChipGroups({...p,...peopleData.me})}achievementSelect.innerHTML='<option value="">Своё достижение</option>'+(rep.catalog||[]).map(x=>`<option value="${esc(x.id)}">${esc(x.title)}${x.proof_required?" · нужен пруф":""}</option>`).join("");achievementList.innerHTML=(rep.achievements||[]).length?rep.achievements.map(a=>{const title=a.achievement_catalog?.title||a.custom_title||"Достижение";const proof=safeUrl(a.proof_url);return `<article class="achievement-card"><div class="achievement-head"><div><div class="kicker">${esc(a.achievement_catalog?.category||"personal")}</div><h3>${esc(title)}</h3></div><span class="status-pill">${esc(proofStatus(a.verification_status))}</span></div><div class="achievement-facts">${a.event_name?`<div class="achievement-fact"><span class="kicker">Событие</span><b>${esc(a.event_name)}</b></div>`:""}${a.completed_at?`<div class="achievement-fact"><span class="kicker">Дата</span><b>${esc(new Date(a.completed_at).toLocaleDateString("ru-RU"))}</b></div>`:""}${a.result_text?`<div class="achievement-fact"><span class="kicker">Результат / время</span><b>${esc(a.result_text)}</b></div>`:""}${a.place_text?`<div class="achievement-fact"><span class="kicker">Место</span><b>${esc(a.place_text)}</b></div>`:""}</div>${a.proof_note?`<p class="copy">${esc(a.proof_note)}</p>`:""}${proof?`<a class="proof-link" href="${esc(proof)}" target="_blank" rel="noopener noreferrer"><span>Смотреть пруф</span>${mbIcon("external")}</a>`:""}</article>`}).join(""):'<div class="people-empty"><div class="kicker">Sports Passport</div><h3>Тут пока без пруфов.</h3><p class="copy">Закинь первый результат: гонку, бревет, Gran Fondo, триатлон или личный рекорд. Фото, скрин или ссылка — всё ок.</p></div>';const b=me?.bike||(Array.isArray(me?.bikes)?me.bikes[0]:null);if(b){const bu=safeUrl(b.photo_url||b.image_url);bikePhoto.innerHTML=bu?`<img src="${esc(bu)}" alt="Велосипед участника">`:"";bikeMeta.innerHTML=`<b>${esc(b.name||[b.brand,b.model].filter(Boolean).join(" ")||"Мой велосипед")}</b>${b.note?`<p>${esc(b.note)}</p>`:""}`;bikeName.value=b.name||[b.brand,b.model].filter(Boolean).join(" ")||"";bikeNote.value=b.note||""}else{bikePhoto.innerHTML="";bikeMeta.innerHTML='<div class="bike-empty"><div><span class="kicker">Personal object</span><strong>Добавь велик, на котором сейчас больше всего катаешь.</strong></div><span>↗</span></div>';bikeName.value="";bikeNote.value=""}}
+const routeInfo={"morning-flow":["Morning Flow","18 км · набережные Москвы","Москва"],"coffee-ride":["Coffee Ride","24 км · ritual","Москва"],"gravel-day":["Gravel Day","56 км · Московская область","Московская область"],"social-ride":["Social Ride","28 км · Москва","Москва"]};let currentRoute="";function renderRouteModal(){if(!currentRoute)return;const x=routeInfo[currentRoute],live=(club.activities||[]).find(a=>a.slug===currentRoute);routeTitle.textContent=x[0];routeText.textContent=x[1];routePeople.innerHTML=`<div class="avatars">${(live?.participants||[]).slice(0,8).map(avatar).join("")}<span style="margin-left:12px">${Number(live?.participant_count||0)} участников</span></div>`;joinRoute.textContent=live?.joined?"Буду ✓":"Буду";openRouteMap.innerHTML=`${mbIcon("map")}<span>Яндекс Карты</span>`;openRouteMap.onclick=()=>openYandexBikeRoute("",x[0],x[2])}document.querySelectorAll("[data-route]").forEach(b=>b.onclick=()=>{currentRoute=b.dataset.route;telemetry("activity_open",{slug:currentRoute});renderRouteModal();openModalElement(routeModal)});joinRoute.onclick=()=>withBusy(joinRoute,async()=>{if(!currentRoute)return;const live=(club.activities||[]).find(a=>a.slug===currentRoute);if(live?.joined){const ok=await new Promise(resolve=>{if(tg?.showConfirm)tg.showConfirm("Отменить участие?",resolve);else resolve(window.confirm("Отменить участие?"))});if(!ok)return;await authJson(`${BASE}/v-ritme-mb-api/api/leave-activity`,"POST",{activity_slug:currentRoute})}else await authJson(`${BASE}/v-ritme-mb-api/api/join-activity`,"POST",{activity_slug:currentRoute});club=await authJson(`${BASE}/v-ritme-club`);renderActivities();renderMyParticipation();renderRouteModal();toast(live?.joined?"Участие отменено":"Участие отмечено ✓")},"Обновляем…");submitActivity.onclick=()=>withBusy(submitActivity,async()=>{telemetry("activity_open",{action:"proposal_submit"});club=await authJson(`${BASE}/v-ritme-club`,"POST",{action:"propose_activity",title:actTitle.value,description:actDesc.value,route_area:actWhere.value,proposed_date:actDate.value});renderActivities();activityModal.classList.remove("open");toast("Предложение отправлено на просмотр")},"Отправляем…");publishMeaning.onclick=()=>withBusy(publishMeaning,async()=>{const t=meaningInput.value.trim();if(!t)return;telemetry("meaning_form_completed",{length:t.length});await authJson(`${BASE}/v-ritme-mb-api/api/meaning`,"POST",{text:t});meaningInput.value="";pulse=await retry(()=>json(`${BASE}/v-ritme-pulse`),1);renderMeanings();toast("Мысль опубликована")},"Публикуем…");saveProfile.onclick=()=>withBusy(saveProfile,async()=>{const vibes=selected(vibeChips),interests=selected(interestChips);telemetry("profile_form_completed",{vibes:vibes.length,interests:interests.length,about_length:about.value.trim().length});const [profileResult,peopleResult]=await Promise.all([authJson(`${BASE}/v-ritme-mb-api/api/profile`,"POST",{rhythm:rhythm.value,status:status.value,drive:drive.value,connect:connect.value,thought:thought.value,is_visible:true}),authJson(`${BASE}/v-ritme-people`,"POST",{action:"update_profile",about:about.value,vibes,interests})]);if(profileResult?.profile)me={...(me||{}),profile:profileResult.profile};if(peopleResult?.me)peopleData={...peopleData,me:peopleResult.me};renderMe();tg?.HapticFeedback?.notificationOccurred?.("success");toast("Профиль сохранён");authJson(`${BASE}/v-ritme-people`).then(x=>{peopleData=x;renderMe();renderPeople()}).catch(e=>console.error("people refresh",e))},"Сохраняем…");async function uploadAvatar(file){if(!file)return;const d=await uploadWithTimeout(`${BASE}/v-ritme-avatar-upload`,{file,kind:"avatar",headers:{"content-type":file.type||"application/octet-stream","x-telegram-init-data":initData}});return d.url}
 avatarFile?.addEventListener("change",async()=>{const f=avatarFile.files?.[0];if(!f)return;try{avatarUploadLabel.textContent="Загружаем…";avatarUploadLabel.classList.add("show");await uploadAvatar(f);me=await authJson(`${BASE}/v-ritme-mb-api/api/me`);peopleData=await authJson(`${BASE}/v-ritme-people`);rep=await authJson(`${BASE}/v-ritme-reputation`);renderMe();renderPeople();renderEvent();avatarFile.value="";tg?.HapticFeedback?.notificationOccurred?.("success");toast("Фото обновлено")}catch(e){console.error(e);alertError(e)}finally{avatarUploadLabel.textContent="Сменить фото"}});
 async function normalizeUserImage(file,label="photo"){
   const maxSide=2400,quality=.86;
@@ -1735,7 +1855,7 @@ window.addEventListener("unhandledrejection",e=>telemetry("ui_error",{message:St
 
 async function boot(){
   try{renderChipGroups({vibes:[],interests:[]})}catch(e){}
-  telemetry("app_open",{build:"v14.10.0"});const pulseP=retry(()=>json(`${BASE}/v-ritme-pulse`),1,350);
+  telemetry("app_open",{build:"v15.2.0-final"});const pulseP=retry(()=>json(`${BASE}/v-ritme-pulse`),1,350);
   if(initData){
     const meP=authJson(`${BASE}/v-ritme-mb-api/api/me`);
     const peopleP=retry(()=>authJson(`${BASE}/v-ritme-people`),1,300);
@@ -1744,18 +1864,18 @@ async function boot(){
     meP.then(x=>{me=x;renderMe()}).catch(e=>{console.error("me",e)});
     peopleP.then(x=>{peopleData=x;renderMe();renderPeople()}).catch(e=>{console.error("people",e);peopleFeed.innerHTML='<div class="error">Не удалось загрузить людей. Попробуй открыть экран ещё раз.</div>'});
     clubP.then(x=>{club=x;renderActivities()}).catch(e=>console.error("club",e));
-    repP.then(x=>{rep=x;renderEvent();renderMe()}).catch(e=>{console.error("reputation",e);renderEvent()});
+    repP.then(x=>{rep=x;renderEvent();renderActivitiesMainEvent();renderMyParticipation();renderCommunityGoal();renderMe()}).catch(e=>{console.error("reputation",e);renderEvent()});
     loadMovement();
   }else{
     document.body.classList.add("browser-demo");
     [saveProfile,saveBike,saveAchievement,joinRoute,submitActivity,movementEls.launch].filter(Boolean).forEach(b=>{b.disabled=true;b.setAttribute("aria-disabled","true");b.title="Доступно внутри Telegram"});
     [avatarFile,bikeFile,achievementFile].filter(Boolean).forEach(x=>x.disabled=true);
-    renderEvent();renderMe();peopleFeed.innerHTML='<div class="empty">Открой Mini App в Telegram, чтобы увидеть персональные совпадения и сохранить изменения.</div>'
+    renderEvent();renderMe();peopleFeed.innerHTML='<div class="empty">Открой Mini App в Telegram, чтобы увидеть общие интересы и сохранить изменения.</div>'
   }
   pulseP.then(x=>{pulse=x;renderPulse();renderMeanings();renderActivities();if(x?.degraded)telemetry("api_failed",{endpoint:"v-ritme-pulse",reason:"degraded"})}).catch(e=>{console.error("pulse",e);metrics.innerHTML='<div class="error-state">Пульс временно не обновился.<br><button class="btn" type="button" id="retryPulse">Повторить</button></div>';document.getElementById("retryPulse")?.addEventListener("click",()=>retry(()=>json(`${BASE}/v-ritme-pulse`),1).then(x=>{pulse=x;renderPulse();renderMeanings();renderActivities()}).catch(alertError))});
 }boot();
-</script><!-- build: v14.10.10-yandex-only-map-safe -->
-<div id="qaBuild" hidden>v14.10.10-yandex-only-map-safe</div><div id="appToast" class="toast" role="status" aria-live="polite"></div></body></html>
+</script><!-- build: v15.2.0-final -->
+<div id="qaBuild" hidden>v15.2.0-final</div><div id="appToast" class="toast" role="status" aria-live="polite"></div></body></html>
 
 <!-- v14.3 approved-photo mapping: 1 Morning Flow; 2 Coffee Ride; 3 Gravel Day; 4 Social Ride; 5 secondary night editorial; 6 hero. Minsk = dedicated generated event plate. -->
 
