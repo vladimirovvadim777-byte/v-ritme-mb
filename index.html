@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ru" data-build="v15.2.0-final">
+<html lang="ru" data-build="v15.2.1-final-clean">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
@@ -1237,6 +1237,19 @@ body.movement-recording{overflow:hidden}body.movement-recording .bottom{transfor
   .movement-entry-cta-arrow{width:36px;height:36px;flex-basis:36px}
 }
 
+
+/* v15.2.1 — final cleanup: legacy global tracker CTA must never appear on Pulse or bottom nav. */
+#movementLaunch,
+.movement-launch{
+  display:none!important;
+  visibility:hidden!important;
+  pointer-events:none!important;
+}
+#pulse .movement-entry-cta,
+#pulse [data-movement-discipline]{
+  display:none!important;
+}
+
 </style>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head><body><div class="app"><header class="topbar"><div class="topin" style="justify-content:flex-end"><div class="avatar" id="topAvatar">В</div></div></header><main>
@@ -1465,6 +1478,14 @@ body.movement-recording{overflow:hidden}body.movement-recording .bottom{transfor
   </div>
 </div><div class="modal" id="eventModal" role="dialog" aria-modal="true" aria-labelledby="eventModalTitle"><div class="sheet"><button class="close" data-close aria-label="Закрыть" type="button">×</button><div class="kicker">Общее событие</div><h2 id="eventModalTitle"></h2><div id="eventModalBody"></div></div></div><div class="modal" id="routeModal" role="dialog" aria-modal="true" aria-labelledby="routeTitle"><div class="sheet"><button class="close" data-close aria-label="Закрыть" type="button">×</button><div class="kicker">Маршрут сообщества</div><h2 id="routeTitle"></h2><p id="routeText"></p><div id="routePeople"></div><div class="actions route-modal-actions"><button class="btn-fill" id="joinRoute" type="button">Присоединиться</button><button class="btn route-map-btn" id="openRouteMap" type="button">Яндекс Карты</button></div></div></div><div class="modal" id="activityModal" role="dialog" aria-modal="true" aria-labelledby="activityModalTitle"><div class="sheet"><button class="close" data-close aria-label="Закрыть" type="button">×</button><div class="kicker">Предложение сообщества</div><h2 id="activityModalTitle">Предложить активность</h2><div class="field"><label for="actTitle">Название</label><input id="actTitle" placeholder="Например: вечерний круг по набережным"></div><div class="field"><label for="actDesc">Пара слов</label><textarea id="actDesc"></textarea></div><div class="field"><label for="actWhere">Где примерно</label><input id="actWhere"></div><div class="field"><label for="actDate">Когда</label><input id="actDate" type="date"></div><p class="copy" style="font-size:12px;color:var(--muted)">После отправки организатор посмотрит детали перед публикацией.</p><button class="btn-fill" id="submitActivity" type="button">Отправить на просмотр</button></div></div><div class="modal" id="bikeModal" role="dialog" aria-modal="true" aria-labelledby="bikeModalTitle"><div class="sheet"><button class="close" data-close aria-label="Закрыть" type="button">×</button><div class="kicker">Мой велик</div><h2 id="bikeModalTitle">Мой велосипед</h2><div class="field"><label for="bikeName">Модель / имя</label><input id="bikeName" placeholder="Например, Specialized Roubaix"></div><div class="field"><label for="bikeNote">Заметка</label><textarea id="bikeNote" placeholder="Что в нём твоего"></textarea></div><div class="field"><label for="bikeFile">Фото велосипеда</label><input id="bikeFile" type="file" accept="image/*,.heic,.heif"><div class="helper">Подойдут фото с iPhone, JPG, PNG, WebP · до 12 МБ</div></div><button class="btn-fill" id="saveBike" type="button">Сохранить</button></div></div><div class="modal" id="achievementModal" role="dialog" aria-modal="true" aria-labelledby="achievementModalTitle"><div class="sheet"><button class="close" data-close aria-label="Закрыть" type="button">×</button><div class="kicker">Новый пруф</div><h2 id="achievementModalTitle">Добавить пруф</h2><div class="field"><label for="achievementSelect">Достижение</label><select id="achievementSelect"><option value="">Своё достижение</option></select></div><div class="field"><label for="achievementCustom">Название</label><input id="achievementCustom"></div><div class="field"><label for="achievementEvent">Событие / гонка</label><input id="achievementEvent"></div><div class="field"><label for="achievementResult">Результат / время</label><input id="achievementResult"></div><div class="field"><label for="achievementPlace">Место</label><input id="achievementPlace"></div><div class="field"><label for="achievementDate">Дата</label><input id="achievementDate" type="date"></div><div class="field"><label for="achievementFile">Фото или скрин</label><input id="achievementFile" type="file" accept="image/*,.heic,.heif"></div><div class="field"><label for="achievementUrl">Или ссылка</label><input id="achievementUrl" type="url"></div><div class="field"><label for="achievementNote">Пара слов</label><textarea id="achievementNote" placeholder="Номер участника, источник результата или пояснение"></textarea></div><button class="btn-fill" id="saveAchievement" type="button">Сохранить пруф</button></div></div>
 <script>
+function removeLegacyMovementLaunch(){
+  document.querySelectorAll("#movementLaunch,.movement-launch").forEach(el=>el.remove());
+  document.querySelectorAll("#pulse button").forEach(el=>{
+    const t=String(el.textContent||"").trim().toLowerCase().replace(/\s+/g," ");
+    if((t==="в движение"||t==="ритм"||t==="записать активность")&&el.id!=="movementStartFromActivities")el.remove();
+  });
+}
+removeLegacyMovementLaunch();
 const BASE="https://yrcogxmnqrebbzcnqbjc.supabase.co/functions/v1",MINSK_TRACK="https://ttrails.ru/routes/velosipednyy-marshrut-zelyonoe-kolco--vokrug-minska",MINSK_START="Национальная библиотека Беларуси, Минск",MINSK_COVER="https://yrcogxmnqrebbzcnqbjc.supabase.co/storage/v1/object/public/activity-media/minsk-green-ring.webp",tg=window.Telegram?.WebApp,tgUser=tg?.initDataUnsafe?.user||{};const $=id=>document.getElementById(id);
 const [metrics,currentEvent,peopleFeed,meaningsList,activityList,personModal,personModalBody,eventModal,eventModalTitle,eventModalBody,routeModal,routeTitle,routeText,routePeople,activityModal,achievementModal,profileName,profileThought,profileAbout,profilePhoto,topAvatar,passportGrid,scoreValue,scoreLevel,scoreBar,scoreComponents,achievementSelect,achievementList,bikePhoto,bikeMeta,vibeChips,interestChips,about,rhythm,status,drive,connect,thought,actTitle,actDesc,actWhere,actDate,meaningInput,submitActivity,publishMeaning,saveProfile,joinRoute,openRouteMap,achievementUrl,achievementFile,achievementCustom,achievementEvent,achievementResult,achievementPlace,achievementDate,achievementNote,saveAchievement,bikeModal,bikeName,bikeNote,bikeFile,saveBike]=["metrics","currentEvent","peopleFeed","meaningsList","activityList","personModal","personModalBody","eventModal","eventModalTitle","eventModalBody","routeModal","routeTitle","routeText","routePeople","activityModal","achievementModal","profileName","profileThought","profileAbout","profilePhoto","topAvatar","passportGrid","scoreValue","scoreLevel","scoreBar","scoreComponents","achievementSelect","achievementList","bikePhoto","bikeMeta","vibeChips","interestChips","about","rhythm","status","drive","connect","thought","actTitle","actDesc","actWhere","actDate","meaningInput","submitActivity","publishMeaning","saveProfile","joinRoute","openRouteMap","achievementUrl","achievementFile","achievementCustom","achievementEvent","achievementResult","achievementPlace","achievementDate","achievementNote","saveAchievement","bikeModal","bikeName","bikeNote","bikeFile","saveBike"].map($);
 const communityGoal=$("communityGoal"),activitiesMainEvent=$("activitiesMainEvent"),myParticipationList=$("myParticipationList"),movementDisciplineModal=$("movementDisciplineModal");
@@ -1672,7 +1693,7 @@ async function uploadWithTimeout(url,{file,headers={},kind="upload",timeout=2500
   }finally{clearTimeout(timer)}
 }
 function alertError(e){const m=e instanceof Error?e.message:String(e||"Ошибка");toast(m,"error");if(tg?.showAlert)tg.showAlert(m);else window.alert(m)}async function withBusy(btn,fn,label="Подождите…"){if(!btn||btn.disabled)return;const old=btn.textContent;btn.disabled=true;btn.setAttribute("aria-busy","true");if(label)btn.textContent=label;try{return await fn()}catch(e){console.error(e);alertError(e)}finally{btn.disabled=false;btn.removeAttribute("aria-busy");btn.textContent=old}}const bgObserver=("IntersectionObserver" in window)?new IntersectionObserver(entries=>{for(const e of entries){if(!e.isIntersecting)continue;const el=e.target;if(!el.dataset.bgLoaded){el.style.backgroundImage=`url("${el.dataset.bg}")`;el.dataset.bgLoaded="1"}bgObserver.unobserve(el)}},{rootMargin:"320px 0px"}):null;
-function loadDeferredBackgrounds(root=document){const els=[...root.querySelectorAll("[data-bg]")];els.forEach((el,i)=>{if(el.dataset.bgLoaded)return;if(i===0||!bgObserver){el.style.backgroundImage=`url("${el.dataset.bg}")`;el.dataset.bgLoaded="1"}else bgObserver.observe(el)})}function show(id){document.querySelectorAll(".screen").forEach(x=>x.classList.toggle("active",x.id===id));telemetry("screen_view",{screen:id,build:"v15.2.0-final"});document.querySelectorAll(".bottom button").forEach(x=>x.classList.toggle("active",x.dataset.screen===id));const active=document.getElementById(id);if(active)loadDeferredBackgrounds(active);if(id==="pulse"){const t=document.getElementById("pulseLiveTitle");if(t&&!window.matchMedia("(prefers-reduced-motion: reduce)").matches){t.classList.remove("pulse-type-kick");void t.offsetWidth;t.classList.add("pulse-type-kick")}}window.scrollTo(0,0)}document.querySelectorAll("[data-screen]").forEach(b=>b.onclick=()=>show(b.dataset.screen));document.querySelectorAll("[data-screen-jump]").forEach(b=>b.onclick=()=>show(b.dataset.screenJump));const entryScreen=new URLSearchParams(location.search).get("screen");if(["pulse","people","activities","meanings","my"].includes(entryScreen))show(entryScreen);else{const pt=document.getElementById("pulseLiveTitle");if(pt&&!window.matchMedia("(prefers-reduced-motion: reduce)").matches)pt.classList.add("pulse-type-kick")}let modalReturnFocus=null;
+function loadDeferredBackgrounds(root=document){const els=[...root.querySelectorAll("[data-bg]")];els.forEach((el,i)=>{if(el.dataset.bgLoaded)return;if(i===0||!bgObserver){el.style.backgroundImage=`url("${el.dataset.bg}")`;el.dataset.bgLoaded="1"}else bgObserver.observe(el)})}function show(id){document.querySelectorAll(".screen").forEach(x=>x.classList.toggle("active",x.id===id));telemetry("screen_view",{screen:id,build:"v15.2.1-final-clean"});document.querySelectorAll(".bottom button").forEach(x=>x.classList.toggle("active",x.dataset.screen===id));const active=document.getElementById(id);if(active)loadDeferredBackgrounds(active);if(id==="pulse"){const t=document.getElementById("pulseLiveTitle");if(t&&!window.matchMedia("(prefers-reduced-motion: reduce)").matches){t.classList.remove("pulse-type-kick");void t.offsetWidth;t.classList.add("pulse-type-kick")}}window.scrollTo(0,0)}document.querySelectorAll("[data-screen]").forEach(b=>b.onclick=()=>show(b.dataset.screen));document.querySelectorAll("[data-screen-jump]").forEach(b=>b.onclick=()=>show(b.dataset.screenJump));const entryScreen=new URLSearchParams(location.search).get("screen");if(["pulse","people","activities","meanings","my"].includes(entryScreen))show(entryScreen);else{const pt=document.getElementById("pulseLiveTitle");if(pt&&!window.matchMedia("(prefers-reduced-motion: reduce)").matches)pt.classList.add("pulse-type-kick")}let modalReturnFocus=null;
 function openModalElement(modal){
   if(!modal)return;
   modalReturnFocus=document.activeElement instanceof HTMLElement?document.activeElement:null;
@@ -1855,7 +1876,7 @@ window.addEventListener("unhandledrejection",e=>telemetry("ui_error",{message:St
 
 async function boot(){
   try{renderChipGroups({vibes:[],interests:[]})}catch(e){}
-  telemetry("app_open",{build:"v15.2.0-final"});const pulseP=retry(()=>json(`${BASE}/v-ritme-pulse`),1,350);
+  telemetry("app_open",{build:"v15.2.1-final-clean"});const pulseP=retry(()=>json(`${BASE}/v-ritme-pulse`),1,350);
   if(initData){
     const meP=authJson(`${BASE}/v-ritme-mb-api/api/me`);
     const peopleP=retry(()=>authJson(`${BASE}/v-ritme-people`),1,300);
@@ -1874,8 +1895,8 @@ async function boot(){
   }
   pulseP.then(x=>{pulse=x;renderPulse();renderMeanings();renderActivities();if(x?.degraded)telemetry("api_failed",{endpoint:"v-ritme-pulse",reason:"degraded"})}).catch(e=>{console.error("pulse",e);metrics.innerHTML='<div class="error-state">Пульс временно не обновился.<br><button class="btn" type="button" id="retryPulse">Повторить</button></div>';document.getElementById("retryPulse")?.addEventListener("click",()=>retry(()=>json(`${BASE}/v-ritme-pulse`),1).then(x=>{pulse=x;renderPulse();renderMeanings();renderActivities()}).catch(alertError))});
 }boot();
-</script><!-- build: v15.2.0-final -->
-<div id="qaBuild" hidden>v15.2.0-final</div><div id="appToast" class="toast" role="status" aria-live="polite"></div></body></html>
+</script><!-- build: v15.2.1-final-clean -->
+<div id="qaBuild" hidden>v15.2.1-final-clean</div><div id="appToast" class="toast" role="status" aria-live="polite"></div></body></html>
 
 <!-- v14.3 approved-photo mapping: 1 Morning Flow; 2 Coffee Ride; 3 Gravel Day; 4 Social Ride; 5 secondary night editorial; 6 hero. Minsk = dedicated generated event plate. -->
 
