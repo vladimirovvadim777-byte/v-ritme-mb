@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ru" data-build="v15.4.4-bike-photo-fidelity">
+<html lang="ru" data-build="v15.5.0-stories-journal">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Onest:wght@400;500;600;700;800&family=Prata&display=swap" rel="stylesheet">
 
-<title>В ритме МБ — v15.4.4-bike-photo-fidelity</title>
+<title>В ритме МБ — v15.5.0-stories-journal</title>
 <link rel="preload" as="image" href="https://yrcogxmnqrebbzcnqbjc.supabase.co/storage/v1/object/public/activity-media/hero-community.webp" type="image/webp" fetchpriority="high">
 
 <style>
@@ -1318,7 +1318,7 @@ body.movement-recording{overflow:hidden}body.movement-recording .bottom{transfor
   letter-spacing:.035em;
   color:var(--muted);
 }
-</style>
+\n/* v15.5.0 — curated personal journal. No feed mechanics, likes or counters. */\n.journal-section{min-width:0}\n.story-list{display:grid;gap:26px;margin-top:22px}\n.story-card{border-top:1px solid var(--ink);padding-top:14px;min-width:0}\n.story-card:first-child{border-top:0;padding-top:0}\n.story-photo{margin:0 0 16px;overflow:hidden;border-radius:18px;background:#ded8cc}\n.story-photo img{display:block;width:100%;height:auto;max-height:62dvh;object-fit:contain;object-position:center;background:#ded8cc}\n.story-meta{display:flex;flex-wrap:wrap;gap:8px 14px;margin-bottom:7px;font:500 9px/1.35 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}\n.story-card h3{margin:0;font-family:var(--serif);font-size:clamp(34px,9.5vw,54px);font-weight:400;line-height:.98;letter-spacing:-.04em}\n.story-card .copy{margin-top:12px;white-space:pre-wrap}\n.story-tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:14px}\n.story-tags span{border:1px solid var(--line);border-radius:999px;padding:7px 10px;font:500 8px/1 var(--mono);letter-spacing:.07em;text-transform:uppercase}\n.story-owner-actions{display:flex;gap:8px;margin-top:14px}\n.story-owner-actions .btn{min-height:42px;padding:9px 13px}\n.story-preview{display:none;margin-top:12px;padding:10px;border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.24)}\n.story-preview.show{display:block}\n.story-preview img{display:block;width:100%;height:auto;max-height:46dvh;object-fit:contain;object-position:center;border-radius:12px;background:#ded8cc}\n.story-preview-note{margin-top:8px;font:500 9px/1.35 var(--mono);letter-spacing:.035em;color:var(--muted)}\n.person-viewer-stories{display:grid;gap:20px}\n.person-viewer-stories .story-card h3{font-size:clamp(30px,8vw,44px)}\n</style>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head><body><div class="app"><header class="topbar"><div class="topin" style="justify-content:flex-end"><div class="avatar" id="topAvatar">В</div></div></header><main>
 <section class="screen active" id="pulse"><div class="hero"><div class="hero-photo"><div><h1 class="serif fx-echo fx-echo fx-rgb" data-text="собирает людей.">собирает людей.</h1><p>Люди, движение и истории, которые складываются в одно сообщество. Без таблицы лидеров.</p></div></div></div><div class="metrics" id="metrics"></div>
@@ -1434,6 +1434,15 @@ body.movement-recording{overflow:hidden}body.movement-recording .bottom{transfor
     <div class="kicker">Моё участие</div>
     <h2 class="serif section-title">Где я<br>вместе.</h2>
     <div class="list" id="myParticipationList"><div class="empty">Участие появится здесь, когда ты присоединишься к событию или ритуалу.</div></div>
+  </section>
+
+
+  <section class="section journal-section" id="storySection">
+    <div class="kicker">Личный журнал</div>
+    <h2 class="serif section-title">Истории, которые<br>хочется сохранить.</h2>
+    <p class="copy">Путешествие, восхождение, поездка или момент, которым хочется поделиться. До шести избранных историй — без лайков, рейтингов и счётчиков.</p>
+    <div class="actions"><button class="btn-fill" id="addStory" type="button">Добавить историю</button></div>
+    <div class="story-list" id="storyList"><div class="empty">Историй пока нет.</div></div>
   </section>
 
   <section class="movement-profile section" id="movementProfile">
@@ -1561,6 +1570,21 @@ body.movement-recording{overflow:hidden}body.movement-recording .bottom{transfor
     <div class="field"><label for="feedbackMessage">Сообщение</label><textarea id="feedbackMessage" maxlength="2000" placeholder="Что произошло или что хочется улучшить?"></textarea></div>
     <p class="helper">Автоматически: версия приложения, экран, online/offline и последняя техническая ошибка. Личные маршруты не отправляются.</p>
     <button class="btn-fill" id="submitFeedback" type="button">Отправить</button>
+  </div>
+</div>
+<div class="modal" id="storyModal" role="dialog" aria-modal="true" aria-labelledby="storyModalTitle">
+  <div class="sheet">
+    <button class="close" data-close aria-label="Закрыть" type="button">×</button>
+    <div class="kicker">Личный журнал</div>
+    <h2 id="storyModalTitle">Новая история</h2>
+    <input id="storyId" type="hidden">
+    <div class="field"><label for="storyTitle">Название</label><input id="storyTitle" maxlength="120" placeholder="Например: Эльбрус, 5642 м"></div>
+    <div class="field"><label for="storyBody">Заметка</label><textarea id="storyBody" maxlength="1200" placeholder="Что запомнилось и почему эта история важна"></textarea></div>
+    <div class="field"><label for="storyPlace">Место</label><input id="storyPlace" maxlength="160" placeholder="Кавказ, Россия"></div>
+    <div class="field"><label for="storyDate">Дата</label><input id="storyDate" type="date"></div>
+    <div class="field"><label for="storyTags">Теги</label><input id="storyTags" maxlength="260" placeholder="горы, travel, восхождение"><div class="helper">До 6 тегов, через запятую.</div></div>
+    <div class="field"><label for="storyFile">Фото</label><input id="storyFile" type="file" accept="image/*,.heic,.heif"><div class="helper">Фото показываем целиком, без неожиданной обрезки.</div><div class="story-preview" id="storyPreview" aria-live="polite"><img id="storyPreviewImg" alt="Предпросмотр фото истории"><div class="story-preview-note" id="storyPreviewNote">Так фото будет выглядеть в журнале.</div></div></div>
+    <button class="btn-fill" id="saveStory" type="button">Сохранить историю</button>
   </div>
 </div>
 <script>
@@ -1811,7 +1835,7 @@ async function uploadWithTimeout(url,{file,headers={},kind="upload",timeout=2500
   }finally{clearTimeout(timer)}
 }
 function alertError(e){const m=e instanceof Error?e.message:String(e||"Ошибка");mbDiagnostics.push("caught",m);telemetry("ui_error",{message:m.slice(0,160)});toast(m,"error");if(tg?.showAlert)tg.showAlert(m);else window.alert(m)}async function withBusy(btn,fn,label="Подождите…"){if(!btn||btn.disabled)return;const old=btn.textContent;btn.disabled=true;btn.setAttribute("aria-busy","true");if(label)btn.textContent=label;try{return await fn()}catch(e){console.error(e);alertError(e)}finally{btn.disabled=false;btn.removeAttribute("aria-busy");btn.textContent=old}}const bgObserver=("IntersectionObserver" in window)?new IntersectionObserver(entries=>{for(const e of entries){if(!e.isIntersecting)continue;const el=e.target;if(!el.dataset.bgLoaded){el.style.backgroundImage=`url("${el.dataset.bg}")`;el.dataset.bgLoaded="1"}bgObserver.unobserve(el)}},{rootMargin:"320px 0px"}):null;
-function loadDeferredBackgrounds(root=document){const els=[...root.querySelectorAll("[data-bg]")];els.forEach((el,i)=>{if(el.dataset.bgLoaded)return;if(i===0||!bgObserver){el.style.backgroundImage=`url("${el.dataset.bg}")`;el.dataset.bgLoaded="1"}else bgObserver.observe(el)})}function show(id){document.querySelectorAll(".screen").forEach(x=>x.classList.toggle("active",x.id===id));telemetry("screen_view",{screen:id,build:"v15.4.4-bike-photo-fidelity"});document.querySelectorAll(".bottom button").forEach(x=>x.classList.toggle("active",x.dataset.screen===id));const active=document.getElementById(id);if(active)loadDeferredBackgrounds(active);if(id==="pulse"){const t=document.getElementById("pulseLiveTitle");if(t&&!window.matchMedia("(prefers-reduced-motion: reduce)").matches){t.classList.remove("pulse-type-kick");void t.offsetWidth;t.classList.add("pulse-type-kick")}}window.scrollTo(0,0)}document.querySelectorAll("[data-screen]").forEach(b=>b.onclick=()=>show(b.dataset.screen));document.querySelectorAll("[data-screen-jump]").forEach(b=>b.onclick=()=>show(b.dataset.screenJump));const entryScreen=new URLSearchParams(location.search).get("screen");if(["pulse","people","activities","meanings","my"].includes(entryScreen))show(entryScreen);else{const pt=document.getElementById("pulseLiveTitle");if(pt&&!window.matchMedia("(prefers-reduced-motion: reduce)").matches)pt.classList.add("pulse-type-kick")}let modalReturnFocus=null;
+function loadDeferredBackgrounds(root=document){const els=[...root.querySelectorAll("[data-bg]")];els.forEach((el,i)=>{if(el.dataset.bgLoaded)return;if(i===0||!bgObserver){el.style.backgroundImage=`url("${el.dataset.bg}")`;el.dataset.bgLoaded="1"}else bgObserver.observe(el)})}function show(id){document.querySelectorAll(".screen").forEach(x=>x.classList.toggle("active",x.id===id));telemetry("screen_view",{screen:id,build:"v15.5.0-stories-journal"});document.querySelectorAll(".bottom button").forEach(x=>x.classList.toggle("active",x.dataset.screen===id));const active=document.getElementById(id);if(active)loadDeferredBackgrounds(active);if(id==="pulse"){const t=document.getElementById("pulseLiveTitle");if(t&&!window.matchMedia("(prefers-reduced-motion: reduce)").matches){t.classList.remove("pulse-type-kick");void t.offsetWidth;t.classList.add("pulse-type-kick")}}window.scrollTo(0,0)}document.querySelectorAll("[data-screen]").forEach(b=>b.onclick=()=>show(b.dataset.screen));document.querySelectorAll("[data-screen-jump]").forEach(b=>b.onclick=()=>show(b.dataset.screenJump));const entryScreen=new URLSearchParams(location.search).get("screen");if(["pulse","people","activities","meanings","my"].includes(entryScreen))show(entryScreen);else{const pt=document.getElementById("pulseLiveTitle");if(pt&&!window.matchMedia("(prefers-reduced-motion: reduce)").matches)pt.classList.add("pulse-type-kick")}let modalReturnFocus=null;
 function openModalElement(modal){
   if(!modal)return;
   modalReturnFocus=document.activeElement instanceof HTMLElement?document.activeElement:null;
@@ -1825,7 +1849,7 @@ document.getElementById("openFeedback")?.addEventListener("click",()=>{telemetry
 document.getElementById("submitFeedback")?.addEventListener("click",()=>withBusy(document.getElementById("submitFeedback"),async()=>{
   const category=document.getElementById("feedbackCategory")?.value||"other",message=String(document.getElementById("feedbackMessage")?.value||"").trim();
   if(message.length<3)throw new Error("Напиши пару слов");
-  await authJson(`${BASE}/v-ritme-feedback`,"POST",{category,message,build:"v15.4.4-bike-photo-fidelity",screen:activeScreenId(),user_agent:navigator.userAgent,online:navigator.onLine,context:feedbackContext()});
+  await authJson(`${BASE}/v-ritme-feedback`,"POST",{category,message,build:"v15.5.0-stories-journal",screen:activeScreenId(),user_agent:navigator.userAgent,online:navigator.onLine,context:feedbackContext()});
   telemetry("feedback_submit",{category,screen:activeScreenId()});
   document.getElementById("feedbackMessage").value="";
   closeModalElement(document.getElementById("feedbackModal"));
@@ -1872,6 +1896,17 @@ function renderPeople(){const mine=peopleData.me||{};let xs=(peopleData.people||
     <button class="person-open" data-person="${esc(p.id)}" type="button"><span>Открыть профиль</span><span class="person-open-icon">${mbIcon("arrow")}</span></button>
   </div>
 </article>`}).join(""):'<div class="people-empty"><div class="kicker">Люди</div><h3>Профили появятся здесь, когда участники расскажут о себе.</h3><p class="copy">Общие интересы помогают быстрее понять, что у вас уже есть общий контекст.</p></div>';document.querySelectorAll("[data-person]").forEach(b=>b.onclick=()=>openPerson(b.dataset.person));if(!renderPeople._avatarReported){renderPeople._avatarReported=true;telemetry("avatar_state",{surface:"people",total:xs.length,with_photo:xs.filter(profilePhotoUrl).length})}}
+let journalStories=[];let storyPreviewObjectUrl="";
+function storyMeta(s){const out=[];if(s.happened_on)out.push(new Date(`${s.happened_on}T12:00:00`).toLocaleDateString("ru-RU",{month:"long",year:"numeric"}));if(s.place)out.push(s.place);return out}
+function storyCardMarkup(story,own=false){const meta=storyMeta(story),image=safeUrl(story.image_url),tags=Array.isArray(story.tags)?story.tags:[];return `<article class="story-card" data-story-card="${esc(story.id)}">${image?`<div class="story-photo"><img src="${esc(image)}" alt="${esc(story.title||"История")}" loading="lazy" decoding="async" onerror="this.closest('.story-photo')?.remove()"></div>`:""}${meta.length?`<div class="story-meta">${meta.map(esc).map(x=>`<span>${x}</span>`).join("")}</div>`:""}<h3>${esc(story.title||"История")}</h3>${story.body?`<p class="copy">${esc(story.body)}</p>`:""}${tags.length?`<div class="story-tags">${tags.slice(0,6).map(t=>`<span>${esc(t)}</span>`).join("")}</div>`:""}${own?`<div class="story-owner-actions"><button class="btn" type="button" data-story-edit="${esc(story.id)}">Изменить</button><button class="btn" type="button" data-story-delete="${esc(story.id)}">Удалить</button></div>`:""}</article>`}
+function renderMyStories(){const box=document.getElementById("storyList");if(!box)return;box.innerHTML=journalStories.length?journalStories.map(x=>storyCardMarkup(x,true)).join(""):'<div class="people-empty"><div class="kicker">Личный журнал</div><h3>Пока без историй.</h3><p class="copy">Добавь момент, к которому хочется вернуться: поездку, восхождение, маршрут или просто хороший день.</p></div>';box.querySelectorAll("[data-story-edit]").forEach(b=>b.addEventListener("click",()=>openStoryEditor(journalStories.find(x=>x.id===b.dataset.storyEdit)||null)));box.querySelectorAll("[data-story-delete]").forEach(b=>b.addEventListener("click",()=>deleteStory(b.dataset.storyDelete)))}
+async function loadMyStories(){if(!initData)return;try{const d=await authJson(`${BASE}/v-ritme-stories`);journalStories=d.stories||[];renderMyStories()}catch(e){console.error("stories",e);const box=document.getElementById("storyList");if(box)box.innerHTML='<div class="error">Не удалось загрузить истории.</div>'}}
+function storyTagsValue(v){return String(v||"").split(",").map(x=>x.trim()).filter(Boolean).slice(0,6)}
+function clearStoryPreview(){if(storyPreviewObjectUrl){URL.revokeObjectURL(storyPreviewObjectUrl);storyPreviewObjectUrl=""}const box=document.getElementById("storyPreview"),img=document.getElementById("storyPreviewImg");box?.classList.remove("show");img?.removeAttribute("src")}
+function openStoryEditor(story=null){const modal=document.getElementById("storyModal");document.getElementById("storyModalTitle").textContent=story?"Изменить историю":"Новая история";document.getElementById("storyId").value=story?.id||"";document.getElementById("storyTitle").value=story?.title||"";document.getElementById("storyBody").value=story?.body||"";document.getElementById("storyPlace").value=story?.place||"";document.getElementById("storyDate").value=story?.happened_on||"";document.getElementById("storyTags").value=(story?.tags||[]).join(", ");document.getElementById("storyFile").value="";clearStoryPreview();if(story?.image_url){const box=document.getElementById("storyPreview"),img=document.getElementById("storyPreviewImg"),note=document.getElementById("storyPreviewNote");if(img)img.src=story.image_url;if(note)note.textContent="Текущее фото. Выбери новое, только если хочешь заменить его.";box?.classList.add("show")}telemetry("story_form_started",{mode:story?"edit":"create"});openModalElement(modal)}
+async function uploadStoryPhoto(storyId,file){const prepared=await normalizeUserImage(file,"story");if(prepared.size>8*1024*1024)throw new Error("Фото слишком большое. Выбери фото до 8 МБ.");const headers={"content-type":prepared.type||"application/octet-stream","x-file-type":prepared.type||"application/octet-stream","x-file-name":encodeURIComponent(prepared.name||file.name||"story-photo"),"x-story-id":storyId,"x-telegram-init-data":initData};let last;for(let attempt=1;attempt<=2;attempt++){try{return await uploadWithTimeout(`${BASE}/v-ritme-story-media`,{file:prepared,kind:"story",timeout:45000,headers})}catch(e){last=e;if(attempt<2){await new Promise(r=>setTimeout(r,700));toast("Сеть подвисла — повторяю загрузку…")}}}throw last||new Error("Не удалось загрузить фото истории")}
+async function deleteStory(id){const story=journalStories.find(x=>x.id===id);if(!story)return;const ok=await new Promise(resolve=>{const msg=`Удалить историю «${story.title}»?`;if(tg?.showConfirm)tg.showConfirm(msg,resolve);else resolve(window.confirm(msg))});if(!ok)return;try{const d=await authJson(`${BASE}/v-ritme-stories`,"POST",{action:"delete",id});journalStories=d.stories||[];renderMyStories();telemetry("story_deleted",{});toast("История удалена")}catch(e){alertError(e)}}
+async function loadPersonStories(profileId){const target=document.getElementById("personStoriesContent");if(!target)return;try{const d=await authJson(`${BASE}/v-ritme-stories?profile_id=${encodeURIComponent(profileId)}`);const xs=d.stories||[];target.innerHTML=xs.length?`<div class="person-viewer-stories">${xs.map(x=>storyCardMarkup(x,false)).join("")}</div>`:'<p class="person-viewer-about">Пока без историй.</p>'}catch(e){console.error("person stories",e);target.innerHTML='<p class="person-viewer-about">Истории сейчас не загрузились.</p>'}}
 function achievementMini(a){const proof=safeUrl(a.proof_url),facts=[a.event_name,a.completed_at?new Date(a.completed_at).toLocaleDateString("ru-RU"):null,a.result_text,a.place_text].filter(Boolean);return `<div class="achievement-card" style="padding:14px 0"><div class="achievement-head"><div><div class="kicker">${esc(a.category||"achievement")}</div><h3 style="font-size:27px">${esc(a.title||"Достижение")}</h3></div><span class="status-pill">${esc(proofStatus(a.verification_status))}</span></div>${facts.length?`<p class="copy">${facts.map(esc).join(" · ")}</p>`:""}${proof?`<a class="proof-link" href="${esc(proof)}" target="_blank" rel="noopener noreferrer">Пруф ↗</a>`:""}</div>`}
 function openPerson(id){
   const p=(peopleData.people||[]).find(x=>String(x.id)===String(id));
@@ -1889,6 +1924,7 @@ function openPerson(id){
     ${o.length?`<section class="person-viewer-section"><div class="kicker">Общие интересы</div><div class="person-viewer-match">${o.slice(0,6).map(esc).join(" · ")}</div></section>`:""}
     ${tags.length?`<div class="person-viewer-tags">${tags.map(x=>`<span>${esc(x)}</span>`).join("")}</div>`:""}
     ${b?`<section class="person-viewer-section"><div class="kicker">Мой велосипед</div><h3>${esc(b.name||"Велосипед")}</h3>${safeUrl(b.photo_url)?`<div class="person-viewer-bike"><img src="${esc(safeUrl(b.photo_url))}" alt="Велосипед участника" onerror="this.closest('.person-viewer-bike')?.remove()"></div>`:""}${b.note?`<p class="person-viewer-about">${esc(b.note)}</p>`:""}</section>`:""}
+    <section class="person-viewer-section"><div class="kicker">Истории</div><div id="personStoriesContent"><div class="empty">Подключаем истории…</div></div></section>
     ${proofs.length?`<section class="person-viewer-section"><div class="kicker">Достижения / пруфы</div>${proofs.slice(0,4).map(achievementMini).join("")}</section>`:""}`;
   const sheet=personModal.querySelector(".person-viewer-sheet");
   if(sheet)sheet.scrollTop=0;
@@ -1896,6 +1932,7 @@ function openPerson(id){
   document.documentElement.classList.add("modal-lock");
   document.body.classList.add("modal-lock");
   requestAnimationFrame(()=>{if(sheet)sheet.scrollTop=0});
+  loadPersonStories(p.id);
 }
 document.querySelectorAll("[data-filter]").forEach(b=>b.onclick=()=>{peopleFilter=b.dataset.filter;document.querySelectorAll("[data-filter]").forEach(x=>x.classList.toggle("active",x===b));renderPeople()});
 function renderActivitiesMainEvent(){if(!activitiesMainEvent)return;const e=rep?.event;if(!e){activitiesMainEvent.innerHTML='<div class="kicker">Главный фокус</div><div class="empty">Следующее большое событие скоро появится здесь.</div>';return}const dates=`${new Date(e.starts_at).toLocaleDateString("ru-RU",{day:"2-digit",month:"2-digit"})} — ${new Date(e.ends_at).toLocaleDateString("ru-RU",{day:"2-digit",month:"2-digit"})}`,cover=safeUrl(e.cover_url)||(e.slug==="minsk-green-ring-2026"?MINSK_COVER:"");activitiesMainEvent.innerHTML=`<div class="kicker">Главное событие сообщества</div><article class="event-card ${cover?"has-cover":"minsk-plate"}" ${cover?`style="background-image:linear-gradient(180deg,rgba(0,0,0,.08),rgba(0,0,0,.8)),url('${esc(cover)}')"`:""}><div class="kicker" style="color:#ddd">ОБЩИЙ ФОКУС / 2026</div><h3 class="serif">${esc(e.title)}</h3><p>${esc(e.description||"")}</p><div class="event-meta-grid"><div><span class="kicker" style="color:#bbb">Когда</span><b>${esc(dates)}</b></div><div><span class="kicker" style="color:#bbb">Где</span><b>${esc(e.location||"—")}</b></div></div><div class="event-people">${(e.participants||[]).slice(0,8).map(eventPersonChip).join("")}</div><div class="kicker" style="color:#ddd;margin-top:8px">${Number(e.participant_count||0)} ${Number(e.participant_count||0)===1?"участник":"участников"}</div><div class="actions"><button class="btn" id="activitiesEventDetails" type="button">Подробнее</button><button class="btn-fill" id="activitiesEventJoin" type="button">${e.joined?"Буду ✓":"Буду"}</button></div></article>`;document.getElementById("activitiesEventDetails")?.addEventListener("click",()=>{if(!document.getElementById("eventDetails"))renderEvent();document.getElementById("eventDetails")?.click()});document.getElementById("activitiesEventJoin")?.addEventListener("click",()=>{if(!document.getElementById("eventJoin"))renderEvent();document.getElementById("eventJoin")?.click()})}
@@ -1952,7 +1989,7 @@ function proofStatus(s){return ({claimed:"Без проверки",pending:"См
 const routeInfo={"morning-flow":["Morning Flow","18 км · набережные Москвы","Москва"],"coffee-ride":["Coffee Ride","24 км · ritual","Москва"],"gravel-day":["Gravel Day","56 км · Московская область","Московская область"],"social-ride":["Social Ride","28 км · Москва","Москва"]};let currentRoute="";function renderRouteModal(){if(!currentRoute)return;const x=routeInfo[currentRoute],live=(club.activities||[]).find(a=>a.slug===currentRoute);routeTitle.textContent=x[0];routeText.textContent=x[1];routePeople.innerHTML=`<div class="avatars">${(live?.participants||[]).slice(0,8).map(avatar).join("")}<span style="margin-left:12px">${Number(live?.participant_count||0)} участников</span></div>`;joinRoute.textContent=live?.joined?"Буду ✓":"Буду";openRouteMap.innerHTML=`${mbIcon("map")}<span>Яндекс Карты</span>`;openRouteMap.onclick=()=>openYandexBikeRoute("",x[0],x[2])}document.querySelectorAll("[data-route]").forEach(b=>b.onclick=()=>{currentRoute=b.dataset.route;telemetry("activity_open",{slug:currentRoute});renderRouteModal();openModalElement(routeModal)});joinRoute.onclick=()=>withBusy(joinRoute,async()=>{if(!currentRoute)return;const live=(club.activities||[]).find(a=>a.slug===currentRoute);if(live?.joined){const ok=await new Promise(resolve=>{if(tg?.showConfirm)tg.showConfirm("Отменить участие?",resolve);else resolve(window.confirm("Отменить участие?"))});if(!ok)return;await authJson(`${BASE}/v-ritme-mb-api/api/leave-activity`,"POST",{activity_slug:currentRoute})}else await authJson(`${BASE}/v-ritme-mb-api/api/join-activity`,"POST",{activity_slug:currentRoute});club=await authJson(`${BASE}/v-ritme-club`);renderActivities();renderMyParticipation();renderRouteModal();toast(live?.joined?"Участие отменено":"Участие отмечено ✓")},"Обновляем…");submitActivity.onclick=()=>withBusy(submitActivity,async()=>{telemetry("activity_open",{action:"proposal_submit"});club=await authJson(`${BASE}/v-ritme-club`,"POST",{action:"propose_activity",title:actTitle.value,description:actDesc.value,route_area:actWhere.value,proposed_date:actDate.value});renderActivities();activityModal.classList.remove("open");toast("Предложение отправлено на просмотр")},"Отправляем…");publishMeaning.onclick=()=>withBusy(publishMeaning,async()=>{const t=meaningInput.value.trim();if(!t)return;telemetry("meaning_form_completed",{length:t.length});await authJson(`${BASE}/v-ritme-mb-api/api/meaning`,"POST",{text:t});meaningInput.value="";pulse=await retry(()=>authJson(`${BASE}/v-ritme-pulse`),1);renderMeanings();toast("Мысль опубликована")},"Публикуем…");saveProfile.onclick=()=>withBusy(saveProfile,async()=>{const vibes=selected(vibeChips),interests=selected(interestChips);telemetry("profile_form_completed",{vibes:vibes.length,interests:interests.length,about_length:about.value.trim().length});const [profileResult,peopleResult]=await Promise.all([authJson(`${BASE}/v-ritme-mb-api/api/profile`,"POST",{rhythm:rhythm.value,status:status.value,drive:drive.value,connect:connect.value,thought:thought.value,is_visible:true}),authJson(`${BASE}/v-ritme-people`,"POST",{action:"update_profile",about:about.value,vibes,interests})]);if(profileResult?.profile)me={...(me||{}),profile:profileResult.profile};if(peopleResult?.me)peopleData={...peopleData,me:peopleResult.me};renderMe();tg?.HapticFeedback?.notificationOccurred?.("success");toast("Профиль сохранён");authJson(`${BASE}/v-ritme-people`).then(x=>{peopleData=x;renderMe();renderPeople()}).catch(e=>console.error("people refresh",e))},"Сохраняем…");async function uploadAvatar(file){if(!file)return;const d=await uploadWithTimeout(`${BASE}/v-ritme-avatar-upload`,{file,kind:"avatar",headers:{"content-type":file.type||"application/octet-stream","x-telegram-init-data":initData}});return d.url}
 avatarFile?.addEventListener("change",async()=>{const f=avatarFile.files?.[0];if(!f)return;try{avatarUploadLabel.textContent="Загружаем…";avatarUploadLabel.classList.add("show");await uploadAvatar(f);me=await authJson(`${BASE}/v-ritme-mb-api/api/me`);peopleData=await authJson(`${BASE}/v-ritme-people`);rep=await authJson(`${BASE}/v-ritme-reputation`);renderMe();renderPeople();renderEvent();avatarFile.value="";tg?.HapticFeedback?.notificationOccurred?.("success");toast("Фото обновлено")}catch(e){console.error(e);alertError(e)}finally{avatarUploadLabel.textContent="Сменить фото"}});
 async function normalizeUserImage(file,label="photo"){
-  const maxSide=label==="bike"?2000:2400,quality=label==="bike"?.82:.86;
+  const maxSide=label==="bike"?2000:label==="story"?2000:2400,quality=label==="bike"?.82:label==="story"?.84:.86;
   const decode=async()=>{
     if("createImageBitmap" in window){
       try{return await createImageBitmap(file,{imageOrientation:"from-image"})}catch(e){}
@@ -1976,6 +2013,9 @@ async function normalizeUserImage(file,label="photo"){
   }catch(e){console.warn("image normalize fallback",e)}
   return file;
 }
+document.getElementById("addStory")?.addEventListener("click",()=>openStoryEditor(null));
+document.getElementById("storyFile")?.addEventListener("change",()=>{clearStoryPreview();const f=document.getElementById("storyFile")?.files?.[0];if(!f)return;storyPreviewObjectUrl=URL.createObjectURL(f);const box=document.getElementById("storyPreview"),img=document.getElementById("storyPreviewImg"),note=document.getElementById("storyPreviewNote");if(img){img.src=storyPreviewObjectUrl;img.onload=()=>{if(note)note.textContent=`Так фото будет выглядеть в журнале — целиком · ${img.naturalWidth}×${img.naturalHeight}`}}box?.classList.add("show")});
+document.getElementById("saveStory")?.addEventListener("click",()=>withBusy(document.getElementById("saveStory"),async()=>{const id=document.getElementById("storyId").value,title=document.getElementById("storyTitle").value.trim(),body=document.getElementById("storyBody").value.trim(),place=document.getElementById("storyPlace").value.trim(),happened_on=document.getElementById("storyDate").value,tags=storyTagsValue(document.getElementById("storyTags").value);if(title.length<3)throw new Error("Добавь название истории");let d=await authJson(`${BASE}/v-ritme-stories`,"POST",{action:id?"update":"create",id:id||undefined,title,body,place,happened_on,tags,is_visible:true});const story=d.story;const f=document.getElementById("storyFile")?.files?.[0];if(f&&story?.id){await uploadStoryPhoto(story.id,f);d=await authJson(`${BASE}/v-ritme-stories`)}journalStories=d.stories||[];renderMyStories();clearStoryPreview();document.getElementById("storyFile").value="";closeModalElement(document.getElementById("storyModal"));telemetry("story_form_completed",{has_photo:!!(f||story?.image_url),body_length:body.length,tags:tags.length});toast("История сохранена")},"Сохраняем…"));
 let bikePreviewObjectUrl="";
 function clearBikePreview(){
   if(bikePreviewObjectUrl){URL.revokeObjectURL(bikePreviewObjectUrl);bikePreviewObjectUrl=""}
@@ -2047,13 +2087,14 @@ window.addEventListener("unhandledrejection",e=>{const m=String(e.reason?.messag
 
 async function boot(){
   try{renderChipGroups({vibes:[],interests:[]})}catch(e){}
-  telemetry("app_open",{build:"v15.4.4-bike-photo-fidelity"});const pulseP=retry(()=>authJson(`${BASE}/v-ritme-pulse`),1,350);
+  telemetry("app_open",{build:"v15.5.0-stories-journal"});const pulseP=retry(()=>authJson(`${BASE}/v-ritme-pulse`),1,350);
   if(initData){
     const meP=authJson(`${BASE}/v-ritme-mb-api/api/me`);
     const peopleP=retry(()=>authJson(`${BASE}/v-ritme-people`),1,300);
     const clubP=authJson(`${BASE}/v-ritme-club`);
     const repP=authJson(`${BASE}/v-ritme-reputation`);
     const avatarSyncP=authJson(`${BASE}/v-ritme-avatar-sync`,"POST",{}).catch(e=>{console.info("avatar sync",e);return null});
+    loadMyStories();
     meP.then(x=>{me=x;renderMe()}).catch(e=>{console.error("me",e)});
     peopleP.then(x=>{peopleData=x;renderMe();renderPeople()}).catch(e=>{console.error("people",e);peopleFeed.innerHTML='<div class="error">Не удалось загрузить людей. Попробуй открыть экран ещё раз.</div>'});
     clubP.then(x=>{club=x;renderActivities()}).catch(e=>console.error("club",e));
@@ -2080,8 +2121,8 @@ async function boot(){
   }
   pulseP.then(x=>{pulse=x;renderPulse();renderMeanings();renderActivities();if(x?.degraded)telemetry("api_failed",{endpoint:"v-ritme-pulse",reason:"degraded"})}).catch(e=>{console.error("pulse",e);metrics.innerHTML='<div class="error-state">Пульс временно не обновился.<br><button class="btn" type="button" id="retryPulse">Повторить</button></div>';document.getElementById("retryPulse")?.addEventListener("click",()=>retry(()=>authJson(`${BASE}/v-ritme-pulse`),1).then(x=>{pulse=x;renderPulse();renderMeanings();renderActivities()}).catch(alertError))});
 }boot();
-</script><!-- build: v15.4.4-bike-photo-fidelity -->
-<div id="qaBuild" hidden>v15.4.4-bike-photo-fidelity</div><div id="appToast" class="toast" role="status" aria-live="polite"></div></body></html>
+</script><!-- build: v15.5.0-stories-journal -->
+<div id="qaBuild" hidden>v15.5.0-stories-journal</div><div id="appToast" class="toast" role="status" aria-live="polite"></div></body></html>
 
 <!-- v14.3 approved-photo mapping: 1 Morning Flow; 2 Coffee Ride; 3 Gravel Day; 4 Social Ride; 5 secondary night editorial; 6 hero. Minsk = dedicated generated event plate. -->
 
