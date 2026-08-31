@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ru" data-build="v15.8.3-final">
+<html lang="ru" data-build="v15.10.0-manual-workouts">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Onest:wght@400;500;600;700;800&family=Prata&display=swap" rel="stylesheet">
 
-<title>В ритме МБ — v15.8.3-final</title>
+<title>В ритме МБ — v15.10.0-manual-workouts</title>
 <link rel="preload" as="image" href="https://yrcogxmnqrebbzcnqbjc.supabase.co/storage/v1/object/public/activity-media/hero-community.webp" type="image/webp" fetchpriority="high">
 
 <style>
@@ -1662,6 +1662,25 @@ body.movement-recording{overflow:hidden}body.movement-recording .bottom{transfor
   .person-viewer-section .achievement-summary{font-size:12px}
 }
 
+
+/* v15.9 — one meeting model */
+.compact-meetings-section{padding-top:28px;padding-bottom:28px}
+.compact-meetings-section .ritual-empty{padding:14px 0 2px;border-top:1px solid var(--line);max-width:620px}
+.custom-meeting-cta{padding-top:30px}
+.custom-meeting-cta .section-title{font-size:clamp(50px,13vw,76px);margin-bottom:14px}
+.custom-meeting-cta .copy{max-width:520px}
+
+
+/* v15.10 manual workouts */
+.movement-entry-actions{display:grid;gap:8px;margin-top:16px}
+.movement-entry-actions .movement-entry-cta{margin-top:0}
+.movement-manual-cta{width:100%;min-height:62px;border:1px solid var(--line);background:transparent;color:inherit;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 14px;text-align:left}
+.movement-manual-cta b{display:block;font-size:12px;letter-spacing:.02em}
+.movement-manual-cta small{display:block;margin-top:4px;font-size:10px;color:var(--muted)}
+.movement-manual-cta>span:last-child{font-size:24px;font-weight:300}
+.micro-hint{margin:12px 0 0;font-size:11px;line-height:1.45;color:var(--muted)}
+.manual-source-link{display:inline-block;margin-top:12px;font-size:12px;font-weight:600;border-bottom:1px solid currentColor}
+
 </style>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head><body><div class="app"><header class="topbar"><div class="topin" style="justify-content:flex-end"><div class="avatar" id="topAvatar">В</div></div></header><main>
@@ -1688,13 +1707,19 @@ body.movement-recording{overflow:hidden}body.movement-recording .bottom{transfor
     <div class="kicker">Личное движение · GPS private</div>
     <h2 class="serif section-title">Записать<br>активность.</h2>
     <p class="copy">Велосипед, бег или ходьба. В общую цель автоматически попадёт только дистанция; маршрут останется приватным, пока ты сам не решишь поделиться.</p>
-    <button class="movement-entry-cta" id="movementStartFromActivities" type="button" aria-label="Записать активность">
-      <span class="movement-entry-cta-copy">
-        <b id="movementEntryLabel">Записать активность</b>
-        <small id="movementEntryMeta">Велосипед · бег · ходьба</small>
-      </span>
-      <span class="movement-entry-cta-arrow" aria-hidden="true">→</span>
-    </button>
+    <div class="movement-entry-actions">
+      <button class="movement-entry-cta" id="movementStartFromActivities" type="button" aria-label="Записать активность">
+        <span class="movement-entry-cta-copy">
+          <b id="movementEntryLabel">Записать активность</b>
+          <small id="movementEntryMeta">GPS · велосипед · бег · ходьба</small>
+        </span>
+        <span class="movement-entry-cta-arrow" aria-hidden="true">→</span>
+      </button>
+      <button class="movement-manual-cta" id="movementManualFromActivities" type="button">
+        <span><b>Добавить вручную</b><small>Уже записал где-то ещё</small></span>
+        <span aria-hidden="true">＋</span>
+      </button>
+    </div>
   </div>
 </section>
 <section class="section rule">
@@ -1702,19 +1727,20 @@ body.movement-recording{overflow:hidden}body.movement-recording .bottom{transfor
   <h2 class="serif section-title">Наши<br>ритуалы.</h2>
   <div class="routes"><article class="route morning" data-bg="https://yrcogxmnqrebbzcnqbjc.supabase.co/storage/v1/object/public/activity-media/morning-flow.webp"><div class="route-top"><span>01 / ROAD</span><span>18 км</span></div><div><h3>Morning Flow</h3><p>Ранние набережные Москвы. Свет, мокрый асфальт и спокойный городской поток.</p><button class="btn" data-route="morning-flow" type="button">Открыть маршрут</button></div></article><article class="route coffee" data-bg="https://yrcogxmnqrebbzcnqbjc.supabase.co/storage/v1/object/public/activity-media/coffee-ride.webp"><div class="route-top"><span>02 / RITUAL</span><span>24 км</span></div><div><h3>Coffee Ride</h3><p>Разговорный темп вдоль реки. Кофе — ритуал после движения.</p><button class="btn" data-route="coffee-ride" type="button">Открыть маршрут</button></div></article><article class="route gravel" data-bg="https://yrcogxmnqrebbzcnqbjc.supabase.co/storage/v1/object/public/activity-media/gravel-day.webp"><div class="route-top"><span>03 / GRAVEL</span><span>56 км</span></div><div><h3>Gravel Day</h3><p>Подмосковные лесные дороги, грунт и тихий adventure без гонки за временем.</p><button class="btn" data-route="gravel-day" type="button">Открыть маршрут</button></div></article><article class="route social" data-bg="https://yrcogxmnqrebbzcnqbjc.supabase.co/storage/v1/object/public/activity-media/social-ride.webp"><div class="route-top"><span>04 / SOCIAL</span><span>28 км</span></div><div><h3>Social Ride</h3><p>Люди, город и вечерний разговорный темп. Без race-tech эстетики.</p><button class="btn" data-route="social-ride" type="button">Открыть маршрут</button></div></article></div>
 </section>
-<section class="section rule">
+<section class="section rule compact-meetings-section">
   <div class="kicker">Собираются сейчас</div>
   <div class="list gathering-list" id="ritualGatheringList"></div>
 </section>
-<section class="section rule">
+<section class="section rule compact-meetings-section">
   <div class="kicker">Ближайшие встречи</div>
   <div class="list" id="activityList"></div>
 </section>
-<section class="section rule">
-  <div class="kicker">От сообщества</div>
-  <h2 class="serif section-title">Предложить<br>свой формат.</h2>
-  <p class="copy">Мы посмотрим детали и поможем оформить идею для сообщества.</p>
-  <div class="actions"><button class="btn-fill" data-open="activityModal" type="button">Предложить активность</button></div>
+<section class="section rule custom-meeting-cta">
+  <div class="kicker">Своё</div>
+  <h2 class="serif section-title">Собрать<br>встречу.</h2>
+  <p class="copy">Поездка, пробежка, хайк, тренировка — любой формат.</p>
+  <div class="actions"><button class="btn-fill" data-open="activityModal" type="button">Собрать встречу</button></div>
+  <p class="micro-hint">Сразу появится в «Собираются сейчас» и в чате.</p>
 </section>
 </section>
 <section class="screen" id="meanings">
@@ -1863,6 +1889,21 @@ body.movement-recording{overflow:hidden}body.movement-recording .bottom{transfor
   </footer>
 </section>
 
+<div class="modal" id="movementManualModal" role="dialog" aria-modal="true" aria-labelledby="movementManualTitle">
+  <div class="sheet">
+    <button class="close" data-close aria-label="Закрыть" type="button">×</button>
+    <div class="kicker">Добавить тренировку</div>
+    <h2 id="movementManualTitle">Уже двигался?</h2>
+    <div class="field"><label for="manualDiscipline">Тип активности</label><select id="manualDiscipline"><option value="bike">Велосипед</option><option value="run">Бег</option><option value="walk">Ходьба</option><option value="swim">Плавание</option></select></div>
+    <div class="field"><label for="manualDistance">Дистанция · км</label><input id="manualDistance" type="number" inputmode="decimal" min="0.1" max="1000" step="0.1" placeholder="Например: 24,6"></div>
+    <div class="field"><label for="manualDuration">Время · минуты</label><input id="manualDuration" type="number" inputmode="numeric" min="1" max="10080" step="1" placeholder="Например: 68"></div>
+    <div class="field"><label for="manualStarted">Когда</label><input id="manualStarted" type="datetime-local"></div>
+    <div class="field"><label for="manualExternalUrl">Ссылка на тренировку · необязательно</label><input id="manualExternalUrl" type="url" inputmode="url" placeholder="Strava, Garmin, Komoot…"></div>
+    <div class="field"><label for="manualNote">Заметка · необязательно</label><textarea id="manualNote" placeholder="Если хочется добавить контекст"></textarea></div>
+    <button class="btn-fill" id="submitManualWorkout" type="button">Добавить тренировку</button>
+    <p class="ritual-created-hint">Километры сразу попадут в твой ритм и общую цель. Ссылка останется дополнительной.</p>
+  </div>
+</div>
 <div class="modal" id="movementDisciplineModal" role="dialog" aria-modal="true" aria-labelledby="movementDisciplineTitle">
   <div class="sheet">
     <button class="close" data-close aria-label="Закрыть" type="button">×</button>
@@ -1901,7 +1942,7 @@ body.movement-recording{overflow:hidden}body.movement-recording .bottom{transfor
     </div>
     <div id="personModalBody" class="person-viewer-body"></div>
   </div>
-</div><div class="modal" id="eventModal" role="dialog" aria-modal="true" aria-labelledby="eventModalTitle"><div class="sheet"><button class="close" data-close aria-label="Закрыть" type="button">×</button><div class="kicker">Общее событие</div><h2 id="eventModalTitle"></h2><div id="eventModalBody"></div></div></div><div class="modal" id="routeModal" role="dialog" aria-modal="true" aria-labelledby="routeTitle"><div class="sheet"><button class="close" data-close aria-label="Закрыть" type="button">×</button><div class="kicker">Ритуал сообщества</div><h2 id="routeTitle"></h2><p id="routeText"></p><div id="routePeople"></div><div class="actions route-modal-actions"><button class="btn-fill" id="joinRoute" type="button">Предложить дату и время</button><button class="btn route-map-btn" id="openRouteMap" type="button">Яндекс Карты</button></div></div></div><div class="modal" id="ritualCreateModal" role="dialog" aria-modal="true" aria-labelledby="ritualCreateTitle"><div class="sheet"><button class="close" data-close aria-label="Закрыть" type="button">×</button><div class="kicker">Собрать ритуал</div><h2 id="ritualCreateTitle">Предложить встречу</h2><p class="ritual-create-intro" id="ritualCreateIntro"></p><div class="field"><label for="ritualWhen">Дата и время</label><input id="ritualWhen" type="datetime-local"></div><div class="field"><label for="ritualLocation">Где встречаемся</label><input id="ritualLocation" placeholder="Например: Хамовники, у входа в парк"></div><div class="field"><label for="ritualNote">Пара слов · необязательно</label><textarea id="ritualNote" placeholder="Темп, примерная дистанция, кофе после — только то, что поможет решить"></textarea></div><button class="btn-fill" id="submitRitualMeeting" type="button">Предложить встречу</button><p class="ritual-created-hint">После публикации встреча сразу появится в «Собираются сейчас», а в общий чат уйдёт карточка со ссылкой. Автор автоматически становится первым участником.</p></div></div><div class="modal" id="activityModal" role="dialog" aria-modal="true" aria-labelledby="activityModalTitle"><div class="sheet"><button class="close" data-close aria-label="Закрыть" type="button">×</button><div class="kicker">Предложение сообщества</div><h2 id="activityModalTitle">Предложить активность</h2><div class="field"><label for="actTitle">Название</label><input id="actTitle" placeholder="Например: вечерний круг по набережным"></div><div class="field"><label for="actDesc">Пара слов</label><textarea id="actDesc"></textarea></div><div class="field"><label for="actWhere">Где примерно</label><input id="actWhere"></div><div class="field"><label for="actDate">Когда</label><input id="actDate" type="date"></div><p class="copy" style="font-size:12px;color:var(--muted)">После отправки организатор посмотрит детали перед публикацией.</p><button class="btn-fill" id="submitActivity" type="button">Отправить на просмотр</button></div></div><div class="modal" id="bikeModal" role="dialog" aria-modal="true" aria-labelledby="bikeModalTitle"><div class="sheet"><button class="close" data-close aria-label="Закрыть" type="button">×</button><div class="kicker">Мой велик</div><h2 id="bikeModalTitle">Мой велосипед</h2><div class="field"><label for="bikeName">Модель / имя</label><input id="bikeName" placeholder="Например, Specialized Roubaix"></div><div class="field"><label for="bikeNote">Заметка</label><textarea id="bikeNote" placeholder="Что в нём твоего"></textarea></div><div class="field"><label for="bikeFile">Фото велосипеда</label><input id="bikeFile" type="file" accept="image/*,.heic,.heif"><div class="helper">Подойдут фото с iPhone, JPG, PNG, WebP · до 12 МБ. Кадр не обрезаем.</div><div class="bike-photo-preview" id="bikePhotoPreview" aria-live="polite"><img id="bikePhotoPreviewImg" alt="Предпросмотр фото велосипеда"><div class="bike-photo-preview-note" id="bikePhotoPreviewNote">Так фото будет выглядеть после сохранения — целиком, без обрезки.</div></div></div><button class="btn-fill" id="saveBike" type="button">Сохранить</button></div></div><div class="modal" id="achievementModal" role="dialog" aria-modal="true" aria-labelledby="achievementModalTitle"><div class="sheet"><button class="close" data-close aria-label="Закрыть" type="button">×</button><div class="kicker">Новый пруф</div><h2 id="achievementModalTitle">Добавить пруф</h2><div class="field"><label for="achievementSelect">Достижение</label><select id="achievementSelect"><option value="">Своё достижение</option></select></div><div class="field"><label for="achievementCustom">Название</label><input id="achievementCustom"></div><div class="field"><label for="achievementEvent">Событие / гонка</label><input id="achievementEvent"></div><div class="field"><label for="achievementResult">Результат / время</label><input id="achievementResult"></div><div class="field"><label for="achievementPlace">Место</label><input id="achievementPlace"></div><div class="field"><label for="achievementDate">Дата</label><input id="achievementDate" type="date"></div><div class="field"><label for="achievementFile">Фото или скрин</label><input id="achievementFile" type="file" accept="image/*,.heic,.heif"></div><div class="field"><label for="achievementUrl">Или ссылка</label><input id="achievementUrl" type="url"></div><div class="field"><label for="achievementNote">Пара слов</label><textarea id="achievementNote" placeholder="Номер участника, источник результата или пояснение"></textarea></div><button class="btn-fill" id="saveAchievement" type="button">Сохранить пруф</button></div></div>
+</div><div class="modal" id="eventModal" role="dialog" aria-modal="true" aria-labelledby="eventModalTitle"><div class="sheet"><button class="close" data-close aria-label="Закрыть" type="button">×</button><div class="kicker">Общее событие</div><h2 id="eventModalTitle"></h2><div id="eventModalBody"></div></div></div><div class="modal" id="routeModal" role="dialog" aria-modal="true" aria-labelledby="routeTitle"><div class="sheet"><button class="close" data-close aria-label="Закрыть" type="button">×</button><div class="kicker">Ритуал сообщества</div><h2 id="routeTitle"></h2><p id="routeText"></p><div id="routePeople"></div><div class="actions route-modal-actions"><button class="btn-fill" id="joinRoute" type="button">Предложить дату и время</button><button class="btn route-map-btn" id="openRouteMap" type="button">Яндекс Карты</button></div></div></div><div class="modal" id="ritualCreateModal" role="dialog" aria-modal="true" aria-labelledby="ritualCreateTitle"><div class="sheet"><button class="close" data-close aria-label="Закрыть" type="button">×</button><div class="kicker">Собрать ритуал</div><h2 id="ritualCreateTitle">Предложить встречу</h2><p class="ritual-create-intro" id="ritualCreateIntro"></p><div class="field"><label for="ritualWhen">Дата и время</label><input id="ritualWhen" type="datetime-local"></div><div class="field"><label for="ritualLocation">Где встречаемся</label><input id="ritualLocation" placeholder="Например: Хамовники, у входа в парк"></div><div class="field"><label for="ritualNote">Пара слов · необязательно</label><textarea id="ritualNote" placeholder="Темп, примерная дистанция, кофе после — только то, что поможет решить"></textarea></div><button class="btn-fill" id="submitRitualMeeting" type="button">Предложить встречу</button><p class="ritual-created-hint">После публикации встреча сразу появится в «Собираются сейчас», а в общий чат уйдёт карточка со ссылкой. Автор автоматически становится первым участником.</p></div></div><div class="modal" id="activityModal" role="dialog" aria-modal="true" aria-labelledby="activityModalTitle"><div class="sheet"><button class="close" data-close aria-label="Закрыть" type="button">×</button><div class="kicker">Своя встреча</div><h2 id="activityModalTitle">Что собираем?</h2><div class="field"><label for="actTitle">Название</label><input id="actTitle" placeholder="Например: вечерний круг по набережным"></div><div class="field"><label for="actDate">Дата и время</label><input id="actDate" type="datetime-local"></div><div class="field"><label for="actWhere">Где встречаемся</label><input id="actWhere" placeholder="Например: Лужники, у входа"></div><div class="field"><label for="actDesc">Пара слов · необязательно</label><textarea id="actDesc" placeholder="Темп, дистанция, что взять с собой"></textarea></div><button class="btn-fill" id="submitActivity" type="button">Опубликовать</button><p class="ritual-created-hint">Ты автоматически первый. Встреча появится в «Собираются сейчас» и в чате — остальные смогут открыть детали и нажать «Я еду».</p></div></div><div class="modal" id="bikeModal" role="dialog" aria-modal="true" aria-labelledby="bikeModalTitle"><div class="sheet"><button class="close" data-close aria-label="Закрыть" type="button">×</button><div class="kicker">Мой велик</div><h2 id="bikeModalTitle">Мой велосипед</h2><div class="field"><label for="bikeName">Модель / имя</label><input id="bikeName" placeholder="Например, Specialized Roubaix"></div><div class="field"><label for="bikeNote">Заметка</label><textarea id="bikeNote" placeholder="Что в нём твоего"></textarea></div><div class="field"><label for="bikeFile">Фото велосипеда</label><input id="bikeFile" type="file" accept="image/*,.heic,.heif"><div class="helper">Подойдут фото с iPhone, JPG, PNG, WebP · до 12 МБ. Кадр не обрезаем.</div><div class="bike-photo-preview" id="bikePhotoPreview" aria-live="polite"><img id="bikePhotoPreviewImg" alt="Предпросмотр фото велосипеда"><div class="bike-photo-preview-note" id="bikePhotoPreviewNote">Так фото будет выглядеть после сохранения — целиком, без обрезки.</div></div></div><button class="btn-fill" id="saveBike" type="button">Сохранить</button></div></div><div class="modal" id="achievementModal" role="dialog" aria-modal="true" aria-labelledby="achievementModalTitle"><div class="sheet"><button class="close" data-close aria-label="Закрыть" type="button">×</button><div class="kicker">Новый пруф</div><h2 id="achievementModalTitle">Добавить пруф</h2><div class="field"><label for="achievementSelect">Достижение</label><select id="achievementSelect"><option value="">Своё достижение</option></select></div><div class="field"><label for="achievementCustom">Название</label><input id="achievementCustom"></div><div class="field"><label for="achievementEvent">Событие / гонка</label><input id="achievementEvent"></div><div class="field"><label for="achievementResult">Результат / время</label><input id="achievementResult"></div><div class="field"><label for="achievementPlace">Место</label><input id="achievementPlace"></div><div class="field"><label for="achievementDate">Дата</label><input id="achievementDate" type="date"></div><div class="field"><label for="achievementFile">Фото или скрин</label><input id="achievementFile" type="file" accept="image/*,.heic,.heif"></div><div class="field"><label for="achievementUrl">Или ссылка</label><input id="achievementUrl" type="url"></div><div class="field"><label for="achievementNote">Пара слов</label><textarea id="achievementNote" placeholder="Номер участника, источник результата или пояснение"></textarea></div><button class="btn-fill" id="saveAchievement" type="button">Сохранить пруф</button></div></div>
 <div class="modal" id="feedbackModal" role="dialog" aria-modal="true" aria-labelledby="feedbackModalTitle">
   <div class="sheet">
     <button class="close" data-close aria-label="Закрыть" type="button">×</button>
@@ -1963,7 +2004,7 @@ function removeLegacyMovementLaunch(){
 removeLegacyMovementLaunch();
 const BASE="https://yrcogxmnqrebbzcnqbjc.supabase.co/functions/v1",MINSK_TRACK="https://ttrails.ru/routes/velosipednyy-marshrut-zelyonoe-kolco--vokrug-minska",MINSK_START="Национальная библиотека Беларуси, Минск",MINSK_COVER="https://yrcogxmnqrebbzcnqbjc.supabase.co/storage/v1/object/public/activity-media/minsk-green-ring.webp",tg=window.Telegram?.WebApp,tgUser=tg?.initDataUnsafe?.user||{};const $=id=>document.getElementById(id);
 const [metrics,currentEvent,peopleFeed,meaningsList,activityList,personModal,personModalBody,eventModal,eventModalTitle,eventModalBody,routeModal,routeTitle,routeText,routePeople,activityModal,achievementModal,profileName,profileThought,profileAbout,profilePhoto,topAvatar,passportGrid,scoreValue,scoreLevel,scoreBar,scoreComponents,achievementSelect,achievementList,bikePhoto,bikeMeta,vibeChips,interestChips,about,rhythm,status,drive,connect,thought,actTitle,actDesc,actWhere,actDate,meaningInput,submitActivity,publishMeaning,saveProfile,joinRoute,openRouteMap,achievementUrl,achievementFile,achievementCustom,achievementEvent,achievementResult,achievementPlace,achievementDate,achievementNote,saveAchievement,bikeModal,bikeName,bikeNote,bikeFile,saveBike]=["metrics","currentEvent","peopleFeed","meaningsList","activityList","personModal","personModalBody","eventModal","eventModalTitle","eventModalBody","routeModal","routeTitle","routeText","routePeople","activityModal","achievementModal","profileName","profileThought","profileAbout","profilePhoto","topAvatar","passportGrid","scoreValue","scoreLevel","scoreBar","scoreComponents","achievementSelect","achievementList","bikePhoto","bikeMeta","vibeChips","interestChips","about","rhythm","status","drive","connect","thought","actTitle","actDesc","actWhere","actDate","meaningInput","submitActivity","publishMeaning","saveProfile","joinRoute","openRouteMap","achievementUrl","achievementFile","achievementCustom","achievementEvent","achievementResult","achievementPlace","achievementDate","achievementNote","saveAchievement","bikeModal","bikeName","bikeNote","bikeFile","saveBike"].map($);
-const communityGoal=$("communityGoal"),activitiesMainEvent=$("activitiesMainEvent"),myParticipationList=$("myParticipationList"),movementDisciplineModal=$("movementDisciplineModal");
+const communityGoal=$("communityGoal"),activitiesMainEvent=$("activitiesMainEvent"),myParticipationList=$("myParticipationList"),movementDisciplineModal=$("movementDisciplineModal"),movementManualModal=$("movementManualModal"),movementManualFromActivities=$("movementManualFromActivities"),manualDiscipline=$("manualDiscipline"),manualDistance=$("manualDistance"),manualDuration=$("manualDuration"),manualStarted=$("manualStarted"),manualExternalUrl=$("manualExternalUrl"),manualNote=$("manualNote"),submitManualWorkout=$("submitManualWorkout");
 if(tg){tg.ready();tg.expand()}const initData=tg?.initData||"";const liveTelegramPhoto=(()=>{try{const u=new URL(String(tgUser.photo_url||""));return /^https?:$/.test(u.protocol)?u.href:""}catch{return ""}})();const esc=s=>String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));let pulse={metrics:null,people:[],meanings:[],activities:[]},club={activities:[],challenges:[],proposals:[]},ritualData={meetings:[]},rep={index:{score:0,level:"Наблюдает",components:{}},catalog:[],achievements:[],event:null},me=null,peopleData={me:null,people:[]},peopleFilter="all";
 
 /* v14.10.6 movement */
@@ -2148,13 +2189,33 @@ async function mvRequestFinish(){
  if(!ok)return;
  await withBusy(movementEls.finish,mvFinish,"Сохраняем…")
 }
-function mvSourceLabel(s){return s==="miniapp_gps"||s==="web"?"В ритме МБ":s==="strava"?"Strava":"Записано"}
+function mvSourceLabel(s){return s==="miniapp_gps"||s==="web"?"В ритме МБ":s==="manual"?"Вручную":s==="strava"?"Strava":"Записано"}
 function mvRenderList(){
  const d=movementState.data||{},m=d.mine||{},c=d.community||{};movementEls.totals.innerHTML=`<div><span>Мой километраж</span><b>${Number(m.total_km||0).toLocaleString("ru-RU",{maximumFractionDigits:1})} км</b></div><div><span>Вместе</span><b>${Number(c.total_km||0).toLocaleString("ru-RU",{maximumFractionDigits:0})} км</b></div>`;
  const rows=d.recent||[];movementEls.list.innerHTML=rows.length?rows.map(w=>{const tr=w.track,km=Number(w.distance_km||0),date=w.ended_at?new Date(w.ended_at).toLocaleDateString("ru-RU",{day:"2-digit",month:"short"}):"";return `<button class="movement-card" type="button" data-workout="${esc(w.id)}"><div><div class="movement-card-meta">${esc(date)} · ${esc(mvSourceLabel(w.source))}</div><div class="movement-card-distance">${esc(({"bike":"Велосипед","run":"Бег","walk":"Ходьба"})[w.discipline||tr?.discipline]||"Активность")} · ${km.toLocaleString("ru-RU",{maximumFractionDigits:2})} км</div><div class="movement-card-share">${tr?.shared_at?"Маршрут опубликован полностью":"Маршрут приватный"}</div></div><div class="movement-card-side"><div class="movement-card-source">${mvFmt(w.duration_seconds||0)}</div><div class="movement-card-source">${tr?.avg_speed_mps?`${Math.round(Number(tr.avg_speed_mps)*3.6)} км/ч`:""}</div></div></button>`}).join(""):'<div class="empty">Первая активность появится здесь после финиша.</div>';
  movementEls.list.querySelectorAll("[data-workout]").forEach(b=>b.addEventListener("click",()=>mvOpenDetail(b.dataset.workout)))
 }
 function syncCommunityKmFromMovement(){const total=Number(movementState.data?.community?.total_km);if(!Number.isFinite(total))return;pulse.metrics={...(pulse.metrics||{}),km_together:total,distance_km:total};renderPulse()}
+
+function mvManualDefaultDate(){
+ if(!manualStarted||manualStarted.value)return;
+ const d=new Date(),p=n=>String(n).padStart(2,"0");
+ manualStarted.value=`${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}T${p(d.getHours())}:${p(d.getMinutes())}`
+}
+movementManualFromActivities?.addEventListener("click",()=>{mvManualDefaultDate();openModalElement(movementManualModal)});
+submitManualWorkout?.addEventListener("click",()=>withBusy(submitManualWorkout,async()=>{
+ const started=new Date(manualStarted.value);if(!Number.isFinite(started.getTime()))throw new Error("Проверь дату");
+ const payload={discipline:manualDiscipline.value,distance_km:Number(String(manualDistance.value).replace(",",".")),duration_minutes:Number(manualDuration.value),started_at:started.toISOString(),external_url:manualExternalUrl.value,note:manualNote.value};
+ const d=await authJson(`${BASE}/v-ritme-manual-workout`,"POST",payload);
+ const km=Number(d?.workout?.distance_km||0);
+ closeModalElement(movementManualModal);
+ manualDistance.value="";manualDuration.value="";manualExternalUrl.value="";manualNote.value="";manualStarted.value="";
+ await loadMovement();
+ authJson(`${BASE}/v-ritme-tracker-feed`,"POST",{workout_id:d.workout.id}).catch(err=>{console.error("manual community feed",err);telemetry("api_failed",{endpoint:"v-ritme-tracker-feed",reason:String(err?.message||err||"feed")})});
+ refreshAfterMovement().catch(e=>console.error("manual movement refresh",e));
+ telemetry("activity_open",{action:"manual_workout_added",discipline:d?.workout?.discipline||payload.discipline});
+ toast(`${km.toLocaleString("ru-RU",{maximumFractionDigits:2})} км добавлено в твой ритм и общую цель`)
+},"Добавляем…"));
 async function loadMovement(){if(!initData)return;try{movementState.data=await authJson(`${BASE}/v-ritme-workouts`);mvRenderList();syncCommunityKmFromMovement()}catch(e){console.error("movement",e)}}
 async function refreshAfterMovement(){const [p,r]=await Promise.allSettled([retry(()=>authJson(`${BASE}/v-ritme-pulse`),1,250),authJson(`${BASE}/v-ritme-reputation`)]);if(p.status==="fulfilled"){pulse=p.value;renderPulse();renderMeanings();renderActivities()}if(r.status==="fulfilled"){rep=r.value;renderEvent();renderActivitiesMainEvent();renderCommunityGoal();renderMe()}}
 async function mvDrawDetail(track){
@@ -2165,7 +2226,7 @@ async function mvDrawDetail(track){
 function mvOpenDetail(id){
  const w=(movementState.data?.recent||[]).find(x=>x.id===id);if(!w)return;movementState.selected=w;const tr=w.track||null;
  movementEls.detailTitle.textContent=`${Number(w.distance_km||0).toLocaleString("ru-RU",{maximumFractionDigits:2})} км`;
- movementEls.detailStats.innerHTML=[["Время",mvFmt(w.duration_seconds||0)],["В движении",mvFmt(tr?.moving_seconds||w.duration_seconds||0)],["Средняя",tr?.avg_speed_mps?`${Math.round(Number(tr.avg_speed_mps)*3.6)} км/ч`:"—"],["Источник",mvSourceLabel(w.source)]].map(x=>`<div><span>${x[0]}</span><b>${x[1]}</b></div>`).join("");
+ movementEls.detailStats.innerHTML=[["Время",mvFmt(w.duration_seconds||0)],["В движении",mvFmt(tr?.moving_seconds||w.duration_seconds||0)],["Средняя",tr?.avg_speed_mps?`${Math.round(Number(tr.avg_speed_mps)*3.6)} км/ч`:"—"],["Источник",mvSourceLabel(w.source)]].map(x=>`<div><span>${x[0]}</span><b>${x[1]}</b></div>`).join("")+(safeUrl(w.external_url)?`<a class="manual-source-link" href="${esc(safeUrl(w.external_url))}" target="_blank" rel="noopener noreferrer">Открыть источник ↗</a>`:"");
  if(tr?.route_geojson){mvDrawDetail(tr)}else movementEls.detailMap.innerHTML='<div class="movement-map-fallback">Для этой активности GPS-трек не сохранён.</div>';
  const shared=!!tr?.shared_at;movementEls.share.hidden=!tr?.route_geojson;movementEls.share.textContent=shared?"Скрыть маршрут":"Поделиться маршрутом";movementEls.privacyText.textContent=shared?`Маршрут опубликован полностью. Полный трек виден community, пока ты сам не скроешь его.`:"Полный трек доступен только тебе. В community автоматически попадают только километры.";
  openModalElement(movementEls.detailModal)
@@ -2284,7 +2345,7 @@ async function uploadWithTimeout(url,{file,headers={},kind="upload",timeout=2500
   }finally{clearTimeout(timer)}
 }
 function alertError(e){const m=e instanceof Error?e.message:String(e||"Ошибка");mbDiagnostics.push("caught",m);telemetry("ui_error",{message:m.slice(0,160)});toast(m,"error");if(tg?.showAlert)tg.showAlert(m);else window.alert(m)}async function withBusy(btn,fn,label="Подождите…"){if(!btn||btn.disabled)return;const old=btn.textContent;btn.disabled=true;btn.setAttribute("aria-busy","true");if(label)btn.textContent=label;try{return await fn()}catch(e){console.error(e);alertError(e)}finally{btn.disabled=false;btn.removeAttribute("aria-busy");btn.textContent=old}}const bgObserver=("IntersectionObserver" in window)?new IntersectionObserver(entries=>{for(const e of entries){if(!e.isIntersecting)continue;const el=e.target;if(!el.dataset.bgLoaded){el.style.backgroundImage=`url("${el.dataset.bg}")`;el.dataset.bgLoaded="1"}bgObserver.unobserve(el)}},{rootMargin:"320px 0px"}):null;
-function loadDeferredBackgrounds(root=document){const els=[...root.querySelectorAll("[data-bg]")];els.forEach((el,i)=>{if(el.dataset.bgLoaded)return;if(i===0||!bgObserver){el.style.backgroundImage=`url("${el.dataset.bg}")`;el.dataset.bgLoaded="1"}else bgObserver.observe(el)})}function show(id){document.querySelectorAll(".screen").forEach(x=>x.classList.toggle("active",x.id===id));telemetry("screen_view",{screen:id,build:"v15.8.3-final"});document.querySelectorAll(".bottom button").forEach(x=>x.classList.toggle("active",x.dataset.screen===id));const active=document.getElementById(id);if(active)loadDeferredBackgrounds(active);if(id==="pulse"){const t=document.getElementById("pulseLiveTitle");if(t&&!window.matchMedia("(prefers-reduced-motion: reduce)").matches){t.classList.remove("pulse-type-kick");void t.offsetWidth;t.classList.add("pulse-type-kick")}}window.scrollTo(0,0)}document.querySelectorAll("[data-screen]").forEach(b=>b.onclick=()=>show(b.dataset.screen));document.querySelectorAll("[data-screen-jump]").forEach(b=>b.onclick=()=>show(b.dataset.screenJump));const entryScreen=new URLSearchParams(location.search).get("screen");if(["pulse","people","activities","meanings","my"].includes(entryScreen))show(entryScreen);else{const pt=document.getElementById("pulseLiveTitle");if(pt&&!window.matchMedia("(prefers-reduced-motion: reduce)").matches)pt.classList.add("pulse-type-kick")}let modalReturnFocus=null;
+function loadDeferredBackgrounds(root=document){const els=[...root.querySelectorAll("[data-bg]")];els.forEach((el,i)=>{if(el.dataset.bgLoaded)return;if(i===0||!bgObserver){el.style.backgroundImage=`url("${el.dataset.bg}")`;el.dataset.bgLoaded="1"}else bgObserver.observe(el)})}function show(id){document.querySelectorAll(".screen").forEach(x=>x.classList.toggle("active",x.id===id));telemetry("screen_view",{screen:id,build:"v15.10.0-manual-workouts"});document.querySelectorAll(".bottom button").forEach(x=>x.classList.toggle("active",x.dataset.screen===id));const active=document.getElementById(id);if(active)loadDeferredBackgrounds(active);if(id==="pulse"){const t=document.getElementById("pulseLiveTitle");if(t&&!window.matchMedia("(prefers-reduced-motion: reduce)").matches){t.classList.remove("pulse-type-kick");void t.offsetWidth;t.classList.add("pulse-type-kick")}}window.scrollTo(0,0)}document.querySelectorAll("[data-screen]").forEach(b=>b.onclick=()=>show(b.dataset.screen));document.querySelectorAll("[data-screen-jump]").forEach(b=>b.onclick=()=>show(b.dataset.screenJump));const entryScreen=new URLSearchParams(location.search).get("screen");if(["pulse","people","activities","meanings","my"].includes(entryScreen))show(entryScreen);else{const pt=document.getElementById("pulseLiveTitle");if(pt&&!window.matchMedia("(prefers-reduced-motion: reduce)").matches)pt.classList.add("pulse-type-kick")}let modalReturnFocus=null;
 function openModalElement(modal){
   if(!modal)return;
   modalReturnFocus=document.activeElement instanceof HTMLElement?document.activeElement:null;
@@ -2298,7 +2359,7 @@ document.getElementById("openFeedback")?.addEventListener("click",()=>{telemetry
 document.getElementById("submitFeedback")?.addEventListener("click",()=>withBusy(document.getElementById("submitFeedback"),async()=>{
   const category=document.getElementById("feedbackCategory")?.value||"other",message=String(document.getElementById("feedbackMessage")?.value||"").trim();
   if(message.length<3)throw new Error("Напиши пару слов");
-  await authJson(`${BASE}/v-ritme-feedback`,"POST",{category,message,build:"v15.8.3-final",screen:activeScreenId(),user_agent:navigator.userAgent,online:navigator.onLine,context:feedbackContext()});
+  await authJson(`${BASE}/v-ritme-feedback`,"POST",{category,message,build:"v15.10.0-manual-workouts",screen:activeScreenId(),user_agent:navigator.userAgent,online:navigator.onLine,context:feedbackContext()});
   telemetry("feedback_submit",{category,screen:activeScreenId()});
   document.getElementById("feedbackMessage").value="";
   closeModalElement(document.getElementById("feedbackModal"));
@@ -2387,11 +2448,12 @@ document.querySelectorAll("[data-filter]").forEach(b=>b.onclick=()=>{peopleFilte
 function renderActivitiesMainEvent(){if(!activitiesMainEvent)return;const e=rep?.event;if(!e){activitiesMainEvent.innerHTML='<div class="kicker">Главный фокус</div><div class="empty">Следующее большое событие скоро появится здесь.</div>';return}const dates=`${new Date(e.starts_at).toLocaleDateString("ru-RU",{day:"2-digit",month:"2-digit"})} — ${new Date(e.ends_at).toLocaleDateString("ru-RU",{day:"2-digit",month:"2-digit"})}`,cover=safeUrl(e.cover_url)||(e.slug==="minsk-green-ring-2026"?MINSK_COVER:"");activitiesMainEvent.innerHTML=`<div class="kicker">Главное событие сообщества</div><article class="event-card ${cover?"has-cover":"minsk-plate"}" ${cover?`style="background-image:linear-gradient(180deg,rgba(0,0,0,.08),rgba(0,0,0,.8)),url('${esc(cover)}')"`:""}><div class="kicker" style="color:#ddd">ОБЩИЙ ФОКУС / 2026</div><h3 class="serif">${esc(e.title)}</h3><p>${esc(e.description||"")}</p><div class="event-meta-grid"><div><span class="kicker" style="color:#bbb">Когда</span><b>${esc(dates)}</b></div><div><span class="kicker" style="color:#bbb">Где</span><b>${esc(e.location||"—")}</b></div></div><div class="event-people">${(e.participants||[]).slice(0,8).map(eventPersonChip).join("")}</div><div class="kicker" style="color:#ddd;margin-top:8px">${Number(e.participant_count||0)} ${Number(e.participant_count||0)===1?"участник":"участников"}</div><div class="actions"><button class="btn" id="activitiesEventDetails" type="button">Подробнее</button><button class="btn-fill" id="activitiesEventJoin" type="button">${e.joined?"Буду ✓":"Буду"}</button></div></article>`;document.getElementById("activitiesEventDetails")?.addEventListener("click",()=>{if(!document.getElementById("eventDetails"))renderEvent();document.getElementById("eventDetails")?.click()});document.getElementById("activitiesEventJoin")?.addEventListener("click",()=>{if(!document.getElementById("eventJoin"))renderEvent();document.getElementById("eventJoin")?.click()})}
 function renderMyParticipation(){if(!myParticipationList)return;const rows=[];if(rep?.event?.joined)rows.push({title:rep.event.title||"Главное событие",meta:"Главное событие · буду"});for(const a of (club.activities||[])){if(a?.joined)rows.push({title:a.title||({"morning-flow":"Morning Flow","coffee-ride":"Coffee Ride","gravel-day":"Gravel Day","social-ride":"Social Ride"})[a.slug]||"Активность",meta:"Ритуал · буду"})}myParticipationList.innerHTML=rows.length?rows.map(x=>`<div class="list-row"><time>вместе</time><div><h3>${esc(x.title)}</h3><div class="kicker">${esc(x.meta)}</div></div></div>`).join(""):'<div class="empty">Участие появится здесь, когда ты присоединишься к событию или ритуалу.</div>'}
 function ritualTitle(slug){return ({"morning-flow":"Morning Flow","coffee-ride":"Coffee Ride","gravel-day":"Gravel Day","social-ride":"Social Ride"})[slug]||slug}
+function meetingTitle(m){return m?.meeting_kind==="custom"?(m.custom_title||"Встреча"):ritualTitle(m?.ritual_slug)}
 function ritualWhen(iso){return new Date(iso).toLocaleString("ru-RU",{day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"})}
 function ritualMeetingStatus(m){const n=Number(m?.participant_count||0);return n>=2?`Собрались · ${n}`:"Ищем ещё одного"}
 function meetingListRow(m,source){
  const n=Number(m.participant_count||0),confirmed=n>=2;
- return `<button class="list-row activity-list-row" type="button" data-meeting-open="${esc(m.id)}" data-source="${esc(source)}"><time>${esc(ritualWhen(m.starts_at))}</time><div><h3>${esc(ritualTitle(m.ritual_slug))}</h3><div class="kicker">${esc(m.location)} · ${confirmed?`${n} едут`:"ищем компанию"}</div></div></button>`
+ return `<button class="list-row activity-list-row" type="button" data-meeting-open="${esc(m.id)}" data-source="${esc(source)}"><time>${esc(ritualWhen(m.starts_at))}</time><div><h3>${esc(meetingTitle(m))}</h3><div class="kicker">${esc(m.location)} · ${confirmed?`${n} едут`:"ищем компанию"}</div></div></button>`
 }
 function renderActivities(){
  renderActivitiesMainEvent();
@@ -2405,8 +2467,8 @@ function renderActivities(){
  const gathering=meetings.filter(m=>Number(m.participant_count||0)<2);
  const confirmed=meetings.filter(m=>Number(m.participant_count||0)>=2);
  const g=$("ritualGatheringList");
- if(g){g.innerHTML=gathering.length?gathering.map(m=>meetingListRow(m,"gathering")).join(""):'<div class="ritual-empty">Сейчас никто не собирает встречу. Выбери ритуал выше и предложи конкретные дату и время.</div>'}
- activityList.innerHTML=confirmed.length?confirmed.map(m=>meetingListRow(m,"upcoming")).join(""):'<div class="ritual-empty">Пока новых встреч не собралось. В ритуалах можно предложить дату — встреча появится здесь, когда подтвердятся минимум двое.</div>';
+ if(g){g.innerHTML=gathering.length?gathering.map(m=>meetingListRow(m,"gathering")).join(""):'<div class="ritual-empty">Пока тихо. Собери ритуал или придумай своё.</div>'}
+ activityList.innerHTML=confirmed.length?confirmed.map(m=>meetingListRow(m,"upcoming")).join(""):'<div class="ritual-empty">Здесь появятся встречи, когда соберутся минимум двое.</div>';
  document.querySelectorAll("[data-meeting-open]").forEach(b=>b.addEventListener("click",()=>openRitualMeeting(b.dataset.meetingOpen,b.dataset.source||"activities")))
 }
 function renderMeanings(){meaningsList.innerHTML=(pulse.meanings||[]).slice(0,8).map(x=>{const author=x.profiles?.first_name||x.profiles?.username||"Кто-то из своих",context=x.activity_title||x.event_title||x.context_title||"";return `<article class="meaning-card user"><div><div class="kicker">${context?`После · ${esc(context)}`:esc(author)}</div><h3>${esc(x.text)}</h3></div><div class="caption">${context?`${esc(author)} · `:""}${x.created_at?esc(new Date(x.created_at).toLocaleDateString("ru-RU",{day:"2-digit",month:"long"})):"Новая мысль"}</div></article>`}).join("")}
@@ -2461,7 +2523,7 @@ function meetingAvatar(p){const u=safeUrl(p?.avatar_url),initial=(p?.first_name|
 function meetingCard(m){
  const n=Number(m.participant_count||0),confirmed=n>=2,joined=!!m.joined,host=!!m.is_host;
  return `<article class="ritual-meeting${m.id===targetMeetingId?" target":""}" data-meeting-card="${esc(m.id)}">
-   <div class="ritual-meeting-head"><div><div class="kicker">${confirmed?"Ближайшая встреча":"Собирается сейчас"}</div><h3>${esc(ritualWhen(m.starts_at))}</h3></div><div class="ritual-meeting-status${confirmed?" confirmed":""}">${esc(ritualMeetingStatus(m))}</div></div>
+   <div class="ritual-meeting-head"><div><div class="kicker">${confirmed?"Ближайшая встреча":"Собирается сейчас"}</div><h3>${esc(m.meeting_kind==="custom"?meetingTitle(m):ritualWhen(m.starts_at))}</h3>${m.meeting_kind==="custom"?`<div class="kicker" style="margin-top:7px">${esc(ritualWhen(m.starts_at))}</div>`:""}</div><div class="ritual-meeting-status${confirmed?" confirmed":""}">${esc(ritualMeetingStatus(m))}</div></div>
    <div class="ritual-meeting-meta"><div><span>Где</span><b>${esc(m.location)}</b></div><div><span>Собирает</span><b>${esc(m.host?.first_name||m.host?.username||"участник сообщества")}</b></div></div>
    ${m.note?`<p class="ritual-meeting-note">${esc(m.note)}</p>`:""}
    <div class="avatars">${(m.participants||[]).slice(0,8).map(meetingAvatar).join("")}<span style="margin-left:12px">${n} ${n===1?"едет":"едут"}</span></div>
@@ -2482,8 +2544,14 @@ function bindMeetingActions(scope){
  scope.querySelectorAll("[data-meeting-map]").forEach(btn=>btn.addEventListener("click",()=>{const m=(ritualData.meetings||[]).find(x=>x.id===btn.dataset.meetingMap);if(m)yandexPlace(m.location)}))
 }
 function renderRouteModal(){
- if(!currentRoute)return;const x=routeInfo[currentRoute],meetings=(ritualData.meetings||[]).filter(m=>m.ritual_slug===currentRoute).sort((a,b)=>new Date(a.starts_at)-new Date(b.starts_at));
- routeTitle.textContent=x[0];routeText.textContent=x[1];
+ const target=(ritualData.meetings||[]).find(m=>m.id===targetMeetingId);
+ if(target?.meeting_kind==="custom"){
+   routeTitle.textContent=meetingTitle(target);routeText.textContent="Своя встреча сообщества";
+   routePeople.innerHTML=`<div class="ritual-meetings">${meetingCard(target)}</div>`;bindMeetingActions(routePeople);
+   joinRoute.style.display="none";openRouteMap.style.display="none";return;
+ }
+ if(!currentRoute)return;const x=routeInfo[currentRoute],meetings=(ritualData.meetings||[]).filter(m=>m.meeting_kind!=="custom"&&m.ritual_slug===currentRoute).sort((a,b)=>new Date(a.starts_at)-new Date(b.starts_at));
+ routeTitle.textContent=x[0];routeText.textContent=x[1];joinRoute.style.display="";openRouteMap.style.display="";
  routePeople.innerHTML=meetings.length?`<div class="ritual-meetings">${meetings.map(meetingCard).join("")}</div>`:'<div class="ritual-empty">У этого ритуала пока нет конкретной встречи. Предложи дату и время — люди увидят её здесь и в общем чате.</div>';
  bindMeetingActions(routePeople);
  joinRoute.textContent=meetings.length?"Предложить другое время":"Предложить дату и время";
@@ -2491,7 +2559,7 @@ function renderRouteModal(){
  if(targetMeetingId)requestAnimationFrame(()=>routePeople.querySelector(`[data-meeting-card="${CSS.escape(targetMeetingId)}"]`)?.scrollIntoView({block:"center",behavior:"smooth"}))
 }
 function openRitualMeeting(id,source="chat"){
- const m=(ritualData.meetings||[]).find(x=>x.id===id);if(!m)return;currentRoute=m.ritual_slug;targetMeetingId=id;telemetry("activity_open",{slug:m.ritual_slug,source:`ritual_${source}`});renderRouteModal();openModalElement(routeModal)
+ const m=(ritualData.meetings||[]).find(x=>x.id===id);if(!m)return;currentRoute=m.meeting_kind==="custom"?"":m.ritual_slug;targetMeetingId=id;telemetry("activity_open",{slug:m.ritual_slug||"custom",source:`meeting_${source}`});renderRouteModal();openModalElement(routeModal)
 }
 function openRitualCreate(){
  if(!currentRoute)return;const x=routeInfo[currentRoute];ritualCreateTitle.textContent=x[0];ritualCreateIntro.textContent=`Когда и где собираемся на ${x[0]}?`;
@@ -2513,7 +2581,7 @@ function ritualDeepLinkId(){
 function openDeepLinkedRitual(){
  const id=ritualDeepLinkId();if(!id)return;const m=(ritualData.meetings||[]).find(x=>x.id===id);if(!m)return;switchScreen?.("activities");setTimeout(()=>openRitualMeeting(id,"chat"),120)
 }
-submitActivity.onclick=()=>withBusy(submitActivity,async()=>{telemetry("activity_open",{action:"proposal_submit"});club=await authJson(`${BASE}/v-ritme-club`,"POST",{action:"propose_activity",title:actTitle.value,description:actDesc.value,route_area:actWhere.value,proposed_date:actDate.value});renderActivities();activityModal.classList.remove("open");toast("Предложение отправлено на просмотр")},"Отправляем…");publishMeaning.onclick=()=>withBusy(publishMeaning,async()=>{const t=meaningInput.value.trim();if(!t)return;telemetry("meaning_form_completed",{length:t.length});await authJson(`${BASE}/v-ritme-mb-api/api/meaning`,"POST",{text:t});meaningInput.value="";pulse=await retry(()=>authJson(`${BASE}/v-ritme-pulse`),1);renderMeanings();toast("Мысль опубликована")},"Публикуем…");saveProfile.onclick=()=>withBusy(saveProfile,async()=>{const vibes=selected(vibeChips),interests=selected(interestChips),aboutValue=String(aboutQuick?.value||peopleData.me?.about||me?.profile?.about||"").trim();telemetry("profile_form_completed",{vibes:vibes.length,interests:interests.length,about_length:aboutValue.length});const [profileResult,peopleResult]=await Promise.all([authJson(`${BASE}/v-ritme-mb-api/api/profile`,"POST",{rhythm:rhythm.value,status:status.value,drive:drive?.value||"",connect:connect?.value||"",thought:thought?.value||"",is_visible:true}),authJson(`${BASE}/v-ritme-people`,"POST",{action:"update_profile",about:aboutValue,vibes,interests})]);if(profileResult?.profile)me={...(me||{}),profile:profileResult.profile};if(peopleResult?.me)peopleData={...peopleData,me:peopleResult.me};renderMe();closeModalElement(document.getElementById("profileSetupModal"));tg?.HapticFeedback?.notificationOccurred?.("success");toast("Ритм сохранён");authJson(`${BASE}/v-ritme-people`).then(x=>{peopleData=x;renderMe();renderPeople()}).catch(e=>console.error("people refresh",e))},"Сохраняем…");async function uploadAvatar(file){if(!file)return;const d=await uploadWithTimeout(`${BASE}/v-ritme-avatar-upload`,{file,kind:"avatar",headers:{"content-type":file.type||"application/octet-stream","x-telegram-init-data":initData}});return d.url}
+submitActivity.onclick=()=>withBusy(submitActivity,async()=>{const value=actDate.value;if(!value)throw new Error("Выбери дату и время");const starts=new Date(value);if(!Number.isFinite(starts.getTime()))throw new Error("Проверь дату и время");telemetry("activity_open",{action:"custom_meeting_create"});const d=await authJson(`${BASE}/v-ritme-rituals`,"POST",{action:"create",meeting_kind:"custom",custom_title:actTitle.value,starts_at:starts.toISOString(),location:actWhere.value,note:actDesc.value});ritualData=d;targetMeetingId=d.meeting_id||"";activityModal.classList.remove("open");renderActivities();openRitualMeeting(targetMeetingId,"created");actTitle.value="";actDesc.value="";actWhere.value="";actDate.value="";toast("Встреча опубликована")},"Публикуем…");publishMeaning.onclick=()=>withBusy(publishMeaning,async()=>{const t=meaningInput.value.trim();if(!t)return;telemetry("meaning_form_completed",{length:t.length});await authJson(`${BASE}/v-ritme-mb-api/api/meaning`,"POST",{text:t});meaningInput.value="";pulse=await retry(()=>authJson(`${BASE}/v-ritme-pulse`),1);renderMeanings();toast("Мысль опубликована")},"Публикуем…");saveProfile.onclick=()=>withBusy(saveProfile,async()=>{const vibes=selected(vibeChips),interests=selected(interestChips),aboutValue=String(aboutQuick?.value||peopleData.me?.about||me?.profile?.about||"").trim();telemetry("profile_form_completed",{vibes:vibes.length,interests:interests.length,about_length:aboutValue.length});const [profileResult,peopleResult]=await Promise.all([authJson(`${BASE}/v-ritme-mb-api/api/profile`,"POST",{rhythm:rhythm.value,status:status.value,drive:drive?.value||"",connect:connect?.value||"",thought:thought?.value||"",is_visible:true}),authJson(`${BASE}/v-ritme-people`,"POST",{action:"update_profile",about:aboutValue,vibes,interests})]);if(profileResult?.profile)me={...(me||{}),profile:profileResult.profile};if(peopleResult?.me)peopleData={...peopleData,me:peopleResult.me};renderMe();closeModalElement(document.getElementById("profileSetupModal"));tg?.HapticFeedback?.notificationOccurred?.("success");toast("Ритм сохранён");authJson(`${BASE}/v-ritme-people`).then(x=>{peopleData=x;renderMe();renderPeople()}).catch(e=>console.error("people refresh",e))},"Сохраняем…");async function uploadAvatar(file){if(!file)return;const d=await uploadWithTimeout(`${BASE}/v-ritme-avatar-upload`,{file,kind:"avatar",headers:{"content-type":file.type||"application/octet-stream","x-telegram-init-data":initData}});return d.url}
 avatarFile?.addEventListener("change",async()=>{const f=avatarFile.files?.[0];if(!f)return;try{avatarUploadLabel.textContent="Загружаем…";avatarUploadLabel.classList.add("show");await uploadAvatar(f);me=await authJson(`${BASE}/v-ritme-mb-api/api/me`);peopleData=await authJson(`${BASE}/v-ritme-people`);rep=await authJson(`${BASE}/v-ritme-reputation`);renderMe();renderPeople();renderEvent();avatarFile.value="";tg?.HapticFeedback?.notificationOccurred?.("success");toast("Фото обновлено")}catch(e){console.error(e);alertError(e)}finally{avatarUploadLabel.textContent="Сменить фото"}});
 async function normalizeUserImage(file,label="photo"){
   const maxSide=label==="bike"?2000:label==="story"?2000:2400,quality=label==="bike"?.82:label==="story"?.84:.86;
@@ -2614,7 +2682,7 @@ window.addEventListener("unhandledrejection",e=>{const m=String(e.reason?.messag
 
 async function boot(){
   try{renderChipGroups({vibes:[],interests:[]})}catch(e){}
-  telemetry("app_open",{build:"v15.8.3-final"});
+  telemetry("app_open",{build:"v15.10.0-manual-workouts"});
   const pulseP=retry(()=>authJson(`${BASE}/v-ritme-pulse`),1,350);
   if(initData){
     try{
@@ -2651,14 +2719,14 @@ async function boot(){
     loadMovement();
   }else{
     document.body.classList.add("browser-demo");
-    [saveProfile,saveBike,saveAchievement,joinRoute,submitRitualMeeting,submitActivity,movementEls.launch].filter(Boolean).forEach(b=>{b.disabled=true;b.setAttribute("aria-disabled","true");b.title="Доступно внутри Telegram"});
+    [saveProfile,saveBike,saveAchievement,joinRoute,submitRitualMeeting,submitActivity,movementEls.launch,movementManualFromActivities,submitManualWorkout].filter(Boolean).forEach(b=>{b.disabled=true;b.setAttribute("aria-disabled","true");b.title="Доступно внутри Telegram"});
     [avatarFile,bikeFile,achievementFile].filter(Boolean).forEach(x=>x.disabled=true);
     renderEvent();renderMe();peopleFeed.innerHTML='<div class="empty">Открой Mini App в Telegram, чтобы увидеть общие интересы и сохранить изменения.</div>'
   }
   pulseP.then(x=>{pulse=x;renderPulse();renderMeanings();renderActivities();if(x?.degraded)telemetry("api_failed",{endpoint:"v-ritme-pulse",reason:"degraded"})}).catch(e=>{console.error("pulse",e);metrics.innerHTML='<div class="error-state">Пульс временно не обновился.<br><button class="btn" type="button" id="retryPulse">Повторить</button></div>';document.getElementById("retryPulse")?.addEventListener("click",()=>retry(()=>authJson(`${BASE}/v-ritme-pulse`),1).then(x=>{pulse=x;renderPulse();renderMeanings();renderActivities()}).catch(alertError))});
 }boot();
-</script><!-- build: v15.8.3-final -->
-<div id="qaBuild" hidden>v15.8.3-final</div><div id="appToast" class="toast" role="status" aria-live="polite"></div></body></html>
+</script><!-- build: v15.10.0-manual-workouts -->
+<div id="qaBuild" hidden>v15.10.0-manual-workouts</div><div id="appToast" class="toast" role="status" aria-live="polite"></div></body></html>
 
 <!-- v14.3 approved-photo mapping: 1 Morning Flow; 2 Coffee Ride; 3 Gravel Day; 4 Social Ride; 5 secondary night editorial; 6 hero. Minsk = dedicated generated event plate. -->
 
