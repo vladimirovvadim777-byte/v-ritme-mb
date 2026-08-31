@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ru" data-build="v15.12.1-signal-icon">
+<html lang="ru" data-build="v15.12.2-participant-names">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Onest:wght@400;500;600;700;800&family=Prata&display=swap" rel="stylesheet">
 
-<title>В ритме МБ — v15.12.1-signal-icon</title>
+<title>В ритме МБ — v15.12.2-participant-names</title>
 <link rel="preload" as="image" href="https://yrcogxmnqrebbzcnqbjc.supabase.co/storage/v1/object/public/activity-media/hero-community.webp" type="image/webp" fetchpriority="high">
 
 <style>
@@ -1724,6 +1724,29 @@ body.movement-recording{overflow:hidden}body.movement-recording .bottom{transfor
 /* v15.12 — safe rendering hardening */
 .screen > .section{content-visibility:auto;contain-intrinsic-size:1px 700px}
 .modal .section,.sheet .section{content-visibility:visible;contain-intrinsic-size:auto}
+
+/* v15.12.2 — participant names */
+.meeting-people{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 2px}
+.meeting-person{
+  appearance:none;border:1px solid var(--line);background:transparent;color:inherit;
+  display:inline-flex;align-items:center;gap:7px;padding:5px 9px 5px 5px;min-width:0;text-align:left
+}
+.meeting-person .mini{width:30px;height:30px;flex:0 0 30px}
+.meeting-person-name{
+  font:10px/1.2 var(--mono);letter-spacing:.03em;white-space:nowrap;max-width:145px;
+  overflow:hidden;text-overflow:ellipsis
+}
+.meeting-people-more{
+  align-self:center;font:9px/1 var(--mono);letter-spacing:.05em;text-transform:uppercase;color:var(--muted)
+}
+.meeting-list-names{
+  margin-top:7px;font:9px/1.45 var(--mono);letter-spacing:.04em;color:var(--muted)
+}
+.meeting-list-names strong{color:var(--ink);font-weight:600}
+@media(max-width:390px){
+ .meeting-person-name{max-width:115px}
+}
+
 </style>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head><body><div class="app"><header class="topbar"><div class="topin" style="justify-content:flex-end"><div class="avatar" id="topAvatar">В</div></div></header><main>
@@ -2045,7 +2068,7 @@ function removeLegacyMovementLaunch(){
   });
 }
 removeLegacyMovementLaunch();
-const BUILD="v15.12.1-signal-icon",BASE="https://yrcogxmnqrebbzcnqbjc.supabase.co/functions/v1",MINSK_TRACK="https://ttrails.ru/routes/velosipednyy-marshrut-zelyonoe-kolco--vokrug-minska",MINSK_START="Национальная библиотека Беларуси, Минск",MINSK_COVER="https://yrcogxmnqrebbzcnqbjc.supabase.co/storage/v1/object/public/activity-media/minsk-green-ring.webp",tg=window.Telegram?.WebApp,tgUser=tg?.initDataUnsafe?.user||{};const $=id=>document.getElementById(id);
+const BUILD="v15.12.2-participant-names",BASE="https://yrcogxmnqrebbzcnqbjc.supabase.co/functions/v1",MINSK_TRACK="https://ttrails.ru/routes/velosipednyy-marshrut-zelyonoe-kolco--vokrug-minska",MINSK_START="Национальная библиотека Беларуси, Минск",MINSK_COVER="https://yrcogxmnqrebbzcnqbjc.supabase.co/storage/v1/object/public/activity-media/minsk-green-ring.webp",tg=window.Telegram?.WebApp,tgUser=tg?.initDataUnsafe?.user||{};const $=id=>document.getElementById(id);
 const [metrics,currentEvent,peopleFeed,meaningsList,activityList,personModal,personModalBody,eventModal,eventModalTitle,eventModalBody,routeModal,routeTitle,routeText,routePeople,activityModal,achievementModal,profileName,profileThought,profileAbout,profilePhoto,topAvatar,passportGrid,scoreValue,scoreLevel,scoreBar,scoreComponents,achievementSelect,achievementList,bikePhoto,bikeMeta,vibeChips,interestChips,about,rhythm,status,drive,connect,thought,actTitle,actDesc,actWhere,actDate,meaningInput,submitActivity,publishMeaning,saveProfile,joinRoute,openRouteMap,achievementUrl,achievementFile,achievementCustom,achievementEvent,achievementResult,achievementPlace,achievementDate,achievementNote,saveAchievement,bikeModal,bikeName,bikeNote,bikeFile,saveBike]=["metrics","currentEvent","peopleFeed","meaningsList","activityList","personModal","personModalBody","eventModal","eventModalTitle","eventModalBody","routeModal","routeTitle","routeText","routePeople","activityModal","achievementModal","profileName","profileThought","profileAbout","profilePhoto","topAvatar","passportGrid","scoreValue","scoreLevel","scoreBar","scoreComponents","achievementSelect","achievementList","bikePhoto","bikeMeta","vibeChips","interestChips","about","rhythm","status","drive","connect","thought","actTitle","actDesc","actWhere","actDate","meaningInput","submitActivity","publishMeaning","saveProfile","joinRoute","openRouteMap","achievementUrl","achievementFile","achievementCustom","achievementEvent","achievementResult","achievementPlace","achievementDate","achievementNote","saveAchievement","bikeModal","bikeName","bikeNote","bikeFile","saveBike"].map($);
 const communityGoal=$("communityGoal"),activitiesMainEvent=$("activitiesMainEvent"),myParticipationList=$("myParticipationList"),movementDisciplineModal=$("movementDisciplineModal"),movementManualModal=$("movementManualModal"),movementManualFromActivities=$("movementManualFromActivities"),manualDiscipline=$("manualDiscipline"),manualDistance=$("manualDistance"),manualDuration=$("manualDuration"),manualStarted=$("manualStarted"),manualExternalUrl=$("manualExternalUrl"),manualNote=$("manualNote"),submitManualWorkout=$("submitManualWorkout"),actType=$("actType");
 if(tg){tg.ready();tg.expand()}const initData=tg?.initData||"";const liveTelegramPhoto=(()=>{try{const u=new URL(String(tgUser.photo_url||""));return /^https?:$/.test(u.protocol)?u.href:""}catch{return ""}})();const esc=s=>String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));let pulse={metrics:null,people:[],meanings:[],activities:[]},club={activities:[],challenges:[],proposals:[]},ritualData={meetings:[]},rep={index:{score:0,level:"Наблюдает",components:{}},catalog:[],achievements:[],event:null},me=null,peopleData={me:null,people:[]},peopleFilter="all";
@@ -2417,7 +2440,7 @@ async function uploadWithTimeout(url,{file,headers={},kind="upload",timeout=2500
   }finally{clearTimeout(timer)}
 }
 function alertError(e){const m=apiErrorText(e);mbDiagnostics.push("caught",m);telemetry("ui_error",{message:m.slice(0,160)});toast(m,"error");try{tg?.HapticFeedback?.notificationOccurred?.("error")}catch{}}async function withBusy(btn,fn,label="Подождите…"){if(!btn||btn.disabled)return;const old=btn.textContent;btn.disabled=true;btn.setAttribute("aria-busy","true");if(label)btn.textContent=label;try{return await fn()}catch(e){console.error(e);alertError(e)}finally{btn.disabled=false;btn.removeAttribute("aria-busy");btn.textContent=old}}const bgObserver=("IntersectionObserver" in window)?new IntersectionObserver(entries=>{for(const e of entries){if(!e.isIntersecting)continue;const el=e.target;if(!el.dataset.bgLoaded){el.style.backgroundImage=`url("${el.dataset.bg}")`;el.dataset.bgLoaded="1"}bgObserver.unobserve(el)}},{rootMargin:"320px 0px"}):null;
-function loadDeferredBackgrounds(root=document){const els=[...root.querySelectorAll("[data-bg]")];els.forEach((el,i)=>{if(el.dataset.bgLoaded)return;if(i===0||!bgObserver){el.style.backgroundImage=`url("${el.dataset.bg}")`;el.dataset.bgLoaded="1"}else bgObserver.observe(el)})}function show(id){document.querySelectorAll(".screen").forEach(x=>x.classList.toggle("active",x.id===id));telemetry("screen_view",{screen:id,build:"v15.12.1-signal-icon"});document.querySelectorAll(".bottom button").forEach(x=>x.classList.toggle("active",x.dataset.screen===id));const active=document.getElementById(id);if(active)loadDeferredBackgrounds(active);if(id==="pulse"){const t=document.getElementById("pulseLiveTitle");if(t&&!window.matchMedia("(prefers-reduced-motion: reduce)").matches){t.classList.remove("pulse-type-kick");void t.offsetWidth;t.classList.add("pulse-type-kick")}}window.scrollTo(0,0)}document.querySelectorAll("[data-screen]").forEach(b=>b.onclick=()=>show(b.dataset.screen));document.querySelectorAll("[data-screen-jump]").forEach(b=>b.onclick=()=>show(b.dataset.screenJump));const entryScreen=new URLSearchParams(location.search).get("screen");if(["pulse","people","activities","meanings","my"].includes(entryScreen))show(entryScreen);else{const pt=document.getElementById("pulseLiveTitle");if(pt&&!window.matchMedia("(prefers-reduced-motion: reduce)").matches)pt.classList.add("pulse-type-kick")}let modalReturnFocus=null;
+function loadDeferredBackgrounds(root=document){const els=[...root.querySelectorAll("[data-bg]")];els.forEach((el,i)=>{if(el.dataset.bgLoaded)return;if(i===0||!bgObserver){el.style.backgroundImage=`url("${el.dataset.bg}")`;el.dataset.bgLoaded="1"}else bgObserver.observe(el)})}function show(id){document.querySelectorAll(".screen").forEach(x=>x.classList.toggle("active",x.id===id));telemetry("screen_view",{screen:id,build:"v15.12.2-participant-names"});document.querySelectorAll(".bottom button").forEach(x=>x.classList.toggle("active",x.dataset.screen===id));const active=document.getElementById(id);if(active)loadDeferredBackgrounds(active);if(id==="pulse"){const t=document.getElementById("pulseLiveTitle");if(t&&!window.matchMedia("(prefers-reduced-motion: reduce)").matches){t.classList.remove("pulse-type-kick");void t.offsetWidth;t.classList.add("pulse-type-kick")}}window.scrollTo(0,0)}document.querySelectorAll("[data-screen]").forEach(b=>b.onclick=()=>show(b.dataset.screen));document.querySelectorAll("[data-screen-jump]").forEach(b=>b.onclick=()=>show(b.dataset.screenJump));const entryScreen=new URLSearchParams(location.search).get("screen");if(["pulse","people","activities","meanings","my"].includes(entryScreen))show(entryScreen);else{const pt=document.getElementById("pulseLiveTitle");if(pt&&!window.matchMedia("(prefers-reduced-motion: reduce)").matches)pt.classList.add("pulse-type-kick")}let modalReturnFocus=null;
 function openModalElement(modal){
   if(!modal)return;
   modalReturnFocus=document.activeElement instanceof HTMLElement?document.activeElement:null;
@@ -2431,7 +2454,7 @@ document.getElementById("openFeedback")?.addEventListener("click",()=>{telemetry
 document.getElementById("submitFeedback")?.addEventListener("click",()=>withBusy(document.getElementById("submitFeedback"),async()=>{
   const category=document.getElementById("feedbackCategory")?.value||"other",message=String(document.getElementById("feedbackMessage")?.value||"").trim();
   if(message.length<3)throw new Error("Напиши пару слов");
-  await authJson(`${BASE}/v-ritme-feedback`,"POST",{category,message,build:"v15.12.1-signal-icon",screen:activeScreenId(),user_agent:navigator.userAgent,online:navigator.onLine,context:feedbackContext()});
+  await authJson(`${BASE}/v-ritme-feedback`,"POST",{category,message,build:"v15.12.2-participant-names",screen:activeScreenId(),user_agent:navigator.userAgent,online:navigator.onLine,context:feedbackContext()});
   telemetry("feedback_submit",{category,screen:activeScreenId()});
   document.getElementById("feedbackMessage").value="";
   closeModalElement(document.getElementById("feedbackModal"));
@@ -2531,6 +2554,20 @@ function meetingIcon(m){
  if(type==="social"||/(кофе|coffee|ужин|бранч|встреча)/i.test(hay))return "☕";
  return "⚡"
 }
+
+function participantName(p){return String(p?.first_name||p?.username||"Участник").trim()||"Участник"}
+function participantSummary(m,limit=3){
+ const names=(Array.isArray(m?.participants)?m.participants:[]).map(participantName).filter(Boolean);
+ return {shown:names.slice(0,limit),more:Math.max(0,names.length-limit),total:names.length}
+}
+function participantChips(m){
+ const ps=(Array.isArray(m?.participants)?m.participants:[]).slice(0,6);
+ if(!ps.length)return "";
+ const chips=ps.map(p=>`<button class="meeting-person" type="button" data-profile-open="${esc(p.profile_id||"")}">${meetingAvatar(p)}<span class="meeting-person-name">${esc(participantName(p))}</span></button>`).join("");
+ const more=Math.max(0,(m.participants||[]).length-ps.length);
+ return `<div class="meeting-people">${chips}${more?`<span class="meeting-people-more">+${more}</span>`:""}</div>`
+}
+
 function ritualWhen(iso){return new Date(iso).toLocaleString("ru-RU",{day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"})}
 function ritualMeetingStatus(m){const n=Number(m?.participant_count||0);return n>=2?`Встреча собрана · ${n}`:"Ищем ещё одного"}
 function meetingListRow(m,source){
@@ -2542,6 +2579,7 @@ function meetingListRow(m,source){
        <div class="meeting-list-top"><span class="meeting-list-when">${esc(ritualWhen(m.starts_at))}</span><span class="meeting-list-status${confirmed?" confirmed":""}">${confirmed?"Собрались ✓":"Ищем ещё одного"}</span></div>
        <h3 class="meeting-list-title">${esc(meetingTitle(m))}</h3>
        <div class="meeting-list-place">${esc(m.location)} · ${n} ${n===1?"едет":"едут"}</div>
+       ${(()=>{const p=participantSummary(m,3);return p.total?`<div class="meeting-list-names"><strong>Едут:</strong> ${p.shown.map(esc).join(" · ")}${p.more?` · +${p.more}`:""}</div>`:""})()}
      </button>
      <div class="meeting-list-actions">
        <button class="${joined?"btn":"btn-fill"}" type="button" data-meeting-join="${esc(m.id)}" ${host?'disabled aria-disabled="true"':""}>${host?"Ты собираешь":joined?"Я еду ✓":"Я еду"}</button>
@@ -2623,6 +2661,7 @@ function meetingCard(m){
    <div class="ritual-meeting-meta"><div><span>Где</span><b>${esc(m.location)}</b></div><div><span>Собирает</span><b>${esc(m.host?.first_name||m.host?.username||"участник сообщества")}</b></div></div>
    ${m.note?`<p class="ritual-meeting-note">${esc(m.note)}</p>`:""}
    <div class="avatars">${(m.participants||[]).slice(0,8).map(meetingAvatar).join("")}<span style="margin-left:12px">${n} ${n===1?"едет":"едут"}</span></div>
+   ${participantChips(m)}
    <p class="ritual-joiner-note">${confirmed?"Встреча уже собрана. Можно просто присоединиться — отдельного одобрения не нужно.":"Нужен ещё минимум один человек. Нажми «Я еду» — и встреча считается собранной."}</p>
    <div class="ritual-meeting-actions">
      <button class="${joined?"btn":"btn-fill"}" type="button" data-meeting-join="${esc(m.id)}" ${host?"disabled aria-disabled=\"true\"":""}>${host?"Ты собираешь":joined?"Я еду ✓":"Я еду"}</button>
@@ -2637,7 +2676,8 @@ function bindMeetingActions(scope){
    if(m.joined){const ok=await new Promise(resolve=>{if(tg?.showConfirm)tg.showConfirm("Не ехать на эту встречу?",resolve);else resolve(window.confirm("Не ехать на эту встречу?"))});if(!ok)return}
    const d=await authJson(`${BASE}/v-ritme-rituals`,"POST",{action:m.joined?"leave":"join",meeting_id:m.id});ritualData=d;targetMeetingId=m.id;renderActivities();renderRouteModal();telemetry("activity_open",{action:m.joined?"meeting_leave":"meeting_join",slug:m.ritual_slug||"custom"});toast(m.joined?"Участие отменено":"Ты в деле ✓")
  },"Обновляем…")));
- scope.querySelectorAll("[data-meeting-map]").forEach(btn=>btn.addEventListener("click",()=>{const m=(ritualData.meetings||[]).find(x=>x.id===btn.dataset.meetingMap);if(m)yandexPlace(m.location)}))
+ scope.querySelectorAll("[data-meeting-map]").forEach(btn=>btn.addEventListener("click",()=>{const m=(ritualData.meetings||[]).find(x=>x.id===btn.dataset.meetingMap);if(m)yandexPlace(m.location)}));
+ scope.querySelectorAll("[data-profile-open]").forEach(btn=>btn.addEventListener("click",e=>{e.stopPropagation();const id=btn.dataset.profileOpen;if(id)openPerson(id)}))
 }
 function renderRouteModal(){
  const target=(ritualData.meetings||[]).find(m=>m.id===targetMeetingId);
@@ -2850,8 +2890,8 @@ async function boot(){
   }
   pulseP.then(x=>{pulse=x;renderPulse();renderMeanings();renderActivities();if(x?.degraded)telemetry("api_failed",{endpoint:"v-ritme-pulse",reason:"degraded"})}).catch(e=>{console.error("pulse",e);metrics.innerHTML='<div class="error-state">Пульс временно не обновился.<br><button class="btn" type="button" id="retryPulse">Повторить</button></div>';document.getElementById("retryPulse")?.addEventListener("click",()=>retry(()=>authJson(`${BASE}/v-ritme-pulse`),1).then(x=>{pulse=x;renderPulse();renderMeanings();renderActivities()}).catch(alertError))});
 }boot();
-</script><!-- build: v15.12.1-signal-icon -->
-<div id="qaBuild" hidden>v15.12.1-signal-icon</div><div id="appToast" class="toast" role="status" aria-live="polite"></div></body></html>
+</script><!-- build: v15.12.2-participant-names -->
+<div id="qaBuild" hidden>v15.12.2-participant-names</div><div id="appToast" class="toast" role="status" aria-live="polite"></div></body></html>
 
 <!-- v14.3 approved-photo mapping: 1 Morning Flow; 2 Coffee Ride; 3 Gravel Day; 4 Social Ride; 5 secondary night editorial; 6 hero. Minsk = dedicated generated event plate. -->
 
