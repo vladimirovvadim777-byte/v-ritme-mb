@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ru" data-build="v15.6.2-about-cleanup">
+<html lang="ru" data-build="v15.7.1-tracker-gap-backend">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Onest:wght@400;500;600;700;800&family=Prata&display=swap" rel="stylesheet">
 
-<title>В ритме МБ — v15.6.2-about-cleanup</title>
+<title>В ритме МБ — v15.7.1-tracker-gap-backend</title>
 <link rel="preload" as="image" href="https://yrcogxmnqrebbzcnqbjc.supabase.co/storage/v1/object/public/activity-media/hero-community.webp" type="image/webp" fetchpriority="high">
 
 <style>
@@ -1566,6 +1566,9 @@ body.movement-recording{overflow:hidden}body.movement-recording .bottom{transfor
   white-space:nowrap!important;
   border:0!important;
 }
+
+/* v15.7.0 — tracker gap recovery */
+.movement-recorder-note{line-height:1.45}
 </style>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head><body><div class="app"><header class="topbar"><div class="topin" style="justify-content:flex-end"><div class="avatar" id="topAvatar">В</div></div></header><main>
@@ -1874,7 +1877,7 @@ const movementEls={
  pause:$("movementPause"),finish:$("movementFinish"),totals:$("movementTotals"),list:$("movementList"),movementProfile:$("movementProfile"),
  detailModal:$("movementDetailModal"),detailTitle:$("movementDetailTitle"),detailMap:$("movementDetailMap"),detailStats:$("movementDetailStats"),privacyText:$("movementPrivacyText"),share:$("movementShareRoute")
 };
-const movementState={trackId:null,status:"idle",startedAt:null,pausedAt:null,totalPauseMs:0,points:[],distanceM:0,movingS:0,currentMps:0,last:null,seq:0,lastSyncIndex:0,watch:null,timer:null,map:null,line:null,marker:null,detailMap:null,detailLine:null,selected:null,data:null,discipline:null,online:navigator.onLine};
+const movementState={trackId:null,status:"idle",startedAt:null,pausedAt:null,totalPauseMs:0,points:[],distanceM:0,movingS:0,currentMps:0,last:null,seq:0,lastSyncIndex:0,watch:null,timer:null,map:null,line:null,marker:null,detailMap:null,detailLine:null,selected:null,data:null,discipline:null,online:navigator.onLine,backgroundAt:null,gapRecoveredM:0,gapCount:0,resumeCapturePending:false};
 function mvFmt(s){s=Math.max(0,Math.floor(Number(s)||0));return [Math.floor(s/3600),Math.floor(s%3600/60),s%60].map(x=>String(x).padStart(2,"0")).join(":")}
 function mvHav(a,b){const R=6371000,r=Math.PI/180,dLat=(b.lat-a.lat)*r,dLon=(b.lng-a.lng)*r,q=Math.sin(dLat/2)**2+Math.cos(a.lat*r)*Math.cos(b.lat*r)*Math.sin(dLon/2)**2;return 2*R*Math.atan2(Math.sqrt(q),Math.sqrt(1-q))}
 function mvElapsed(){if(!movementState.startedAt)return 0;const end=movementState.status==="paused"&&movementState.pausedAt?movementState.pausedAt:Date.now();return Math.max(0,(end-movementState.startedAt-movementState.totalPauseMs)/1000)}
@@ -1904,7 +1907,7 @@ function mvProject(points,w=1000,h=620,pad=44){
 }
 function mvRouteMarkup(points){
  if(!points?.length)return '<div class="movement-map-fallback">Ждём первые GPS-точки…</div>';
- const q=mvProject(points),path=q.map((p,i)=>`${i?"L":"M"} ${p.x.toFixed(1)} ${p.y.toFixed(1)}`).join(" ");
+ const q=mvProject(points),path=q.map((p,i)=>`${i&&!points[i]?._gapRecovered?"L":"M"} ${p.x.toFixed(1)} ${p.y.toFixed(1)}`).join(" ");
  const a=q[0],b=q[q.length-1],last=points[points.length-1];
  return `<svg class="mv-route-svg" viewBox="0 0 1000 620" preserveAspectRatio="none" aria-label="GPS-трек"><path class="mv-route-line" d="${path}"></path><circle class="mv-route-start" cx="${a.x}" cy="${a.y}" r="8"></circle><circle class="mv-route-now" cx="${b.x}" cy="${b.y}" r="10"></circle></svg><a class="mv-yandex-link" href="${mvYandexHref(last)}" target="_blank" rel="noopener">Открыть в Яндекс</a>`;
 }
@@ -1914,17 +1917,59 @@ async function mvInitMap(){
 function mvDraw(){
  movementEls.map.innerHTML=mvRouteMarkup(movementState.points);
 }
-function mvAcceptRaw(lat,lng,accuracy,speed,ts=Date.now()){
- if(movementState.status!=="recording")return;if(!Number.isFinite(lat)||!Number.isFinite(lng)||accuracy>50){movementEls.gpsDot.className="movement-gps-dot weak";movementEls.gpsStatus.textContent=`GPS ±${Math.round(accuracy||99)} м`;return}
- const p={lat,lng,accuracy:Number(accuracy||0),speed:Number.isFinite(speed)&&speed>=0?speed:null,recordedAt:Number(ts||Date.now())};const last=movementState.last;
- if(last){const dt=(p.recordedAt-last.recordedAt)/1000;if(dt<=0)return;const d=mvHav(last,p),s=p.speed??d/dt;if(s>25)return;if(dt<=60){movementState.distanceM+=d;if(s>.5)movementState.movingS+=dt;movementState.currentMps=s}else movementEls.note.textContent="GPS был недоступен больше минуты — новый сегмент."}
- movementState.points.push(p);movementState.last=p;movementEls.gpsDot.className="movement-gps-dot good";movementEls.gpsStatus.textContent=`GPS ±${Math.round(accuracy)} м`;mvDraw();mvRender();if(movementState.points.length-movementState.lastSyncIndex>=10)mvFlush()
+function mvAcceptRaw(lat,lng,accuracy,speed,ts=Date.now(),meta={}){
+ if(movementState.status!=="recording")return;
+ if(!Number.isFinite(lat)||!Number.isFinite(lng)||accuracy>65){
+   movementEls.gpsDot.className="movement-gps-dot weak";
+   movementEls.gpsStatus.textContent=`GPS ±${Math.round(accuracy||99)} м`;
+   return
+ }
+ const p={lat,lng,accuracy:Number(accuracy||0),speed:Number.isFinite(speed)&&speed>=0?speed:null,recordedAt:Number(ts||Date.now())};
+ const last=movementState.last;
+ if(last){
+   const dt=(p.recordedAt-last.recordedAt)/1000;
+   if(dt<=0)return;
+   const d=mvHav(last,p),directMps=d/dt,s=p.speed??directMps;
+   if(s>25||directMps>25)return;
+   if(dt<=60){
+     movementState.distanceM+=d;
+     if(s>.5)movementState.movingS+=dt;
+     movementState.currentMps=s;
+   }else if(meta.recoverGap){
+     p._gapRecovered=true;
+     p._gapSeconds=Math.round(dt);
+     p._gapDistanceM=Math.round(d);
+     movementState.distanceM+=d;
+     movementState.gapRecoveredM+=d;
+     movementState.gapCount+=1;
+     if(directMps>.5)movementState.movingS+=dt;
+     movementState.currentMps=directMps;
+     movementEls.note.textContent=`GPS прерывался ${Math.round(dt/60)} мин — ${Math.max(.01,d/1000).toLocaleString("ru-RU",{maximumFractionDigits:2})} км восстановлено как минимальная дистанция между точками.`;
+   }else{
+     movementEls.note.textContent="GPS был недоступен больше минуты — после возврата восстановим минимальную дистанцию между точками.";
+   }
+ }
+ movementState.points.push(p);movementState.last=p;
+ movementEls.gpsDot.className="movement-gps-dot good";
+ movementEls.gpsStatus.textContent=`GPS ±${Math.round(accuracy)} м`;
+ mvDraw();mvRender();
+ if(movementState.points.length-movementState.lastSyncIndex>=10)mvFlush()
 }
 function mvGeoStart(){
  if(movementState.watch!=null||!navigator.geolocation)return;
  movementState.watch=navigator.geolocation.watchPosition(p=>mvAcceptRaw(Number(p.coords.latitude),Number(p.coords.longitude),Number(p.coords.accuracy||99),Number.isFinite(p.coords.speed)?Number(p.coords.speed):null,p.timestamp),e=>{movementEls.gpsDot.className="movement-gps-dot weak";movementEls.gpsStatus.textContent="GPS недоступен";movementEls.note.textContent=e?.code===1?"Разреши Telegram доступ к геопозиции.":"Ждём сигнал GPS…";mvRender()},{enableHighAccuracy:true,maximumAge:2000,timeout:15000})
 }
 function mvGeoStop(){if(movementState.watch!=null&&navigator.geolocation){navigator.geolocation.clearWatch(movementState.watch);movementState.watch=null}}
+function mvCaptureFreshPoint(recoverGap=false){
+ return new Promise(resolve=>{
+   if(!navigator.geolocation||movementState.status!=="recording"){resolve(false);return}
+   navigator.geolocation.getCurrentPosition(
+     p=>{mvAcceptRaw(Number(p.coords.latitude),Number(p.coords.longitude),Number(p.coords.accuracy||99),Number.isFinite(p.coords.speed)?Number(p.coords.speed):null,p.timestamp,{recoverGap});resolve(true)},
+     ()=>resolve(false),
+     {enableHighAccuracy:true,maximumAge:0,timeout:12000}
+   )
+ })
+}
 async function mvFlush(){
  if(!movementState.trackId||!movementState.online)return;const from=movementState.lastSyncIndex,pts=movementState.points.slice(from,from+100);if(!pts.length)return;
  try{await authJson(`${BASE}/v-ritme-track`,"POST",{action:"append",track_id:movementState.trackId,seq:movementState.seq,points:pts});movementState.lastSyncIndex+=pts.length;movementState.seq++;if(movementState.lastSyncIndex<movementState.points.length)setTimeout(mvFlush,10)}catch(e){movementEls.note.textContent="Нет синхронизации — точки останутся в текущей сессии до восстановления сети."}
@@ -1936,7 +1981,7 @@ async function mvStart(discipline="bike"){
  if(movementEls.recorderTitle)movementEls.recorderTitle.textContent=`${disciplineLabel}.`;
  movementEls.recorder.hidden=false;document.body.classList.add("movement-recording");movementEls.note.textContent="Маршрут приватный. В общую копилку попадут только километры.";
  const d=await authJson(`${BASE}/v-ritme-track`,"POST",{action:"start",discipline});
- const tr=d.track||{};movementState.trackId=d.track_id;movementState.status=tr.status||"recording";movementState.startedAt=tr.started_at?new Date(tr.started_at).getTime():Date.now();movementState.pausedAt=null;movementState.totalPauseMs=0;movementState.points=[];movementState.distanceM=0;movementState.movingS=0;movementState.currentMps=0;movementState.last=null;movementState.seq=Math.floor(Date.now()/1000);movementState.lastSyncIndex=0;
+ const tr=d.track||{};movementState.trackId=d.track_id;movementState.status=tr.status||"recording";movementState.startedAt=tr.started_at?new Date(tr.started_at).getTime():Date.now();movementState.pausedAt=null;movementState.totalPauseMs=0;movementState.points=[];movementState.distanceM=0;movementState.movingS=0;movementState.currentMps=0;movementState.last=null;movementState.seq=Math.floor(Date.now()/1000);movementState.lastSyncIndex=0;movementState.backgroundAt=null;movementState.gapRecoveredM=0;movementState.gapCount=0;movementState.resumeCapturePending=false;
  await mvInitMap();mvGeoStart();tg?.enableClosingConfirmation?.();mvRender();movementEls.recorderTitle?.focus?.()
 }
 function mvOpen(){if(["recording","paused"].includes(movementState.status)){const disciplineLabel=({"bike":"Велосипед","run":"Бег","walk":"Ходьба"})[movementState.discipline]||"Активность";if(movementEls.recorderTitle)movementEls.recorderTitle.textContent=`${disciplineLabel}.`;movementEls.recorder.hidden=false;document.body.classList.add("movement-recording");mvInitMap();if(movementState.status==="recording")mvGeoStart();mvRender()}else openModalElement(movementDisciplineModal)}
@@ -1945,14 +1990,27 @@ async function mvPauseResume(){if(!movementState.trackId)return;if(movementState
 function mvResetLocalSession(){
  mvGeoStop();
  movementState.status="idle";movementState.trackId=null;movementState.startedAt=null;movementState.points=[];movementState.last=null;
- movementState.distanceM=0;movementState.movingS=0;movementState.currentMps=0;movementState.line=null;movementState.marker=null;movementState.discipline=null;
+ movementState.distanceM=0;movementState.movingS=0;movementState.currentMps=0;movementState.line=null;movementState.marker=null;movementState.discipline=null;movementState.backgroundAt=null;movementState.gapRecoveredM=0;movementState.gapCount=0;movementState.resumeCapturePending=false;
  tg?.disableClosingConfirmation?.();mvClose();mvRender()
 }
 async function mvFinish(){
+ if(movementState.status==="recording")await mvCaptureFreshPoint(true);
  await mvFlush();if(movementState.lastSyncIndex<movementState.points.length)await mvFlush();
  let d=null;
  try{
    d=await authJson(`${BASE}/v-ritme-track`,"POST",{action:"finish",track_id:movementState.trackId,visibility:"private"});
+   if(!d?.discarded_short&&movementState.gapCount>0){
+     try{
+       const recovered=await authJson(`${BASE}/v-ritme-track-gap`,"POST",{track_id:movementState.trackId});
+       if(recovered?.summary){
+         d.summary=recovered.summary;
+         if(d.workout)d.workout.distance_km=Number(recovered.summary.distance_m||0)/1000;
+       }
+     }catch(gapErr){
+       console.error("gap recovery",gapErr);
+       telemetry("api_failed",{endpoint:"v-ritme-track-gap",reason:String(gapErr?.message||gapErr||"gap")});
+     }
+   }
  }catch(e){
    const reason=String(e?.message||e||"").toLowerCase();
    const terminalShort=reason.includes("not_enough_points")||reason.includes("not enough points")||reason.includes("track_failed")||reason.includes("track failed");
@@ -1970,8 +2028,9 @@ async function mvFinish(){
  }
  mvResetLocalSession();
  await loadMovement();show("my");movementEls.movementProfile?.scrollIntoView?.({behavior:"smooth"});
- const km=Number(d?.workout?.distance_km||0);
+ const km=Number(d?.workout?.distance_km||0),recoveredKm=Number(d?.summary?.recovered_gap_m||0)/1000;
  if(d?.discarded_short)toast("Запись завершена. Нулевая или слишком короткая активность не добавлена в статистику.");
+ else if(km>0&&recoveredKm>0)toast(`${km.toLocaleString("ru-RU",{maximumFractionDigits:2})} км сохранено · ~${recoveredKm.toLocaleString("ru-RU",{maximumFractionDigits:2})} км восстановлено после паузы GPS`);
  else if(km>0)toast(`${km.toLocaleString("ru-RU",{maximumFractionDigits:2})} км добавлено в твой ритм и общую копилку`);
  else toast("Активность завершена и сохранена.");
  refreshAfterMovement().catch(e=>console.error("movement refresh",e))
@@ -2014,6 +2073,28 @@ async function mvToggleShare(){
 movementEls.launch?.addEventListener("click",mvOpen);
 document.querySelectorAll("[data-movement-discipline]").forEach(b=>b.addEventListener("click",()=>withBusy(b,async()=>{const discipline=b.dataset.movementDiscipline||"bike";movementDisciplineModal?.classList.remove("open");await mvStart(discipline)},"Старт…")));movementEls.close?.addEventListener("click",mvClose);movementEls.pause?.addEventListener("click",()=>withBusy(movementEls.pause,mvPauseResume,movementState.status==="paused"?"Продолжаем…":"Пауза…"));movementEls.finish?.addEventListener("click",mvRequestFinish);movementEls.share?.addEventListener("click",()=>withBusy(movementEls.share,mvToggleShare,"Сохраняем…"));
 window.addEventListener("online",()=>{movementState.online=true;mvFlush();mvRender()});window.addEventListener("offline",()=>{movementState.online=false;mvRender()});
+
+// Telegram Mini App cannot guarantee continuous iOS GPS while the phone is locked.
+// On foreground we take a fresh point and recover only the minimum straight-line distance
+// across the missing interval. The route itself remains visually broken across that gap.
+document.addEventListener("visibilitychange",()=>{
+ if(movementState.status!=="recording")return;
+ if(document.hidden){
+   movementState.backgroundAt=Date.now();
+   movementState.resumeCapturePending=true;
+   movementEls.note.textContent="Телефон заблокирован или приложение в фоне. GPS может прерваться; после возврата восстановим минимальную дистанцию.";
+   mvFlush();
+ }else if(movementState.resumeCapturePending){
+   movementState.resumeCapturePending=false;
+   mvCaptureFreshPoint(true).finally(()=>{movementState.backgroundAt=null;mvGeoStart()});
+ }
+});
+window.addEventListener("pageshow",()=>{
+ if(movementState.status==="recording"&&movementState.resumeCapturePending){
+   movementState.resumeCapturePending=false;
+   mvCaptureFreshPoint(true).finally(()=>{movementState.backgroundAt=null;mvGeoStart()});
+ }
+});
 setInterval(()=>{if(["recording","paused"].includes(movementState.status))mvRender()},1000);setInterval(()=>{if(movementState.status==="recording")mvFlush()},15000);
 
 const VIBES=["без спешки","всегда в движении","ранний старт","ночной город","живу спонтанно","люблю план","душа компании","один на один","тихий интроверт","легко знакомлюсь","свои люди важнее толпы","люблю собирать людей","можно молчать","разговоры до ночи","люблю спорить об идеях","больше слушаю","с юмором по жизни","без small talk","без гонки","люблю вызов","долго и далеко","коротко, но ярко","куда глаза глядят","маршрут важнее цифр","город мой playground","тянет в лес","горы зовут","люблю исчезнуть за город","городской романтик","эстет деталей","немного винтаж","кофе обязателен","музыка в дороге","weekend escape","вечный исследователь","за красивый крюк","молчать и крутить","ехать и разговаривать","после финиша не расходимся","вид важнее скорости","главное — компания","люблю возвращаться другим путём"];const INTERESTS=["походы","трекинг","кемпинг","горы","лес","путешествия","road trips","серф","лыжи","сноуборд","бег","плавание","триатлон","зал","йога","велосипед","gravel","road","coffee ride","long distance","кофе","гастрономия","музыка","концерты","кино","фотография","архитектура","дизайн","искусство","мода","книги","технологии","стартапы","автомобили","мото","собаки","баня","дача","городские прогулки","языки"];
@@ -2100,7 +2181,7 @@ async function uploadWithTimeout(url,{file,headers={},kind="upload",timeout=2500
   }finally{clearTimeout(timer)}
 }
 function alertError(e){const m=e instanceof Error?e.message:String(e||"Ошибка");mbDiagnostics.push("caught",m);telemetry("ui_error",{message:m.slice(0,160)});toast(m,"error");if(tg?.showAlert)tg.showAlert(m);else window.alert(m)}async function withBusy(btn,fn,label="Подождите…"){if(!btn||btn.disabled)return;const old=btn.textContent;btn.disabled=true;btn.setAttribute("aria-busy","true");if(label)btn.textContent=label;try{return await fn()}catch(e){console.error(e);alertError(e)}finally{btn.disabled=false;btn.removeAttribute("aria-busy");btn.textContent=old}}const bgObserver=("IntersectionObserver" in window)?new IntersectionObserver(entries=>{for(const e of entries){if(!e.isIntersecting)continue;const el=e.target;if(!el.dataset.bgLoaded){el.style.backgroundImage=`url("${el.dataset.bg}")`;el.dataset.bgLoaded="1"}bgObserver.unobserve(el)}},{rootMargin:"320px 0px"}):null;
-function loadDeferredBackgrounds(root=document){const els=[...root.querySelectorAll("[data-bg]")];els.forEach((el,i)=>{if(el.dataset.bgLoaded)return;if(i===0||!bgObserver){el.style.backgroundImage=`url("${el.dataset.bg}")`;el.dataset.bgLoaded="1"}else bgObserver.observe(el)})}function show(id){document.querySelectorAll(".screen").forEach(x=>x.classList.toggle("active",x.id===id));telemetry("screen_view",{screen:id,build:"v15.6.2-about-cleanup"});document.querySelectorAll(".bottom button").forEach(x=>x.classList.toggle("active",x.dataset.screen===id));const active=document.getElementById(id);if(active)loadDeferredBackgrounds(active);if(id==="pulse"){const t=document.getElementById("pulseLiveTitle");if(t&&!window.matchMedia("(prefers-reduced-motion: reduce)").matches){t.classList.remove("pulse-type-kick");void t.offsetWidth;t.classList.add("pulse-type-kick")}}window.scrollTo(0,0)}document.querySelectorAll("[data-screen]").forEach(b=>b.onclick=()=>show(b.dataset.screen));document.querySelectorAll("[data-screen-jump]").forEach(b=>b.onclick=()=>show(b.dataset.screenJump));const entryScreen=new URLSearchParams(location.search).get("screen");if(["pulse","people","activities","meanings","my"].includes(entryScreen))show(entryScreen);else{const pt=document.getElementById("pulseLiveTitle");if(pt&&!window.matchMedia("(prefers-reduced-motion: reduce)").matches)pt.classList.add("pulse-type-kick")}let modalReturnFocus=null;
+function loadDeferredBackgrounds(root=document){const els=[...root.querySelectorAll("[data-bg]")];els.forEach((el,i)=>{if(el.dataset.bgLoaded)return;if(i===0||!bgObserver){el.style.backgroundImage=`url("${el.dataset.bg}")`;el.dataset.bgLoaded="1"}else bgObserver.observe(el)})}function show(id){document.querySelectorAll(".screen").forEach(x=>x.classList.toggle("active",x.id===id));telemetry("screen_view",{screen:id,build:"v15.7.1-tracker-gap-backend"});document.querySelectorAll(".bottom button").forEach(x=>x.classList.toggle("active",x.dataset.screen===id));const active=document.getElementById(id);if(active)loadDeferredBackgrounds(active);if(id==="pulse"){const t=document.getElementById("pulseLiveTitle");if(t&&!window.matchMedia("(prefers-reduced-motion: reduce)").matches){t.classList.remove("pulse-type-kick");void t.offsetWidth;t.classList.add("pulse-type-kick")}}window.scrollTo(0,0)}document.querySelectorAll("[data-screen]").forEach(b=>b.onclick=()=>show(b.dataset.screen));document.querySelectorAll("[data-screen-jump]").forEach(b=>b.onclick=()=>show(b.dataset.screenJump));const entryScreen=new URLSearchParams(location.search).get("screen");if(["pulse","people","activities","meanings","my"].includes(entryScreen))show(entryScreen);else{const pt=document.getElementById("pulseLiveTitle");if(pt&&!window.matchMedia("(prefers-reduced-motion: reduce)").matches)pt.classList.add("pulse-type-kick")}let modalReturnFocus=null;
 function openModalElement(modal){
   if(!modal)return;
   modalReturnFocus=document.activeElement instanceof HTMLElement?document.activeElement:null;
@@ -2114,7 +2195,7 @@ document.getElementById("openFeedback")?.addEventListener("click",()=>{telemetry
 document.getElementById("submitFeedback")?.addEventListener("click",()=>withBusy(document.getElementById("submitFeedback"),async()=>{
   const category=document.getElementById("feedbackCategory")?.value||"other",message=String(document.getElementById("feedbackMessage")?.value||"").trim();
   if(message.length<3)throw new Error("Напиши пару слов");
-  await authJson(`${BASE}/v-ritme-feedback`,"POST",{category,message,build:"v15.6.2-about-cleanup",screen:activeScreenId(),user_agent:navigator.userAgent,online:navigator.onLine,context:feedbackContext()});
+  await authJson(`${BASE}/v-ritme-feedback`,"POST",{category,message,build:"v15.7.1-tracker-gap-backend",screen:activeScreenId(),user_agent:navigator.userAgent,online:navigator.onLine,context:feedbackContext()});
   telemetry("feedback_submit",{category,screen:activeScreenId()});
   document.getElementById("feedbackMessage").value="";
   closeModalElement(document.getElementById("feedbackModal"));
@@ -2348,7 +2429,7 @@ window.addEventListener("unhandledrejection",e=>{const m=String(e.reason?.messag
 
 async function boot(){
   try{renderChipGroups({vibes:[],interests:[]})}catch(e){}
-  telemetry("app_open",{build:"v15.6.2-about-cleanup"});const pulseP=retry(()=>authJson(`${BASE}/v-ritme-pulse`),1,350);
+  telemetry("app_open",{build:"v15.7.1-tracker-gap-backend"});const pulseP=retry(()=>authJson(`${BASE}/v-ritme-pulse`),1,350);
   if(initData){
     const meP=authJson(`${BASE}/v-ritme-mb-api/api/me`);
     const peopleP=retry(()=>authJson(`${BASE}/v-ritme-people`),1,300);
@@ -2382,8 +2463,8 @@ async function boot(){
   }
   pulseP.then(x=>{pulse=x;renderPulse();renderMeanings();renderActivities();if(x?.degraded)telemetry("api_failed",{endpoint:"v-ritme-pulse",reason:"degraded"})}).catch(e=>{console.error("pulse",e);metrics.innerHTML='<div class="error-state">Пульс временно не обновился.<br><button class="btn" type="button" id="retryPulse">Повторить</button></div>';document.getElementById("retryPulse")?.addEventListener("click",()=>retry(()=>authJson(`${BASE}/v-ritme-pulse`),1).then(x=>{pulse=x;renderPulse();renderMeanings();renderActivities()}).catch(alertError))});
 }boot();
-</script><!-- build: v15.6.2-about-cleanup -->
-<div id="qaBuild" hidden>v15.6.2-about-cleanup</div><div id="appToast" class="toast" role="status" aria-live="polite"></div></body></html>
+</script><!-- build: v15.7.1-tracker-gap-backend -->
+<div id="qaBuild" hidden>v15.7.1-tracker-gap-backend</div><div id="appToast" class="toast" role="status" aria-live="polite"></div></body></html>
 
 <!-- v14.3 approved-photo mapping: 1 Morning Flow; 2 Coffee Ride; 3 Gravel Day; 4 Social Ride; 5 secondary night editorial; 6 hero. Minsk = dedicated generated event plate. -->
 
