@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ru" data-build="v15.8.1-entry-race-fix">
+<html lang="ru" data-build="v15.8.3-final">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Onest:wght@400;500;600;700;800&family=Prata&display=swap" rel="stylesheet">
 
-<title>В ритме МБ — v15.8.1-entry-race-fix</title>
+<title>В ритме МБ — v15.8.3-final</title>
 <link rel="preload" as="image" href="https://yrcogxmnqrebbzcnqbjc.supabase.co/storage/v1/object/public/activity-media/hero-community.webp" type="image/webp" fetchpriority="high">
 
 <style>
@@ -1594,6 +1594,74 @@ body.movement-recording{overflow:hidden}body.movement-recording .bottom{transfor
 .gathering-list .list-row{grid-template-columns:88px 1fr}
 .activity-list-row{width:100%;text-align:left;border-left:0;border-right:0;background:transparent;color:inherit}
 
+
+/* v15.8.2 — achievement cards in viewed profiles */
+.person-viewer-section .achievement-card{
+  margin:12px 0 0;
+  padding:16px 0 2px;
+  border:0;
+  border-top:1px solid var(--line);
+  border-radius:0;
+  background:transparent;
+}
+.person-viewer-section .achievement-card:first-of-type{margin-top:10px}
+.person-viewer-section .achievement-head{
+  display:grid;
+  grid-template-columns:minmax(0,1fr);
+  gap:9px;
+  align-items:start;
+}
+.person-viewer-section .achievement-card h3{
+  margin:5px 0 0;
+  font-size:clamp(30px,8.6vw,40px);
+  line-height:.98;
+  overflow-wrap:anywhere;
+  hyphens:auto;
+}
+.person-viewer-section .achievement-card .kicker{
+  color:var(--muted);
+  font-size:9px;
+}
+.person-viewer-section .status-pill{
+  justify-self:start;
+  border:0!important;
+  border-top:1px solid var(--line)!important;
+  border-radius:0;
+  padding:7px 0 0;
+  font-size:10px;
+  line-height:1.25;
+  color:var(--muted);
+  white-space:normal;
+}
+.person-viewer-section .achievement-summary{
+  display:flex;
+  flex-wrap:wrap;
+  gap:5px 8px;
+  margin-top:12px;
+  font-size:13px;
+  line-height:1.4;
+}
+.person-viewer-section .achievement-summary span:not(:last-child)::after{
+  content:"·";
+  margin-left:8px;
+  color:var(--muted);
+}
+.person-viewer-section .proof-link{
+  margin-top:12px;
+  min-height:40px;
+  padding:0;
+  border:0;
+  border-bottom:1px solid currentColor;
+  font-size:13px;
+  font-weight:600;
+  text-transform:none;
+  letter-spacing:0;
+}
+@media(max-width:390px){
+  .person-viewer-section .achievement-card h3{font-size:29px}
+  .person-viewer-section .achievement-summary{font-size:12px}
+}
+
 </style>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head><body><div class="app"><header class="topbar"><div class="topin" style="justify-content:flex-end"><div class="avatar" id="topAvatar">В</div></div></header><main>
@@ -2216,7 +2284,7 @@ async function uploadWithTimeout(url,{file,headers={},kind="upload",timeout=2500
   }finally{clearTimeout(timer)}
 }
 function alertError(e){const m=e instanceof Error?e.message:String(e||"Ошибка");mbDiagnostics.push("caught",m);telemetry("ui_error",{message:m.slice(0,160)});toast(m,"error");if(tg?.showAlert)tg.showAlert(m);else window.alert(m)}async function withBusy(btn,fn,label="Подождите…"){if(!btn||btn.disabled)return;const old=btn.textContent;btn.disabled=true;btn.setAttribute("aria-busy","true");if(label)btn.textContent=label;try{return await fn()}catch(e){console.error(e);alertError(e)}finally{btn.disabled=false;btn.removeAttribute("aria-busy");btn.textContent=old}}const bgObserver=("IntersectionObserver" in window)?new IntersectionObserver(entries=>{for(const e of entries){if(!e.isIntersecting)continue;const el=e.target;if(!el.dataset.bgLoaded){el.style.backgroundImage=`url("${el.dataset.bg}")`;el.dataset.bgLoaded="1"}bgObserver.unobserve(el)}},{rootMargin:"320px 0px"}):null;
-function loadDeferredBackgrounds(root=document){const els=[...root.querySelectorAll("[data-bg]")];els.forEach((el,i)=>{if(el.dataset.bgLoaded)return;if(i===0||!bgObserver){el.style.backgroundImage=`url("${el.dataset.bg}")`;el.dataset.bgLoaded="1"}else bgObserver.observe(el)})}function show(id){document.querySelectorAll(".screen").forEach(x=>x.classList.toggle("active",x.id===id));telemetry("screen_view",{screen:id,build:"v15.8.1-entry-race-fix"});document.querySelectorAll(".bottom button").forEach(x=>x.classList.toggle("active",x.dataset.screen===id));const active=document.getElementById(id);if(active)loadDeferredBackgrounds(active);if(id==="pulse"){const t=document.getElementById("pulseLiveTitle");if(t&&!window.matchMedia("(prefers-reduced-motion: reduce)").matches){t.classList.remove("pulse-type-kick");void t.offsetWidth;t.classList.add("pulse-type-kick")}}window.scrollTo(0,0)}document.querySelectorAll("[data-screen]").forEach(b=>b.onclick=()=>show(b.dataset.screen));document.querySelectorAll("[data-screen-jump]").forEach(b=>b.onclick=()=>show(b.dataset.screenJump));const entryScreen=new URLSearchParams(location.search).get("screen");if(["pulse","people","activities","meanings","my"].includes(entryScreen))show(entryScreen);else{const pt=document.getElementById("pulseLiveTitle");if(pt&&!window.matchMedia("(prefers-reduced-motion: reduce)").matches)pt.classList.add("pulse-type-kick")}let modalReturnFocus=null;
+function loadDeferredBackgrounds(root=document){const els=[...root.querySelectorAll("[data-bg]")];els.forEach((el,i)=>{if(el.dataset.bgLoaded)return;if(i===0||!bgObserver){el.style.backgroundImage=`url("${el.dataset.bg}")`;el.dataset.bgLoaded="1"}else bgObserver.observe(el)})}function show(id){document.querySelectorAll(".screen").forEach(x=>x.classList.toggle("active",x.id===id));telemetry("screen_view",{screen:id,build:"v15.8.3-final"});document.querySelectorAll(".bottom button").forEach(x=>x.classList.toggle("active",x.dataset.screen===id));const active=document.getElementById(id);if(active)loadDeferredBackgrounds(active);if(id==="pulse"){const t=document.getElementById("pulseLiveTitle");if(t&&!window.matchMedia("(prefers-reduced-motion: reduce)").matches){t.classList.remove("pulse-type-kick");void t.offsetWidth;t.classList.add("pulse-type-kick")}}window.scrollTo(0,0)}document.querySelectorAll("[data-screen]").forEach(b=>b.onclick=()=>show(b.dataset.screen));document.querySelectorAll("[data-screen-jump]").forEach(b=>b.onclick=()=>show(b.dataset.screenJump));const entryScreen=new URLSearchParams(location.search).get("screen");if(["pulse","people","activities","meanings","my"].includes(entryScreen))show(entryScreen);else{const pt=document.getElementById("pulseLiveTitle");if(pt&&!window.matchMedia("(prefers-reduced-motion: reduce)").matches)pt.classList.add("pulse-type-kick")}let modalReturnFocus=null;
 function openModalElement(modal){
   if(!modal)return;
   modalReturnFocus=document.activeElement instanceof HTMLElement?document.activeElement:null;
@@ -2230,7 +2298,7 @@ document.getElementById("openFeedback")?.addEventListener("click",()=>{telemetry
 document.getElementById("submitFeedback")?.addEventListener("click",()=>withBusy(document.getElementById("submitFeedback"),async()=>{
   const category=document.getElementById("feedbackCategory")?.value||"other",message=String(document.getElementById("feedbackMessage")?.value||"").trim();
   if(message.length<3)throw new Error("Напиши пару слов");
-  await authJson(`${BASE}/v-ritme-feedback`,"POST",{category,message,build:"v15.8.1-entry-race-fix",screen:activeScreenId(),user_agent:navigator.userAgent,online:navigator.onLine,context:feedbackContext()});
+  await authJson(`${BASE}/v-ritme-feedback`,"POST",{category,message,build:"v15.8.3-final",screen:activeScreenId(),user_agent:navigator.userAgent,online:navigator.onLine,context:feedbackContext()});
   telemetry("feedback_submit",{category,screen:activeScreenId()});
   document.getElementById("feedbackMessage").value="";
   closeModalElement(document.getElementById("feedbackModal"));
@@ -2288,7 +2356,7 @@ function openStoryEditor(story=null){const modal=document.getElementById("storyM
 async function uploadStoryPhoto(storyId,file){const prepared=await normalizeUserImage(file,"story");if(prepared.size>8*1024*1024)throw new Error("Фото слишком большое. Выбери фото до 8 МБ.");const headers={"content-type":prepared.type||"application/octet-stream","x-file-type":prepared.type||"application/octet-stream","x-file-name":encodeURIComponent(prepared.name||file.name||"story-photo"),"x-story-id":storyId,"x-telegram-init-data":initData};let last;for(let attempt=1;attempt<=2;attempt++){try{return await uploadWithTimeout(`${BASE}/v-ritme-story-media`,{file:prepared,kind:"story",timeout:45000,headers})}catch(e){last=e;if(attempt<2){await new Promise(r=>setTimeout(r,700));toast("Сеть подвисла — повторяю загрузку…")}}}throw last||new Error("Не удалось загрузить фото истории")}
 async function deleteStory(id){const story=journalStories.find(x=>x.id===id);if(!story)return;const ok=await new Promise(resolve=>{const msg=`Удалить историю «${story.title}»?`;if(tg?.showConfirm)tg.showConfirm(msg,resolve);else resolve(window.confirm(msg))});if(!ok)return;try{const d=await authJson(`${BASE}/v-ritme-stories`,"POST",{action:"delete",id});journalStories=d.stories||[];renderMyStories();telemetry("story_deleted",{});toast("История удалена")}catch(e){alertError(e)}}
 async function loadPersonStories(profileId){const target=document.getElementById("personStoriesContent");if(!target)return;try{const d=await authJson(`${BASE}/v-ritme-stories?profile_id=${encodeURIComponent(profileId)}`);const xs=d.stories||[];target.innerHTML=xs.length?`<div class="person-viewer-stories">${xs.map(x=>storyCardMarkup(x,false)).join("")}</div>`:'<p class="person-viewer-about">Пока без историй.</p>'}catch(e){console.error("person stories",e);target.innerHTML='<p class="person-viewer-about">Истории сейчас не загрузились.</p>'}}
-function achievementMini(a){const proof=safeUrl(a.proof_url),facts=[a.event_name,a.completed_at?new Date(a.completed_at).toLocaleDateString("ru-RU"):null,a.result_text,a.place_text].filter(Boolean);return `<div class="achievement-card" style="padding:14px 0"><div class="achievement-head"><div><div class="kicker">${esc(a.category||"achievement")}</div><h3 style="font-size:27px">${esc(a.title||"Достижение")}</h3></div><span class="status-pill">${esc(proofStatus(a.verification_status))}</span></div>${facts.length?`<p class="copy">${facts.map(esc).join(" · ")}</p>`:""}${proof?`<a class="proof-link" href="${esc(proof)}" target="_blank" rel="noopener noreferrer">Пруф ↗</a>`:""}</div>`}
+function achievementMini(a){const proof=safeUrl(a.proof_url),facts=[a.event_name,a.completed_at?new Date(a.completed_at).toLocaleDateString("ru-RU"):null,a.result_text,a.place_text].filter(Boolean);return `<article class="achievement-card"><div class="achievement-head"><div><div class="kicker">Достижение</div><h3>${esc(a.title||"Достижение")}</h3></div><span class="status-pill">${esc(proofStatus(a.verification_status))}</span></div>${facts.length?`<div class="achievement-summary">${facts.map(x=>`<span>${esc(x)}</span>`).join("")}</div>`:""}${proof?`<a class="proof-link" href="${esc(proof)}" target="_blank" rel="noopener noreferrer">Открыть пруф ↗</a>`:""}</article>`}
 function openPerson(id){
   const p=(peopleData.people||[]).find(x=>String(x.id)===String(id));
   if(!p)return;
@@ -2546,7 +2614,7 @@ window.addEventListener("unhandledrejection",e=>{const m=String(e.reason?.messag
 
 async function boot(){
   try{renderChipGroups({vibes:[],interests:[]})}catch(e){}
-  telemetry("app_open",{build:"v15.8.1-entry-race-fix"});
+  telemetry("app_open",{build:"v15.8.3-final"});
   const pulseP=retry(()=>authJson(`${BASE}/v-ritme-pulse`),1,350);
   if(initData){
     try{
@@ -2589,8 +2657,8 @@ async function boot(){
   }
   pulseP.then(x=>{pulse=x;renderPulse();renderMeanings();renderActivities();if(x?.degraded)telemetry("api_failed",{endpoint:"v-ritme-pulse",reason:"degraded"})}).catch(e=>{console.error("pulse",e);metrics.innerHTML='<div class="error-state">Пульс временно не обновился.<br><button class="btn" type="button" id="retryPulse">Повторить</button></div>';document.getElementById("retryPulse")?.addEventListener("click",()=>retry(()=>authJson(`${BASE}/v-ritme-pulse`),1).then(x=>{pulse=x;renderPulse();renderMeanings();renderActivities()}).catch(alertError))});
 }boot();
-</script><!-- build: v15.8.1-entry-race-fix -->
-<div id="qaBuild" hidden>v15.8.1-entry-race-fix</div><div id="appToast" class="toast" role="status" aria-live="polite"></div></body></html>
+</script><!-- build: v15.8.3-final -->
+<div id="qaBuild" hidden>v15.8.3-final</div><div id="appToast" class="toast" role="status" aria-live="polite"></div></body></html>
 
 <!-- v14.3 approved-photo mapping: 1 Morning Flow; 2 Coffee Ride; 3 Gravel Day; 4 Social Ride; 5 secondary night editorial; 6 hero. Minsk = dedicated generated event plate. -->
 
